@@ -1,0 +1,242 @@
+{
+  "client_id": 1042,
+  "scenario": "happy_path",
+  "events": [
+    {
+      "seq": 0,
+      "t_offset_ms": 1919,
+      "agent": "orchestrator",
+      "type": "status",
+      "title": "Referral received",
+      "detail": "New referral from Zuckerberg San Francisco General for client 1042. Starting intake pipeline."
+    },
+    {
+      "seq": 1,
+      "t_offset_ms": 4440,
+      "agent": "intake",
+      "type": "thought",
+      "title": "Parsing referral",
+      "detail": "HL7-style discharge summary detected. Extracting diet orders, allergy list, and hard nutritional limits."
+    },
+    {
+      "seq": 2,
+      "t_offset_ms": 5971,
+      "agent": "intake",
+      "type": "check",
+      "title": "Diet orders identified",
+      "detail": "Diet orders: diabetic + cardiovascular. Allergy: peanut. Sodium ceiling 600 mg/meal, carbohydrates 45–60 g/meal."
+    },
+    {
+      "seq": 3,
+      "t_offset_ms": 7662,
+      "agent": "intake",
+      "type": "output",
+      "title": "Client profile structured",
+      "detail": "Preferences captured: Filipino cuisine, dislikes lentils, cooking ability: microwave-only, 7 meals/week, zone: Tenderloin.",
+      "data": {
+        "client_profile_id": 1042
+      }
+    },
+    {
+      "seq": 4,
+      "t_offset_ms": 9417,
+      "agent": "orchestrator",
+      "type": "status",
+      "title": "Dispatching Clinical Matching Agent",
+      "detail": "Profile validated. Hard constraint hierarchy locked: allergens → sodium → carbs → diet-order tags. These are exclusion rules, never scoring penalties."
+    },
+    {
+      "seq": 5,
+      "t_offset_ms": 11273,
+      "agent": "matching",
+      "type": "thought",
+      "title": "Scanning inventory",
+      "detail": "Scoring all 80 meals against hard constraints first, then ranking survivors by cuisine preference and dislike avoidance."
+    },
+    {
+      "seq": 6,
+      "t_offset_ms": 13599,
+      "agent": "matching",
+      "type": "check",
+      "title": "Rejected: Pancit Bihon",
+      "detail": "Excluded — carbs: 63 g outside 45–60 g range. Hard constraint: cannot be scored down, must be removed.",
+      "data": {
+        "meal_id": "M005",
+        "result": "fail"
+      }
+    },
+    {
+      "seq": 7,
+      "t_offset_ms": 15854,
+      "agent": "matching",
+      "type": "check",
+      "title": "Rejected: Heart-Healthy Beef Kaldereta",
+      "detail": "Excluded — carbs: 43 g outside 45–60 g range. Hard constraint: cannot be scored down, must be removed.",
+      "data": {
+        "meal_id": "M008",
+        "result": "fail"
+      }
+    },
+    {
+      "seq": 8,
+      "t_offset_ms": 18126,
+      "agent": "matching",
+      "type": "check",
+      "title": "Rejected: Lumpiang Sariwa",
+      "detail": "Excluded — allergen: contains peanut. Hard constraint: cannot be scored down, must be removed.",
+      "data": {
+        "meal_id": "M010",
+        "result": "fail"
+      }
+    },
+    {
+      "seq": 9,
+      "t_offset_ms": 19170,
+      "agent": "matching",
+      "type": "check",
+      "title": "Matched: Low-Sodium Chicken Adobo with Rice",
+      "detail": "All hard checks pass — sodium 426/600 mg ✓, carbs 52 g (target 45–60) ✓, no peanut ✓. Sourced from today's kitchen batch.",
+      "data": {
+        "meal_id": "M001",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 10,
+      "t_offset_ms": 20151,
+      "agent": "matching",
+      "type": "check",
+      "title": "Matched: Baked Bangus with Garlic Rice",
+      "detail": "All hard checks pass — sodium 396/600 mg ✓, carbs 47 g (target 45–60) ✓, no peanut ✓.",
+      "data": {
+        "meal_id": "M007",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 11,
+      "t_offset_ms": 22307,
+      "agent": "matching",
+      "type": "check",
+      "title": "Matched: Ginataang Gulay with Rice",
+      "detail": "All hard checks pass — sodium 401/600 mg ✓, carbs 51 g (target 45–60) ✓, no peanut ✓.",
+      "data": {
+        "meal_id": "M006",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 12,
+      "t_offset_ms": 24482,
+      "agent": "matching",
+      "type": "check",
+      "title": "Matched: Chicken Tinola with Rice",
+      "detail": "All hard checks pass — sodium 412/600 mg ✓, carbs 48 g (target 45–60) ✓, no peanut ✓.",
+      "data": {
+        "meal_id": "M003",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 13,
+      "t_offset_ms": 27055,
+      "agent": "matching",
+      "type": "check",
+      "title": "Matched: Pork Sinigang with Brown Rice",
+      "detail": "All hard checks pass — sodium 460/600 mg ✓, carbs 55 g (target 45–60) ✓, no peanut ✓.",
+      "data": {
+        "meal_id": "M002",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 14,
+      "t_offset_ms": 28979,
+      "agent": "matching",
+      "type": "thought",
+      "title": "Shortfall detected",
+      "detail": "Only 4 compliant servings available from current stock against a 7-meal plan. Escalating shortfall to Kitchen Planning; composing grocery bundle for remaining gap days."
+    },
+    {
+      "seq": 15,
+      "t_offset_ms": 30153,
+      "agent": "kitchen",
+      "type": "thought",
+      "title": "Aggregating unmet demand",
+      "detail": "Compliant Filipino-style, diabetic + heart-healthy meals are stock-constrained across today's queue. Evaluating a production batch against remaining capacity."
+    },
+    {
+      "seq": 16,
+      "t_offset_ms": 31446,
+      "agent": "kitchen",
+      "type": "output",
+      "title": "Batch scheduled: Low-Sodium Chicken Adobo",
+      "detail": "Batch B1: 80 servings, 9 labor hours, fits today's remaining capacity (42 h available, 6 equipment slots). Recipe meets 600 mg sodium ceiling at 420 mg/serving.",
+      "data": {
+        "batch_id": "B1"
+      }
+    },
+    {
+      "seq": 17,
+      "t_offset_ms": 33715,
+      "agent": "donation",
+      "type": "check",
+      "title": "Donation D001 triaged",
+      "detail": "Incoming jasmine rice donation (12 × 50 lb) classified as kitchen ingredient — condition good, no allergens. Routing to batch B1.",
+      "data": {
+        "donation_id": "D001",
+        "result": "kitchen_ingredient"
+      }
+    },
+    {
+      "seq": 18,
+      "t_offset_ms": 35224,
+      "agent": "donation",
+      "type": "check",
+      "title": "Donation D007 triaged",
+      "detail": "Chicken thighs (9 cases) — cold chain intact. Routing to batch B1 as primary protein.",
+      "data": {
+        "donation_id": "D007",
+        "result": "kitchen_ingredient"
+      }
+    },
+    {
+      "seq": 19,
+      "t_offset_ms": 37338,
+      "agent": "fallback",
+      "type": "output",
+      "title": "Grocery kit composed",
+      "detail": "Gap of 2 day(s) covered with a microwave-only kit: Instant Oatmeal (unsweetened, 10-pack), Low-Sodium Canned Black Beans, Frozen Mixed Vegetables (1 lb), Low-Sodium Vegetable Soup (microwavable), Fresh Apples (3-pack). All items peanut-free; numbered prep steps limited to microwave use.",
+      "data": {
+        "fallback_level": 1
+      }
+    },
+    {
+      "seq": 20,
+      "t_offset_ms": 38427,
+      "agent": "delivery",
+      "type": "thought",
+      "title": "Slotting into route",
+      "detail": "Client zone is Tenderloin. Existing route R-TEND-1 departs within the 10:00–12:00 window with cold-chain margin."
+    },
+    {
+      "seq": 21,
+      "t_offset_ms": 39988,
+      "agent": "delivery",
+      "type": "output",
+      "title": "Route assigned",
+      "detail": "Client 1042 added to route R-TEND-1 (Tenderloin), delivery 2026-07-21, window 10:00–12:00. Cold chain OK.",
+      "data": {
+        "route_id": "R-TEND-1"
+      }
+    },
+    {
+      "seq": 22,
+      "t_offset_ms": 41701,
+      "agent": "orchestrator",
+      "type": "output",
+      "title": "Plan complete",
+      "detail": "Client 1042: 5 compliant meals (1 from batch B1) + grocery kit covering 2 day(s). 0 hard-constraint violations. Total pipeline time: 0.7 min."
+    }
+  ]
+}

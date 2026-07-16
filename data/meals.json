@@ -1,0 +1,1833 @@
+[
+  {
+    "id": "M001",
+    "name": "Low-Sodium Chicken Adobo with Rice",
+    "cuisine": "Filipino",
+    "sodium_mg": 426,
+    "carbs_g": 52,
+    "allergens": [
+      "soy"
+    ],
+    "key_ingredients": [
+      "chicken",
+      "garlic",
+      "vinegar",
+      "rice"
+    ],
+    "diet_tags": [
+      "heart-healthy",
+      "diabetic-friendly",
+      "renal-friendly",
+      "gluten-free"
+    ],
+    "stock_qty": 8,
+    "source": "kitchen",
+    "reheat_method": "microwave"
+  },
+  {
+    "id": "M002",
+    "name": "Pork Sinigang with Brown Rice",
+    "cuisine": "Filipino",
+    "sodium_mg": 460,
+    "carbs_g": 55,
+    "allergens": [],
+    "key_ingredients": [
+      "pork",
+      "tamarind",
+      "kangkong",
+      "brown rice"
+    ],
+    "diet_tags": [
+      "heart-healthy",
+      "diabetic-friendly",
+      "gluten-free"
+    ],
+    "stock_qty": 67,
+    "source": "kitchen",
+    "reheat_method": "microwave"
+  },
+  {
+    "id": "M003",
+    "name": "Chicken Tinola with Rice",
+    "cuisine": "Filipino",
+    "sodium_mg": 412,
+    "carbs_g": 48,
+    "allergens": [],
+    "key_ingredients": [
+      "chicken",
+      "ginger",
+      "green papaya",
+      "rice"
+    ],
+    "diet_tags": [
+      "heart-healthy",
+      "diabetic-friendly",
+      "renal-friendly",
+      "gluten-free"
+    ],
+    "stock_qty": 65,
+    "source": "purchased",
+    "reheat_method": "microwave"
+  },
+  {
+    "id": "M004",
+    "name": "Arroz Caldo",
+    "cuisine": "Filipino",
+    "sodium_mg": 465,
+    "carbs_g": 57,
+    "allergens": [],
+    "key_ingredients": [
+      "chicken",
+      "rice",
+      "ginger"
+    ],
+    "diet_tags": [
+      "heart-healthy",
+      "diabetic-friendly",
+      "gluten-free"
+    ],
+    "stock_qty": 59,
+    "source": "kitchen",
+    "reheat_method": "microwave"
+  },
+  {
+    "id": "M005",
+    "name": "Pancit Bihon",
+    "cuisine": "Filipino",
+    "sodium_mg": 531,
+    "carbs_g": 63,
+    "allergens": [
+      "soy"
+    ],
+    "key_ingredients": [
+      "rice noodles",
+      "chicken",
+      "carrots",
+      "cabbage"
+    ],
+    "diet_tags": [
+      "heart-healthy",
+      "gluten-free"
+    ],
+    "stock_qty": 40,
+    "source": "kitchen",
+    "reheat_method": "microwave"
+  },
+  {
+    "id": "M006",
+    "name": "Ginataang Gulay with Rice",
+    "cuisine": "Filipino",
+    "sodium_mg": 401,
+    "carbs_g": 51,
+    "allergens": [],
+    "key_ingredients": [
+      "squash",
+      "green beans",
+      "coconut milk",
+      "rice"
+    ],
+    "diet_tags": [
+      "heart-healthy",
+      "diabetic-friendly",
+      "renal-friendly",
+      "gluten-free",
+      "vegetarian"
+    ],
+    "stock_qty": 99,
+    "source": "kitchen",
+    "reheat_method": "microwave"
+  },
+  {
+    "id": "M007",
+    "name": "Baked Bangus with Garlic Rice",
+    "cuisine": "Filipino",
+    "sodium_mg": 396,
+    "carbs_g": 47,
+    "allergens": [
+      "fish"
+    ],
+    "key_ingredients": [
+      "milkfish",
+      "tomatoes",
+      "rice"
+    ],
+    "diet_tags": [
+      "heart-healthy",
+      "diabetic-friendly",
+      "renal-friendly",
+      "gluten-free"
+    ],
+    "stock_qty": 58,
+    "source": "donated",
+    "reheat_method": "microwave"
+  },
+  {
+    "id": "M008",
+    "name": "Heart-Healthy Beef Kaldereta",
+    "cuisine": "Filipino",
+    "sodium_mg": 542,
+    "carbs_g": 43,
+    "allergens": [],
+    "key_ingredients": [
+      "beef",
+      "potatoes",
+      "bell pepper"
+    ],
+    "diet_tags": [
+      "heart-healthy",
+      "diabetic-friendly",
+      "gluten-free"
+    ],
+    "stock_qty": 57,
+    "source": "donated",
+    "reheat_method": "microwave"
+  },
+  {
+    "id": "M009",
+    "name": "Chicken Afritada with Rice",
+    "cuisine": "Filipino",
+    "sodium_mg": 499,
+    "carbs_g": 55,
+    "allergens": [],
+    "key_ingredients": [
+      "chicken",
+      "potatoes",
+      "peas",
+      "rice"
+    ],
+    "diet_tags": [
+      "heart-healthy",
+      "diabetic-friendly",
+      "gluten-free"
+    ],
+    "stock_qty": 72,
+    "source": "kitchen",
+    "reheat_method": "microwave"
+  },
+  {
+    "id": "M010",
+    "name": "Lumpiang Sariwa",
+    "cuisine": "Filipino",
+    "sodium_mg": 432,
+    "carbs_g": 41,
+    "allergens": [
+      "peanut",
+      "gluten",
+      "egg"
+    ],
+    "key_ingredients": [
+      "vegetables",
+      "wheat wrapper",
+      "peanut sauce"
+    ],
+    "diet_tags": [
+      "heart-healthy",
+      "diabetic-friendly",
+      "vegetarian"
+    ],
+    "stock_qty": 96,
+    "source": "kitchen",
+    "reheat_method": "none"
+  },
+  {
+    "id": "M011",
+    "name": "Chicken Congee with Scallions",
+    "cuisine": "Chinese",
+    "sodium_mg": 364,
+    "carbs_g": 49,
+    "allergens": [],
+    "key_ingredients": [
+      "chicken",
+      "rice",
+      "ginger"
+    ],
+    "diet_tags": [
+      "heart-healthy",
+      "diabetic-friendly",
+      "renal-friendly",
+      "gluten-free"
+    ],
+    "stock_qty": 61,
+    "source": "kitchen",
+    "reheat_method": "microwave"
+  },
+  {
+    "id": "M012",
+    "name": "Steamed Fish with Ginger and Rice",
+    "cuisine": "Chinese",
+    "sodium_mg": 435,
+    "carbs_g": 50,
+    "allergens": [
+      "fish"
+    ],
+    "key_ingredients": [
+      "fish",
+      "ginger",
+      "rice"
+    ],
+    "diet_tags": [
+      "heart-healthy",
+      "diabetic-friendly",
+      "gluten-free"
+    ],
+    "stock_qty": 91,
+    "source": "kitchen",
+    "reheat_method": "microwave"
+  },
+  {
+    "id": "M013",
+    "name": "Vegetable Stir-Fry with Tofu",
+    "cuisine": "Chinese",
+    "sodium_mg": 497,
+    "carbs_g": 44,
+    "allergens": [
+      "soy"
+    ],
+    "key_ingredients": [
+      "tofu",
+      "bok choy",
+      "carrots",
+      "rice"
+    ],
+    "diet_tags": [
+      "heart-healthy",
+      "diabetic-friendly",
+      "gluten-free",
+      "vegetarian"
+    ],
+    "stock_qty": 47,
+    "source": "kitchen",
+    "reheat_method": "microwave"
+  },
+  {
+    "id": "M014",
+    "name": "Beef and Broccoli with Brown Rice",
+    "cuisine": "Chinese",
+    "sodium_mg": 571,
+    "carbs_g": 51,
+    "allergens": [
+      "soy"
+    ],
+    "key_ingredients": [
+      "beef",
+      "broccoli",
+      "brown rice"
+    ],
+    "diet_tags": [
+      "diabetic-friendly",
+      "gluten-free"
+    ],
+    "stock_qty": 133,
+    "source": "kitchen",
+    "reheat_method": "microwave"
+  },
+  {
+    "id": "M015",
+    "name": "Mild Mapo Tofu with Rice",
+    "cuisine": "Chinese",
+    "sodium_mg": 607,
+    "carbs_g": 52,
+    "allergens": [
+      "soy"
+    ],
+    "key_ingredients": [
+      "tofu",
+      "ground pork",
+      "rice"
+    ],
+    "diet_tags": [
+      "diabetic-friendly",
+      "gluten-free"
+    ],
+    "stock_qty": 135,
+    "source": "kitchen",
+    "reheat_method": "microwave"
+  },
+  {
+    "id": "M016",
+    "name": "Cashew Chicken with Rice",
+    "cuisine": "Chinese",
+    "sodium_mg": 516,
+    "carbs_g": 46,
+    "allergens": [
+      "tree_nut",
+      "soy"
+    ],
+    "key_ingredients": [
+      "chicken",
+      "cashews",
+      "bell pepper",
+      "rice"
+    ],
+    "diet_tags": [
+      "heart-healthy",
+      "diabetic-friendly",
+      "gluten-free"
+    ],
+    "stock_qty": 76,
+    "source": "kitchen",
+    "reheat_method": "microwave"
+  },
+  {
+    "id": "M017",
+    "name": "Shrimp Chow Mein",
+    "cuisine": "Chinese",
+    "sodium_mg": 617,
+    "carbs_g": 61,
+    "allergens": [
+      "shellfish",
+      "gluten",
+      "soy"
+    ],
+    "key_ingredients": [
+      "shrimp",
+      "wheat noodles",
+      "cabbage"
+    ],
+    "diet_tags": [],
+    "stock_qty": 47,
+    "source": "donated",
+    "reheat_method": "microwave"
+  },
+  {
+    "id": "M018",
+    "name": "Buddha's Delight",
+    "cuisine": "Chinese",
+    "sodium_mg": 457,
+    "carbs_g": 49,
+    "allergens": [
+      "soy"
+    ],
+    "key_ingredients": [
+      "tofu",
+      "mushrooms",
+      "napa cabbage",
+      "rice"
+    ],
+    "diet_tags": [
+      "heart-healthy",
+      "diabetic-friendly",
+      "gluten-free",
+      "vegetarian"
+    ],
+    "stock_qty": 111,
+    "source": "kitchen",
+    "reheat_method": "microwave"
+  },
+  {
+    "id": "M019",
+    "name": "Vegetable Egg Fried Rice",
+    "cuisine": "Chinese",
+    "sodium_mg": 521,
+    "carbs_g": 62,
+    "allergens": [
+      "egg",
+      "soy"
+    ],
+    "key_ingredients": [
+      "rice",
+      "egg",
+      "peas",
+      "carrots"
+    ],
+    "diet_tags": [
+      "heart-healthy",
+      "gluten-free",
+      "vegetarian"
+    ],
+    "stock_qty": 52,
+    "source": "purchased",
+    "reheat_method": "microwave"
+  },
+  {
+    "id": "M020",
+    "name": "Winter Melon Soup with Chicken and Rice",
+    "cuisine": "Chinese",
+    "sodium_mg": 354,
+    "carbs_g": 45,
+    "allergens": [],
+    "key_ingredients": [
+      "winter melon",
+      "chicken",
+      "rice"
+    ],
+    "diet_tags": [
+      "heart-healthy",
+      "diabetic-friendly",
+      "renal-friendly",
+      "gluten-free"
+    ],
+    "stock_qty": 83,
+    "source": "kitchen",
+    "reheat_method": "microwave"
+  },
+  {
+    "id": "M021",
+    "name": "Pho Ga (Chicken Pho)",
+    "cuisine": "Vietnamese",
+    "sodium_mg": 530,
+    "carbs_g": 56,
+    "allergens": [],
+    "key_ingredients": [
+      "chicken",
+      "rice noodles",
+      "herbs"
+    ],
+    "diet_tags": [
+      "heart-healthy",
+      "diabetic-friendly",
+      "gluten-free"
+    ],
+    "stock_qty": 72,
+    "source": "donated",
+    "reheat_method": "microwave"
+  },
+  {
+    "id": "M022",
+    "name": "Lemongrass Chicken with Rice",
+    "cuisine": "Vietnamese",
+    "sodium_mg": 458,
+    "carbs_g": 50,
+    "allergens": [],
+    "key_ingredients": [
+      "chicken",
+      "lemongrass",
+      "rice"
+    ],
+    "diet_tags": [
+      "heart-healthy",
+      "diabetic-friendly",
+      "gluten-free"
+    ],
+    "stock_qty": 125,
+    "source": "kitchen",
+    "reheat_method": "microwave"
+  },
+  {
+    "id": "M023",
+    "name": "Bun Bowl with Grilled Pork",
+    "cuisine": "Vietnamese",
+    "sodium_mg": 520,
+    "carbs_g": 59,
+    "allergens": [
+      "peanut"
+    ],
+    "key_ingredients": [
+      "pork",
+      "rice noodles",
+      "cucumber",
+      "herbs"
+    ],
+    "diet_tags": [
+      "heart-healthy",
+      "diabetic-friendly",
+      "gluten-free"
+    ],
+    "stock_qty": 83,
+    "source": "kitchen",
+    "reheat_method": "microwave"
+  },
+  {
+    "id": "M024",
+    "name": "Com Tam with Grilled Chicken",
+    "cuisine": "Vietnamese",
+    "sodium_mg": 498,
+    "carbs_g": 54,
+    "allergens": [],
+    "key_ingredients": [
+      "chicken",
+      "broken rice",
+      "pickled vegetables"
+    ],
+    "diet_tags": [
+      "heart-healthy",
+      "diabetic-friendly",
+      "gluten-free"
+    ],
+    "stock_qty": 110,
+    "source": "kitchen",
+    "reheat_method": "microwave"
+  },
+  {
+    "id": "M025",
+    "name": "Canh Chua (Sour Fish Soup) with Rice",
+    "cuisine": "Vietnamese",
+    "sodium_mg": 467,
+    "carbs_g": 49,
+    "allergens": [
+      "fish"
+    ],
+    "key_ingredients": [
+      "fish",
+      "pineapple",
+      "tomato",
+      "rice"
+    ],
+    "diet_tags": [
+      "heart-healthy",
+      "diabetic-friendly",
+      "gluten-free"
+    ],
+    "stock_qty": 49,
+    "source": "kitchen",
+    "reheat_method": "microwave"
+  },
+  {
+    "id": "M026",
+    "name": "Fresh Spring Rolls with Chicken",
+    "cuisine": "Vietnamese",
+    "sodium_mg": 420,
+    "carbs_g": 41,
+    "allergens": [
+      "peanut"
+    ],
+    "key_ingredients": [
+      "chicken",
+      "rice paper",
+      "vermicelli",
+      "peanut sauce"
+    ],
+    "diet_tags": [
+      "heart-healthy",
+      "diabetic-friendly",
+      "renal-friendly",
+      "gluten-free"
+    ],
+    "stock_qty": 138,
+    "source": "kitchen",
+    "reheat_method": "none"
+  },
+  {
+    "id": "M027",
+    "name": "Ginger Chicken Claypot with Rice",
+    "cuisine": "Vietnamese",
+    "sodium_mg": 543,
+    "carbs_g": 52,
+    "allergens": [],
+    "key_ingredients": [
+      "chicken",
+      "ginger",
+      "rice"
+    ],
+    "diet_tags": [
+      "heart-healthy",
+      "diabetic-friendly",
+      "gluten-free"
+    ],
+    "stock_qty": 62,
+    "source": "kitchen",
+    "reheat_method": "microwave"
+  },
+  {
+    "id": "M028",
+    "name": "Tofu and Vegetable Curry with Rice",
+    "cuisine": "Vietnamese",
+    "sodium_mg": 439,
+    "carbs_g": 54,
+    "allergens": [
+      "soy"
+    ],
+    "key_ingredients": [
+      "tofu",
+      "coconut milk",
+      "vegetables",
+      "rice"
+    ],
+    "diet_tags": [
+      "heart-healthy",
+      "diabetic-friendly",
+      "gluten-free",
+      "vegetarian"
+    ],
+    "stock_qty": 73,
+    "source": "kitchen",
+    "reheat_method": "microwave"
+  },
+  {
+    "id": "M029",
+    "name": "Beef Pho with Rice Noodles",
+    "cuisine": "Vietnamese",
+    "sodium_mg": 598,
+    "carbs_g": 57,
+    "allergens": [],
+    "key_ingredients": [
+      "beef",
+      "rice noodles",
+      "herbs"
+    ],
+    "diet_tags": [
+      "diabetic-friendly",
+      "gluten-free"
+    ],
+    "stock_qty": 72,
+    "source": "donated",
+    "reheat_method": "microwave"
+  },
+  {
+    "id": "M030",
+    "name": "Steamed Rice Rolls with Mushrooms",
+    "cuisine": "Vietnamese",
+    "sodium_mg": 423,
+    "carbs_g": 46,
+    "allergens": [],
+    "key_ingredients": [
+      "rice flour",
+      "mushrooms",
+      "shallots"
+    ],
+    "diet_tags": [
+      "heart-healthy",
+      "diabetic-friendly",
+      "renal-friendly",
+      "gluten-free",
+      "vegetarian"
+    ],
+    "stock_qty": 127,
+    "source": "kitchen",
+    "reheat_method": "microwave"
+  },
+  {
+    "id": "M031",
+    "name": "Chicken Fajita Bowl",
+    "cuisine": "Mexican",
+    "sodium_mg": 450,
+    "carbs_g": 57,
+    "allergens": [],
+    "key_ingredients": [
+      "chicken",
+      "bell pepper",
+      "onion",
+      "brown rice"
+    ],
+    "diet_tags": [
+      "heart-healthy",
+      "diabetic-friendly",
+      "gluten-free"
+    ],
+    "stock_qty": 104,
+    "source": "purchased",
+    "reheat_method": "microwave"
+  },
+  {
+    "id": "M032",
+    "name": "Black Bean and Rice Bowl",
+    "cuisine": "Mexican",
+    "sodium_mg": 465,
+    "carbs_g": 56,
+    "allergens": [],
+    "key_ingredients": [
+      "black beans",
+      "rice",
+      "corn",
+      "tomato"
+    ],
+    "diet_tags": [
+      "heart-healthy",
+      "diabetic-friendly",
+      "gluten-free",
+      "vegetarian"
+    ],
+    "stock_qty": 100,
+    "source": "kitchen",
+    "reheat_method": "microwave"
+  },
+  {
+    "id": "M033",
+    "name": "Veggie Enchiladas",
+    "cuisine": "Mexican",
+    "sodium_mg": 551,
+    "carbs_g": 47,
+    "allergens": [
+      "dairy"
+    ],
+    "key_ingredients": [
+      "corn tortilla",
+      "vegetables",
+      "cheese"
+    ],
+    "diet_tags": [
+      "diabetic-friendly",
+      "gluten-free",
+      "vegetarian"
+    ],
+    "stock_qty": 111,
+    "source": "donated",
+    "reheat_method": "microwave"
+  },
+  {
+    "id": "M034",
+    "name": "Pork Carnitas Bowl",
+    "cuisine": "Mexican",
+    "sodium_mg": 507,
+    "carbs_g": 50,
+    "allergens": [],
+    "key_ingredients": [
+      "pork",
+      "rice",
+      "pico de gallo"
+    ],
+    "diet_tags": [
+      "heart-healthy",
+      "diabetic-friendly",
+      "gluten-free"
+    ],
+    "stock_qty": 73,
+    "source": "kitchen",
+    "reheat_method": "microwave"
+  },
+  {
+    "id": "M035",
+    "name": "Baja Fish Tacos",
+    "cuisine": "Mexican",
+    "sodium_mg": 483,
+    "carbs_g": 50,
+    "allergens": [
+      "fish"
+    ],
+    "key_ingredients": [
+      "fish",
+      "corn tortilla",
+      "cabbage slaw"
+    ],
+    "diet_tags": [
+      "heart-healthy",
+      "diabetic-friendly",
+      "gluten-free"
+    ],
+    "stock_qty": 97,
+    "source": "purchased",
+    "reheat_method": "microwave"
+  },
+  {
+    "id": "M036",
+    "name": "Chicken Pozole Verde",
+    "cuisine": "Mexican",
+    "sodium_mg": 569,
+    "carbs_g": 43,
+    "allergens": [],
+    "key_ingredients": [
+      "chicken",
+      "hominy",
+      "tomatillo"
+    ],
+    "diet_tags": [
+      "diabetic-friendly",
+      "gluten-free"
+    ],
+    "stock_qty": 96,
+    "source": "kitchen",
+    "reheat_method": "microwave"
+  },
+  {
+    "id": "M037",
+    "name": "Chicken Tinga with Rice",
+    "cuisine": "Mexican",
+    "sodium_mg": 454,
+    "carbs_g": 48,
+    "allergens": [],
+    "key_ingredients": [
+      "chicken",
+      "chipotle",
+      "tomato",
+      "rice"
+    ],
+    "diet_tags": [
+      "heart-healthy",
+      "diabetic-friendly",
+      "gluten-free"
+    ],
+    "stock_qty": 82,
+    "source": "kitchen",
+    "reheat_method": "microwave"
+  },
+  {
+    "id": "M038",
+    "name": "Calabacitas con Pollo",
+    "cuisine": "Mexican",
+    "sodium_mg": 374,
+    "carbs_g": 43,
+    "allergens": [],
+    "key_ingredients": [
+      "chicken",
+      "zucchini",
+      "corn",
+      "rice"
+    ],
+    "diet_tags": [
+      "heart-healthy",
+      "diabetic-friendly",
+      "renal-friendly",
+      "gluten-free"
+    ],
+    "stock_qty": 130,
+    "source": "kitchen",
+    "reheat_method": "microwave"
+  },
+  {
+    "id": "M039",
+    "name": "Turkey Picadillo with Rice",
+    "cuisine": "Mexican",
+    "sodium_mg": 440,
+    "carbs_g": 48,
+    "allergens": [],
+    "key_ingredients": [
+      "turkey",
+      "potatoes",
+      "olives",
+      "rice"
+    ],
+    "diet_tags": [
+      "heart-healthy",
+      "diabetic-friendly",
+      "gluten-free"
+    ],
+    "stock_qty": 95,
+    "source": "kitchen",
+    "reheat_method": "microwave"
+  },
+  {
+    "id": "M040",
+    "name": "Bean and Cheese Burrito",
+    "cuisine": "Mexican",
+    "sodium_mg": 604,
+    "carbs_g": 64,
+    "allergens": [
+      "dairy",
+      "gluten"
+    ],
+    "key_ingredients": [
+      "flour tortilla",
+      "pinto beans",
+      "cheese"
+    ],
+    "diet_tags": [
+      "vegetarian"
+    ],
+    "stock_qty": 70,
+    "source": "kitchen",
+    "reheat_method": "microwave"
+  },
+  {
+    "id": "M041",
+    "name": "Herb Roasted Chicken with Mashed Potatoes",
+    "cuisine": "American",
+    "sodium_mg": 430,
+    "carbs_g": 43,
+    "allergens": [
+      "dairy"
+    ],
+    "key_ingredients": [
+      "chicken",
+      "potatoes",
+      "green beans"
+    ],
+    "diet_tags": [
+      "heart-healthy",
+      "diabetic-friendly",
+      "renal-friendly",
+      "gluten-free"
+    ],
+    "stock_qty": 57,
+    "source": "kitchen",
+    "reheat_method": "microwave"
+  },
+  {
+    "id": "M042",
+    "name": "Turkey Meatloaf with Roasted Vegetables",
+    "cuisine": "American",
+    "sodium_mg": 469,
+    "carbs_g": 39,
+    "allergens": [
+      "egg"
+    ],
+    "key_ingredients": [
+      "turkey",
+      "carrots",
+      "potatoes"
+    ],
+    "diet_tags": [
+      "heart-healthy",
+      "diabetic-friendly",
+      "gluten-free"
+    ],
+    "stock_qty": 71,
+    "source": "kitchen",
+    "reheat_method": "microwave"
+  },
+  {
+    "id": "M043",
+    "name": "Baked Salmon with Quinoa",
+    "cuisine": "American",
+    "sodium_mg": 395,
+    "carbs_g": 40,
+    "allergens": [
+      "fish"
+    ],
+    "key_ingredients": [
+      "salmon",
+      "quinoa",
+      "asparagus"
+    ],
+    "diet_tags": [
+      "heart-healthy",
+      "diabetic-friendly",
+      "renal-friendly",
+      "gluten-free"
+    ],
+    "stock_qty": 88,
+    "source": "kitchen",
+    "reheat_method": "microwave"
+  },
+  {
+    "id": "M044",
+    "name": "Grilled Chicken Garden Salad",
+    "cuisine": "American",
+    "sodium_mg": 333,
+    "carbs_g": 39,
+    "allergens": [],
+    "key_ingredients": [
+      "chicken",
+      "lettuce",
+      "tomato",
+      "cucumber"
+    ],
+    "diet_tags": [
+      "heart-healthy",
+      "diabetic-friendly",
+      "renal-friendly",
+      "gluten-free"
+    ],
+    "stock_qty": 121,
+    "source": "kitchen",
+    "reheat_method": "none"
+  },
+  {
+    "id": "M045",
+    "name": "Turkey and Avocado Sandwich",
+    "cuisine": "American",
+    "sodium_mg": 559,
+    "carbs_g": 51,
+    "allergens": [
+      "gluten"
+    ],
+    "key_ingredients": [
+      "turkey",
+      "whole wheat bread",
+      "avocado"
+    ],
+    "diet_tags": [
+      "diabetic-friendly"
+    ],
+    "stock_qty": 93,
+    "source": "donated",
+    "reheat_method": "none"
+  },
+  {
+    "id": "M046",
+    "name": "Hearty Beef Stew",
+    "cuisine": "American",
+    "sodium_mg": 544,
+    "carbs_g": 44,
+    "allergens": [],
+    "key_ingredients": [
+      "beef",
+      "potatoes",
+      "carrots",
+      "celery"
+    ],
+    "diet_tags": [
+      "heart-healthy",
+      "diabetic-friendly",
+      "gluten-free"
+    ],
+    "stock_qty": 54,
+    "source": "kitchen",
+    "reheat_method": "microwave"
+  },
+  {
+    "id": "M047",
+    "name": "Chicken Pot Pie",
+    "cuisine": "American",
+    "sodium_mg": 659,
+    "carbs_g": 50,
+    "allergens": [
+      "gluten",
+      "dairy"
+    ],
+    "key_ingredients": [
+      "chicken",
+      "wheat crust",
+      "peas",
+      "cream"
+    ],
+    "diet_tags": [
+      "diabetic-friendly"
+    ],
+    "stock_qty": 79,
+    "source": "kitchen",
+    "reheat_method": "oven"
+  },
+  {
+    "id": "M048",
+    "name": "Three-Bean Veggie Chili",
+    "cuisine": "American",
+    "sodium_mg": 480,
+    "carbs_g": 50,
+    "allergens": [],
+    "key_ingredients": [
+      "kidney beans",
+      "black beans",
+      "tomato",
+      "corn"
+    ],
+    "diet_tags": [
+      "heart-healthy",
+      "diabetic-friendly",
+      "gluten-free",
+      "vegetarian"
+    ],
+    "stock_qty": 126,
+    "source": "donated",
+    "reheat_method": "microwave"
+  },
+  {
+    "id": "M049",
+    "name": "BBQ Chicken with Corn and Slaw",
+    "cuisine": "American",
+    "sodium_mg": 575,
+    "carbs_g": 55,
+    "allergens": [],
+    "key_ingredients": [
+      "chicken",
+      "corn",
+      "cabbage slaw"
+    ],
+    "diet_tags": [
+      "diabetic-friendly",
+      "gluten-free"
+    ],
+    "stock_qty": 47,
+    "source": "kitchen",
+    "reheat_method": "microwave"
+  },
+  {
+    "id": "M050",
+    "name": "Overnight Oats with Berries",
+    "cuisine": "American",
+    "sodium_mg": 300,
+    "carbs_g": 55,
+    "allergens": [
+      "dairy"
+    ],
+    "key_ingredients": [
+      "oats",
+      "yogurt",
+      "berries"
+    ],
+    "diet_tags": [
+      "heart-healthy",
+      "diabetic-friendly",
+      "renal-friendly",
+      "gluten-free",
+      "vegetarian"
+    ],
+    "stock_qty": 116,
+    "source": "purchased",
+    "reheat_method": "none"
+  },
+  {
+    "id": "M051",
+    "name": "Chicken Shawarma Bowl",
+    "cuisine": "Mediterranean",
+    "sodium_mg": 529,
+    "carbs_g": 53,
+    "allergens": [],
+    "key_ingredients": [
+      "chicken",
+      "rice",
+      "cucumber",
+      "tomato"
+    ],
+    "diet_tags": [
+      "heart-healthy",
+      "diabetic-friendly",
+      "gluten-free"
+    ],
+    "stock_qty": 124,
+    "source": "purchased",
+    "reheat_method": "microwave"
+  },
+  {
+    "id": "M052",
+    "name": "Falafel Plate with Hummus",
+    "cuisine": "Mediterranean",
+    "sodium_mg": 486,
+    "carbs_g": 57,
+    "allergens": [
+      "sesame",
+      "gluten"
+    ],
+    "key_ingredients": [
+      "chickpeas",
+      "pita",
+      "tahini"
+    ],
+    "diet_tags": [
+      "heart-healthy",
+      "diabetic-friendly",
+      "vegetarian"
+    ],
+    "stock_qty": 85,
+    "source": "purchased",
+    "reheat_method": "microwave"
+  },
+  {
+    "id": "M053",
+    "name": "Greek Chicken with Orzo",
+    "cuisine": "Mediterranean",
+    "sodium_mg": 481,
+    "carbs_g": 49,
+    "allergens": [
+      "gluten"
+    ],
+    "key_ingredients": [
+      "chicken",
+      "orzo",
+      "spinach",
+      "lemon"
+    ],
+    "diet_tags": [
+      "heart-healthy",
+      "diabetic-friendly"
+    ],
+    "stock_qty": 134,
+    "source": "kitchen",
+    "reheat_method": "microwave"
+  },
+  {
+    "id": "M054",
+    "name": "Hearty Lentil Soup with Vegetables",
+    "cuisine": "Mediterranean",
+    "sodium_mg": 410,
+    "carbs_g": 47,
+    "allergens": [],
+    "key_ingredients": [
+      "lentils",
+      "carrots",
+      "celery",
+      "tomato"
+    ],
+    "diet_tags": [
+      "heart-healthy",
+      "diabetic-friendly",
+      "renal-friendly",
+      "gluten-free",
+      "vegetarian"
+    ],
+    "stock_qty": 55,
+    "source": "kitchen",
+    "reheat_method": "microwave"
+  },
+  {
+    "id": "M055",
+    "name": "Baked Cod with Herbed Couscous",
+    "cuisine": "Mediterranean",
+    "sodium_mg": 351,
+    "carbs_g": 41,
+    "allergens": [
+      "fish",
+      "gluten"
+    ],
+    "key_ingredients": [
+      "cod",
+      "couscous",
+      "zucchini"
+    ],
+    "diet_tags": [
+      "heart-healthy",
+      "diabetic-friendly",
+      "renal-friendly"
+    ],
+    "stock_qty": 105,
+    "source": "donated",
+    "reheat_method": "microwave"
+  },
+  {
+    "id": "M056",
+    "name": "Vegetable Moussaka",
+    "cuisine": "Mediterranean",
+    "sodium_mg": 548,
+    "carbs_g": 43,
+    "allergens": [
+      "dairy"
+    ],
+    "key_ingredients": [
+      "eggplant",
+      "potatoes",
+      "béchamel"
+    ],
+    "diet_tags": [
+      "heart-healthy",
+      "diabetic-friendly",
+      "gluten-free",
+      "vegetarian"
+    ],
+    "stock_qty": 87,
+    "source": "donated",
+    "reheat_method": "oven"
+  },
+  {
+    "id": "M057",
+    "name": "Tabbouleh with Grilled Chicken",
+    "cuisine": "Mediterranean",
+    "sodium_mg": 378,
+    "carbs_g": 40,
+    "allergens": [
+      "gluten"
+    ],
+    "key_ingredients": [
+      "bulgur",
+      "parsley",
+      "chicken",
+      "tomato"
+    ],
+    "diet_tags": [
+      "heart-healthy",
+      "diabetic-friendly",
+      "renal-friendly"
+    ],
+    "stock_qty": 54,
+    "source": "kitchen",
+    "reheat_method": "none"
+  },
+  {
+    "id": "M058",
+    "name": "Quinoa-Stuffed Bell Peppers",
+    "cuisine": "Mediterranean",
+    "sodium_mg": 417,
+    "carbs_g": 48,
+    "allergens": [],
+    "key_ingredients": [
+      "bell pepper",
+      "quinoa",
+      "tomato",
+      "herbs"
+    ],
+    "diet_tags": [
+      "heart-healthy",
+      "diabetic-friendly",
+      "renal-friendly",
+      "gluten-free",
+      "vegetarian"
+    ],
+    "stock_qty": 97,
+    "source": "donated",
+    "reheat_method": "microwave"
+  },
+  {
+    "id": "M059",
+    "name": "Shakshuka with Whole-Grain Pita",
+    "cuisine": "Mediterranean",
+    "sodium_mg": 508,
+    "carbs_g": 46,
+    "allergens": [
+      "egg",
+      "gluten"
+    ],
+    "key_ingredients": [
+      "egg",
+      "tomato",
+      "pita"
+    ],
+    "diet_tags": [
+      "heart-healthy",
+      "diabetic-friendly",
+      "vegetarian"
+    ],
+    "stock_qty": 59,
+    "source": "kitchen",
+    "reheat_method": "microwave"
+  },
+  {
+    "id": "M060",
+    "name": "Hummus and Veggie Wrap",
+    "cuisine": "Mediterranean",
+    "sodium_mg": 451,
+    "carbs_g": 52,
+    "allergens": [
+      "sesame",
+      "gluten"
+    ],
+    "key_ingredients": [
+      "hummus",
+      "whole wheat wrap",
+      "vegetables"
+    ],
+    "diet_tags": [
+      "heart-healthy",
+      "diabetic-friendly",
+      "vegetarian"
+    ],
+    "stock_qty": 87,
+    "source": "kitchen",
+    "reheat_method": "none"
+  },
+  {
+    "id": "M061",
+    "name": "Chicken Tikka with Basmati Rice",
+    "cuisine": "Indian",
+    "sodium_mg": 515,
+    "carbs_g": 54,
+    "allergens": [
+      "dairy"
+    ],
+    "key_ingredients": [
+      "chicken",
+      "yogurt",
+      "basmati rice"
+    ],
+    "diet_tags": [
+      "heart-healthy",
+      "diabetic-friendly",
+      "gluten-free"
+    ],
+    "stock_qty": 71,
+    "source": "kitchen",
+    "reheat_method": "microwave"
+  },
+  {
+    "id": "M062",
+    "name": "Dal Tadka with Brown Rice",
+    "cuisine": "Indian",
+    "sodium_mg": 430,
+    "carbs_g": 56,
+    "allergens": [],
+    "key_ingredients": [
+      "lentils",
+      "tomato",
+      "brown rice"
+    ],
+    "diet_tags": [
+      "heart-healthy",
+      "diabetic-friendly",
+      "renal-friendly",
+      "gluten-free",
+      "vegetarian"
+    ],
+    "stock_qty": 93,
+    "source": "kitchen",
+    "reheat_method": "microwave"
+  },
+  {
+    "id": "M063",
+    "name": "Chana Masala with Rice",
+    "cuisine": "Indian",
+    "sodium_mg": 469,
+    "carbs_g": 56,
+    "allergens": [],
+    "key_ingredients": [
+      "chickpeas",
+      "tomato",
+      "onion",
+      "rice"
+    ],
+    "diet_tags": [
+      "heart-healthy",
+      "diabetic-friendly",
+      "gluten-free",
+      "vegetarian"
+    ],
+    "stock_qty": 53,
+    "source": "kitchen",
+    "reheat_method": "microwave"
+  },
+  {
+    "id": "M064",
+    "name": "Vegetable Korma with Rice",
+    "cuisine": "Indian",
+    "sodium_mg": 519,
+    "carbs_g": 53,
+    "allergens": [
+      "dairy",
+      "tree_nut"
+    ],
+    "key_ingredients": [
+      "vegetables",
+      "cashews",
+      "cream",
+      "rice"
+    ],
+    "diet_tags": [
+      "heart-healthy",
+      "diabetic-friendly",
+      "gluten-free",
+      "vegetarian"
+    ],
+    "stock_qty": 46,
+    "source": "purchased",
+    "reheat_method": "microwave"
+  },
+  {
+    "id": "M065",
+    "name": "Tandoori Chicken with Rice and Raita",
+    "cuisine": "Indian",
+    "sodium_mg": 476,
+    "carbs_g": 49,
+    "allergens": [
+      "dairy"
+    ],
+    "key_ingredients": [
+      "chicken",
+      "yogurt",
+      "rice"
+    ],
+    "diet_tags": [
+      "heart-healthy",
+      "diabetic-friendly",
+      "gluten-free"
+    ],
+    "stock_qty": 49,
+    "source": "donated",
+    "reheat_method": "microwave"
+  },
+  {
+    "id": "M066",
+    "name": "Palak Paneer with Rice",
+    "cuisine": "Indian",
+    "sodium_mg": 483,
+    "carbs_g": 45,
+    "allergens": [
+      "dairy"
+    ],
+    "key_ingredients": [
+      "spinach",
+      "paneer",
+      "rice"
+    ],
+    "diet_tags": [
+      "heart-healthy",
+      "diabetic-friendly",
+      "gluten-free",
+      "vegetarian"
+    ],
+    "stock_qty": 63,
+    "source": "donated",
+    "reheat_method": "microwave"
+  },
+  {
+    "id": "M067",
+    "name": "Vegetable Biryani",
+    "cuisine": "Indian",
+    "sodium_mg": 504,
+    "carbs_g": 59,
+    "allergens": [],
+    "key_ingredients": [
+      "basmati rice",
+      "vegetables",
+      "spices"
+    ],
+    "diet_tags": [
+      "heart-healthy",
+      "diabetic-friendly",
+      "gluten-free",
+      "vegetarian"
+    ],
+    "stock_qty": 137,
+    "source": "donated",
+    "reheat_method": "microwave"
+  },
+  {
+    "id": "M068",
+    "name": "Rajma (Kidney Bean Curry) with Rice",
+    "cuisine": "Indian",
+    "sodium_mg": 450,
+    "carbs_g": 59,
+    "allergens": [],
+    "key_ingredients": [
+      "kidney beans",
+      "tomato",
+      "rice"
+    ],
+    "diet_tags": [
+      "heart-healthy",
+      "diabetic-friendly",
+      "gluten-free",
+      "vegetarian"
+    ],
+    "stock_qty": 95,
+    "source": "donated",
+    "reheat_method": "microwave"
+  },
+  {
+    "id": "M069",
+    "name": "Mild Chicken Curry with Rice",
+    "cuisine": "Indian",
+    "sodium_mg": 532,
+    "carbs_g": 50,
+    "allergens": [],
+    "key_ingredients": [
+      "chicken",
+      "tomato",
+      "onion",
+      "rice"
+    ],
+    "diet_tags": [
+      "heart-healthy",
+      "diabetic-friendly",
+      "gluten-free"
+    ],
+    "stock_qty": 47,
+    "source": "kitchen",
+    "reheat_method": "microwave"
+  },
+  {
+    "id": "M070",
+    "name": "Kitchari with Seasonal Vegetables",
+    "cuisine": "Indian",
+    "sodium_mg": 373,
+    "carbs_g": 52,
+    "allergens": [],
+    "key_ingredients": [
+      "lentils",
+      "rice",
+      "vegetables"
+    ],
+    "diet_tags": [
+      "heart-healthy",
+      "diabetic-friendly",
+      "renal-friendly",
+      "gluten-free",
+      "vegetarian"
+    ],
+    "stock_qty": 107,
+    "source": "kitchen",
+    "reheat_method": "microwave"
+  },
+  {
+    "id": "M071",
+    "name": "Chicken Pasta Primavera",
+    "cuisine": "Italian",
+    "sodium_mg": 494,
+    "carbs_g": 63,
+    "allergens": [
+      "gluten"
+    ],
+    "key_ingredients": [
+      "chicken",
+      "wheat pasta",
+      "zucchini",
+      "tomato"
+    ],
+    "diet_tags": [
+      "heart-healthy"
+    ],
+    "stock_qty": 42,
+    "source": "kitchen",
+    "reheat_method": "microwave"
+  },
+  {
+    "id": "M072",
+    "name": "Turkey Bolognese with Whole-Wheat Pasta",
+    "cuisine": "Italian",
+    "sodium_mg": 530,
+    "carbs_g": 56,
+    "allergens": [
+      "gluten"
+    ],
+    "key_ingredients": [
+      "turkey",
+      "wheat pasta",
+      "tomato"
+    ],
+    "diet_tags": [
+      "heart-healthy",
+      "diabetic-friendly"
+    ],
+    "stock_qty": 124,
+    "source": "kitchen",
+    "reheat_method": "microwave"
+  },
+  {
+    "id": "M073",
+    "name": "Minestrone with Whole-Grain Roll",
+    "cuisine": "Italian",
+    "sodium_mg": 462,
+    "carbs_g": 55,
+    "allergens": [
+      "gluten"
+    ],
+    "key_ingredients": [
+      "vegetables",
+      "cannellini beans",
+      "wheat roll"
+    ],
+    "diet_tags": [
+      "heart-healthy",
+      "diabetic-friendly",
+      "vegetarian"
+    ],
+    "stock_qty": 136,
+    "source": "kitchen",
+    "reheat_method": "microwave"
+  },
+  {
+    "id": "M074",
+    "name": "Baked Ziti",
+    "cuisine": "Italian",
+    "sodium_mg": 621,
+    "carbs_g": 67,
+    "allergens": [
+      "gluten",
+      "dairy"
+    ],
+    "key_ingredients": [
+      "wheat pasta",
+      "ricotta",
+      "tomato"
+    ],
+    "diet_tags": [
+      "vegetarian"
+    ],
+    "stock_qty": 134,
+    "source": "kitchen",
+    "reheat_method": "microwave"
+  },
+  {
+    "id": "M075",
+    "name": "Chicken Piccata with Rice",
+    "cuisine": "Italian",
+    "sodium_mg": 474,
+    "carbs_g": 47,
+    "allergens": [],
+    "key_ingredients": [
+      "chicken",
+      "lemon",
+      "capers",
+      "rice"
+    ],
+    "diet_tags": [
+      "heart-healthy",
+      "diabetic-friendly",
+      "gluten-free"
+    ],
+    "stock_qty": 71,
+    "source": "kitchen",
+    "reheat_method": "microwave"
+  },
+  {
+    "id": "M076",
+    "name": "Eggplant Parmesan",
+    "cuisine": "Italian",
+    "sodium_mg": 595,
+    "carbs_g": 48,
+    "allergens": [
+      "dairy",
+      "gluten"
+    ],
+    "key_ingredients": [
+      "eggplant",
+      "mozzarella",
+      "breadcrumbs"
+    ],
+    "diet_tags": [
+      "diabetic-friendly",
+      "vegetarian"
+    ],
+    "stock_qty": 109,
+    "source": "kitchen",
+    "reheat_method": "oven"
+  },
+  {
+    "id": "M077",
+    "name": "Mushroom Risotto",
+    "cuisine": "Italian",
+    "sodium_mg": 513,
+    "carbs_g": 65,
+    "allergens": [
+      "dairy"
+    ],
+    "key_ingredients": [
+      "arborio rice",
+      "mushrooms",
+      "parmesan"
+    ],
+    "diet_tags": [
+      "heart-healthy",
+      "gluten-free",
+      "vegetarian"
+    ],
+    "stock_qty": 139,
+    "source": "donated",
+    "reheat_method": "microwave"
+  },
+  {
+    "id": "M078",
+    "name": "Pesto Pasta with Green Beans",
+    "cuisine": "Italian",
+    "sodium_mg": 548,
+    "carbs_g": 62,
+    "allergens": [
+      "gluten",
+      "tree_nut",
+      "dairy"
+    ],
+    "key_ingredients": [
+      "wheat pasta",
+      "basil pesto",
+      "pine nuts"
+    ],
+    "diet_tags": [
+      "heart-healthy",
+      "vegetarian"
+    ],
+    "stock_qty": 107,
+    "source": "purchased",
+    "reheat_method": "microwave"
+  },
+  {
+    "id": "M079",
+    "name": "Tuscan White Bean Soup",
+    "cuisine": "Italian",
+    "sodium_mg": 413,
+    "carbs_g": 53,
+    "allergens": [],
+    "key_ingredients": [
+      "cannellini beans",
+      "kale",
+      "tomato"
+    ],
+    "diet_tags": [
+      "heart-healthy",
+      "diabetic-friendly",
+      "renal-friendly",
+      "gluten-free",
+      "vegetarian"
+    ],
+    "stock_qty": 72,
+    "source": "purchased",
+    "reheat_method": "microwave"
+  },
+  {
+    "id": "M080",
+    "name": "Grilled Chicken with Creamy Polenta",
+    "cuisine": "Italian",
+    "sodium_mg": 445,
+    "carbs_g": 52,
+    "allergens": [
+      "dairy"
+    ],
+    "key_ingredients": [
+      "chicken",
+      "polenta",
+      "spinach"
+    ],
+    "diet_tags": [
+      "heart-healthy",
+      "diabetic-friendly",
+      "gluten-free"
+    ],
+    "stock_qty": 93,
+    "source": "donated",
+    "reheat_method": "microwave"
+  }
+]

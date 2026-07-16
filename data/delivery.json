@@ -1,0 +1,359 @@
+{
+  "zones": [
+    {
+      "zone": "Tenderloin",
+      "depot_distance_mi": 8,
+      "cold_chain_limit_hours": 4
+    },
+    {
+      "zone": "Mission",
+      "depot_distance_mi": 4,
+      "cold_chain_limit_hours": 4
+    },
+    {
+      "zone": "Bayview-Hunters Point",
+      "depot_distance_mi": 3,
+      "cold_chain_limit_hours": 4
+    },
+    {
+      "zone": "Sunset",
+      "depot_distance_mi": 7,
+      "cold_chain_limit_hours": 4
+    },
+    {
+      "zone": "Richmond",
+      "depot_distance_mi": 6,
+      "cold_chain_limit_hours": 4
+    },
+    {
+      "zone": "SoMa",
+      "depot_distance_mi": 2,
+      "cold_chain_limit_hours": 4
+    },
+    {
+      "zone": "Excelsior",
+      "depot_distance_mi": 4,
+      "cold_chain_limit_hours": 4
+    },
+    {
+      "zone": "Chinatown",
+      "depot_distance_mi": 8,
+      "cold_chain_limit_hours": 4
+    },
+    {
+      "zone": "Western Addition",
+      "depot_distance_mi": 8,
+      "cold_chain_limit_hours": 4
+    },
+    {
+      "zone": "Visitacion Valley",
+      "depot_distance_mi": 3,
+      "cold_chain_limit_hours": 4
+    }
+  ],
+  "batches": [
+    {
+      "route_id": "R-TEND-1",
+      "zone": "Tenderloin",
+      "clients": [
+        1011,
+        1012,
+        1020,
+        1026,
+        1033,
+        1034,
+        1037,
+        1042,
+        1050,
+        1057,
+        1073,
+        1082
+      ],
+      "window": "10:00–12:00",
+      "delivery_date": "2026-07-21",
+      "cold_chain_ok": true
+    },
+    {
+      "route_id": "R-TEND-2",
+      "zone": "Tenderloin",
+      "clients": [
+        1089,
+        1114,
+        1130,
+        1140,
+        1142
+      ],
+      "window": "12:00–14:00",
+      "delivery_date": "2026-07-21",
+      "cold_chain_ok": true
+    },
+    {
+      "route_id": "R-MISS-1",
+      "zone": "Mission",
+      "clients": [
+        1013,
+        1023,
+        1059,
+        1068,
+        1072,
+        1080,
+        1083,
+        1085,
+        1087,
+        1098,
+        1108,
+        1110
+      ],
+      "window": "14:00–16:00",
+      "delivery_date": "2026-07-21",
+      "cold_chain_ok": true
+    },
+    {
+      "route_id": "R-MISS-2",
+      "zone": "Mission",
+      "clients": [
+        1116,
+        1117,
+        1125,
+        1132,
+        1133,
+        1148
+      ],
+      "window": "10:00–12:00",
+      "delivery_date": "2026-07-21",
+      "cold_chain_ok": true
+    },
+    {
+      "route_id": "R-BAYV-1",
+      "zone": "Bayview-Hunters Point",
+      "clients": [
+        1003,
+        1005,
+        1031,
+        1055,
+        1063,
+        1064,
+        1071,
+        1075,
+        1096,
+        1101,
+        1107,
+        1112
+      ],
+      "window": "12:00–14:00",
+      "delivery_date": "2026-07-21",
+      "cold_chain_ok": true
+    },
+    {
+      "route_id": "R-BAYV-2",
+      "zone": "Bayview-Hunters Point",
+      "clients": [
+        1113,
+        1121,
+        1124,
+        1128,
+        1136
+      ],
+      "window": "14:00–16:00",
+      "delivery_date": "2026-07-21",
+      "cold_chain_ok": true
+    },
+    {
+      "route_id": "R-SUNS-1",
+      "zone": "Sunset",
+      "clients": [
+        1018,
+        1030,
+        1043,
+        1044,
+        1052,
+        1056,
+        1067,
+        1078,
+        1090,
+        1126,
+        1143,
+        1147
+      ],
+      "window": "10:00–12:00",
+      "delivery_date": "2026-07-21",
+      "cold_chain_ok": true
+    },
+    {
+      "route_id": "R-RICH-1",
+      "zone": "Richmond",
+      "clients": [
+        1009,
+        1040,
+        1045,
+        1048,
+        1065,
+        1074,
+        1100,
+        1115,
+        1118,
+        1119,
+        1127,
+        1141
+      ],
+      "window": "12:00–14:00",
+      "delivery_date": "2026-07-21",
+      "cold_chain_ok": true
+    },
+    {
+      "route_id": "R-RICH-2",
+      "zone": "Richmond",
+      "clients": [
+        1149
+      ],
+      "window": "14:00–16:00",
+      "delivery_date": "2026-07-21",
+      "cold_chain_ok": true
+    },
+    {
+      "route_id": "R-SOMA-1",
+      "zone": "SoMa",
+      "clients": [
+        1007,
+        1008,
+        1019,
+        1024,
+        1025,
+        1029,
+        1054,
+        1058,
+        1076,
+        1095,
+        1097,
+        1103
+      ],
+      "window": "10:00–12:00",
+      "delivery_date": "2026-07-21",
+      "cold_chain_ok": true
+    },
+    {
+      "route_id": "R-SOMA-2",
+      "zone": "SoMa",
+      "clients": [
+        1123,
+        1131,
+        1135,
+        1146
+      ],
+      "window": "12:00–14:00",
+      "delivery_date": "2026-07-21",
+      "cold_chain_ok": true
+    },
+    {
+      "route_id": "R-EXCE-1",
+      "zone": "Excelsior",
+      "clients": [
+        1002,
+        1010,
+        1015,
+        1017,
+        1021,
+        1027,
+        1028,
+        1036,
+        1038,
+        1039,
+        1051,
+        1060
+      ],
+      "window": "14:00–16:00",
+      "delivery_date": "2026-07-21",
+      "cold_chain_ok": true
+    },
+    {
+      "route_id": "R-EXCE-2",
+      "zone": "Excelsior",
+      "clients": [
+        1066,
+        1069,
+        1070,
+        1077,
+        1092,
+        1094,
+        1102,
+        1129,
+        1137,
+        1144
+      ],
+      "window": "10:00–12:00",
+      "delivery_date": "2026-07-21",
+      "cold_chain_ok": true
+    },
+    {
+      "route_id": "R-CHIN-1",
+      "zone": "Chinatown",
+      "clients": [
+        1001,
+        1004,
+        1006,
+        1014,
+        1032,
+        1035,
+        1079,
+        1088,
+        1104,
+        1111,
+        1145
+      ],
+      "window": "12:00–14:00",
+      "delivery_date": "2026-07-21",
+      "cold_chain_ok": true
+    },
+    {
+      "route_id": "R-WEST-1",
+      "zone": "Western Addition",
+      "clients": [
+        1016,
+        1041,
+        1046,
+        1049,
+        1053,
+        1062,
+        1084,
+        1086,
+        1091,
+        1093,
+        1099,
+        1105
+      ],
+      "window": "14:00–16:00",
+      "delivery_date": "2026-07-21",
+      "cold_chain_ok": true
+    },
+    {
+      "route_id": "R-WEST-2",
+      "zone": "Western Addition",
+      "clients": [
+        1109,
+        1122,
+        1134,
+        1139,
+        1150
+      ],
+      "window": "10:00–12:00",
+      "delivery_date": "2026-07-21",
+      "cold_chain_ok": true
+    },
+    {
+      "route_id": "R-VISI-1",
+      "zone": "Visitacion Valley",
+      "clients": [
+        1022,
+        1047,
+        1061,
+        1081,
+        1106,
+        1120,
+        1138
+      ],
+      "window": "12:00–14:00",
+      "delivery_date": "2026-07-21",
+      "cold_chain_ok": true
+    }
+  ]
+}

@@ -1,0 +1,209 @@
+[
+  {
+    "id": "D001",
+    "donor": "Golden State Rice Cooperative",
+    "received_at": "2026-07-19T08:30:00Z",
+    "condition": "good",
+    "items": [
+      {
+        "name": "Jasmine Rice (50 lb sacks)",
+        "qty": 12,
+        "unit": "sack",
+        "allergens": []
+      }
+    ],
+    "triage_status": "kitchen_ingredient",
+    "routed_to": "batch:B1"
+  },
+  {
+    "id": "D002",
+    "donor": "Bay Area Produce Exchange",
+    "received_at": "2026-07-19T09:15:00Z",
+    "condition": "good",
+    "items": [
+      {
+        "name": "Fresh Bok Choy (cases)",
+        "qty": 8,
+        "unit": "case",
+        "allergens": []
+      },
+      {
+        "name": "Carrots (25 lb bags)",
+        "qty": 6,
+        "unit": "bag",
+        "allergens": []
+      }
+    ],
+    "triage_status": "kitchen_ingredient",
+    "routed_to": "batch:B2"
+  },
+  {
+    "id": "D003",
+    "donor": "Mission Community Market",
+    "received_at": "2026-07-19T10:00:00Z",
+    "condition": "good",
+    "items": [
+      {
+        "name": "Canned Low-Sodium Beans (flats)",
+        "qty": 20,
+        "unit": "flat",
+        "allergens": []
+      }
+    ],
+    "triage_status": "usable_as_is",
+    "routed_to": "inventory"
+  },
+  {
+    "id": "D004",
+    "donor": "Sunrise Bakery",
+    "received_at": "2026-07-19T11:20:00Z",
+    "condition": "good",
+    "items": [
+      {
+        "name": "Whole-Wheat Rolls (dozens)",
+        "qty": 15,
+        "unit": "dozen",
+        "allergens": [
+          "gluten"
+        ]
+      }
+    ],
+    "triage_status": "usable_as_is",
+    "routed_to": "inventory"
+  },
+  {
+    "id": "D005",
+    "donor": "Pacific Seafood Distributors",
+    "received_at": "2026-07-19T12:05:00Z",
+    "condition": "good",
+    "items": [
+      {
+        "name": "Frozen Cod Fillets (10 lb boxes)",
+        "qty": 10,
+        "unit": "box",
+        "allergens": [
+          "fish"
+        ]
+      }
+    ],
+    "triage_status": "kitchen_ingredient",
+    "routed_to": "batch:B3"
+  },
+  {
+    "id": "D006",
+    "donor": "Anonymous Drop-off",
+    "received_at": "2026-07-19T13:40:00Z",
+    "condition": "expired",
+    "items": [
+      {
+        "name": "Assorted Canned Goods (past date)",
+        "qty": 4,
+        "unit": "case",
+        "allergens": []
+      }
+    ],
+    "triage_status": "non_compliant",
+    "routed_to": null
+  },
+  {
+    "id": "D007",
+    "donor": "Valley Poultry Farms",
+    "received_at": "2026-07-19T14:10:00Z",
+    "condition": "good",
+    "items": [
+      {
+        "name": "Chicken Thighs (40 lb cases)",
+        "qty": 9,
+        "unit": "case",
+        "allergens": []
+      }
+    ],
+    "triage_status": "kitchen_ingredient",
+    "routed_to": "batch:B1"
+  },
+  {
+    "id": "D008",
+    "donor": "Richmond Grocery Outlet",
+    "received_at": "2026-07-19T15:00:00Z",
+    "condition": "good",
+    "items": [
+      {
+        "name": "Instant Oatmeal (cases)",
+        "qty": 12,
+        "unit": "case",
+        "allergens": []
+      }
+    ],
+    "triage_status": "usable_as_is",
+    "routed_to": "inventory"
+  },
+  {
+    "id": "D009",
+    "donor": "Sunset Farmers Market",
+    "received_at": "2026-07-19T15:45:00Z",
+    "condition": "over_ripe",
+    "items": [
+      {
+        "name": "Over-Ripe Bananas (cases)",
+        "qty": 7,
+        "unit": "case",
+        "allergens": []
+      }
+    ],
+    "triage_status": "non_compliant",
+    "routed_to": null
+  },
+  {
+    "id": "D010",
+    "donor": "Corporate Cafeteria Surplus",
+    "received_at": "2026-07-19T16:30:00Z",
+    "condition": "unknown_provenance",
+    "items": [
+      {
+        "name": "Prepared Sandwich Trays",
+        "qty": 6,
+        "unit": "tray",
+        "allergens": [
+          "gluten",
+          "dairy"
+        ]
+      }
+    ],
+    "triage_status": "non_compliant",
+    "routed_to": null
+  },
+  {
+    "id": "D011",
+    "donor": "SoMa Wholesale Foods",
+    "received_at": "2026-07-20T08:20:00Z",
+    "condition": "good",
+    "items": [
+      {
+        "name": "Brown Rice (25 lb bags)",
+        "qty": 10,
+        "unit": "bag",
+        "allergens": []
+      }
+    ],
+    "triage_status": "kitchen_ingredient",
+    "routed_to": "batch:B2"
+  },
+  {
+    "id": "D012",
+    "donor": "Peninsula Dairy Collective",
+    "received_at": "2026-07-20T09:10:00Z",
+    "condition": "good",
+    "items": [
+      {
+        "name": "Plain Greek Yogurt (cases)",
+        "qty": 8,
+        "unit": "case",
+        "allergens": [
+          "dairy"
+        ]
+      }
+    ],
+    "triage_status": "usable_as_is",
+    "routed_to": "inventory"
+  }
+]

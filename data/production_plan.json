@@ -1,0 +1,41 @@
+{
+  "week": "2026-07-20",
+  "batches": [
+    {
+      "id": "B1",
+      "meal_id": "M001",
+      "meal_name": "Low-Sodium Chicken Adobo with Rice",
+      "qty": 80,
+      "labor_hours": 9,
+      "date": "2026-07-20",
+      "ingredients_from": [
+        "D001",
+        "D007"
+      ]
+    },
+    {
+      "id": "B2",
+      "meal_id": "M011",
+      "meal_name": "Chicken Congee with Scallions",
+      "qty": 100,
+      "labor_hours": 7,
+      "date": "2026-07-20",
+      "ingredients_from": [
+        "D002",
+        "D011"
+      ]
+    },
+    {
+      "id": "B3",
+      "meal_id": "M055",
+      "meal_name": "Baked Cod with Herbed Couscous",
+      "qty": 60,
+      "labor_hours": 8,
+      "date": "2026-07-21",
+      "ingredients_from": [
+        "D005"
+      ]
+    }
+  ],
+  "capacity_utilization": 0.2
+}

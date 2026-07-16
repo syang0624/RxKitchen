@@ -1,0 +1,61 @@
+{
+  "client_id": 1042,
+  "scenario": "stockout_replan",
+  "events": [
+    {
+      "seq": 0,
+      "t_offset_ms": 907,
+      "agent": "orchestrator",
+      "type": "status",
+      "title": "Stock alert",
+      "detail": "Low-Sodium Chicken Adobo with Rice (M001) marked depleted by inventory. One allocation for client 1042 is affected. Triggering re-plan.",
+      "data": {
+        "meal_id": "M001"
+      }
+    },
+    {
+      "seq": 1,
+      "t_offset_ms": 1780,
+      "agent": "matching",
+      "type": "thought",
+      "title": "Re-scoring alternatives",
+      "detail": "Re-running hard-constraint filter over remaining stock. Constraint hierarchy unchanged: clinical limits are never relaxed, only preferences."
+    },
+    {
+      "seq": 2,
+      "t_offset_ms": 3585,
+      "agent": "matching",
+      "type": "check",
+      "title": "Replacement candidate: Arroz Caldo",
+      "detail": "Sodium 465/600 mg ✓, carbs 57 g ✓, allergen-free for this client ✓, microwave-ready ✓.",
+      "data": {
+        "meal_id": "M004",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 3,
+      "t_offset_ms": 4950,
+      "agent": "matching",
+      "type": "output",
+      "title": "Allocation updated",
+      "detail": "Swapped Low-Sodium Chicken Adobo with Rice → Arroz Caldo for Mon. Cuisine preference preserved."
+    },
+    {
+      "seq": 4,
+      "t_offset_ms": 6672,
+      "agent": "kitchen",
+      "type": "thought",
+      "title": "Demand signal updated",
+      "detail": "Depletion of M001 raises tomorrow's batch priority for this recipe family."
+    },
+    {
+      "seq": 5,
+      "t_offset_ms": 7547,
+      "agent": "orchestrator",
+      "type": "output",
+      "title": "Re-plan complete",
+      "detail": "Client 1042 remains fully covered with 0 clinical violations. Re-plan latency: 7 s."
+    }
+  ]
+}

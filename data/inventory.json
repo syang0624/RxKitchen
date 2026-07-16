@@ -1,0 +1,297 @@
+[
+  {
+    "id": "G001",
+    "name": "Brown Rice (2 lb bag)",
+    "nutrition": {
+      "sodium_mg": 5,
+      "carbs_g": 45
+    },
+    "allergens": [],
+    "stock_qty": 200,
+    "prep_complexity": "microwave"
+  },
+  {
+    "id": "G002",
+    "name": "Instant Oatmeal (unsweetened, 10-pack)",
+    "nutrition": {
+      "sodium_mg": 0,
+      "carbs_g": 27
+    },
+    "allergens": [],
+    "stock_qty": 180,
+    "prep_complexity": "microwave"
+  },
+  {
+    "id": "G003",
+    "name": "Quinoa Cup (microwavable)",
+    "nutrition": {
+      "sodium_mg": 10,
+      "carbs_g": 39
+    },
+    "allergens": [],
+    "stock_qty": 120,
+    "prep_complexity": "microwave"
+  },
+  {
+    "id": "G004",
+    "name": "Low-Sodium Canned Black Beans",
+    "nutrition": {
+      "sodium_mg": 140,
+      "carbs_g": 22
+    },
+    "allergens": [],
+    "stock_qty": 160,
+    "prep_complexity": "microwave"
+  },
+  {
+    "id": "G005",
+    "name": "Frozen Mixed Vegetables (1 lb)",
+    "nutrition": {
+      "sodium_mg": 45,
+      "carbs_g": 12
+    },
+    "allergens": [],
+    "stock_qty": 220,
+    "prep_complexity": "microwave"
+  },
+  {
+    "id": "G006",
+    "name": "Pre-Cooked Chicken Breast Strips (8 oz)",
+    "nutrition": {
+      "sodium_mg": 200,
+      "carbs_g": 0
+    },
+    "allergens": [],
+    "stock_qty": 150,
+    "prep_complexity": "microwave"
+  },
+  {
+    "id": "G007",
+    "name": "Low-Sodium Canned Tuna",
+    "nutrition": {
+      "sodium_mg": 180,
+      "carbs_g": 0
+    },
+    "allergens": [
+      "fish"
+    ],
+    "stock_qty": 140,
+    "prep_complexity": "none"
+  },
+  {
+    "id": "G008",
+    "name": "Low-Sodium Vegetable Soup (microwavable)",
+    "nutrition": {
+      "sodium_mg": 340,
+      "carbs_g": 18
+    },
+    "allergens": [],
+    "stock_qty": 170,
+    "prep_complexity": "microwave"
+  },
+  {
+    "id": "G009",
+    "name": "Unsalted Whole-Grain Crackers",
+    "nutrition": {
+      "sodium_mg": 30,
+      "carbs_g": 20
+    },
+    "allergens": [
+      "gluten"
+    ],
+    "stock_qty": 130,
+    "prep_complexity": "none"
+  },
+  {
+    "id": "G010",
+    "name": "Fresh Apples (3-pack)",
+    "nutrition": {
+      "sodium_mg": 0,
+      "carbs_g": 25
+    },
+    "allergens": [],
+    "stock_qty": 200,
+    "prep_complexity": "none"
+  },
+  {
+    "id": "G011",
+    "name": "Bananas (bunch)",
+    "nutrition": {
+      "sodium_mg": 1,
+      "carbs_g": 27
+    },
+    "allergens": [],
+    "stock_qty": 200,
+    "prep_complexity": "none"
+  },
+  {
+    "id": "G012",
+    "name": "Whole-Wheat Tortillas (8-pack)",
+    "nutrition": {
+      "sodium_mg": 220,
+      "carbs_g": 24
+    },
+    "allergens": [
+      "gluten"
+    ],
+    "stock_qty": 110,
+    "prep_complexity": "none"
+  },
+  {
+    "id": "G013",
+    "name": "Shelf-Stable Milk (1 qt)",
+    "nutrition": {
+      "sodium_mg": 120,
+      "carbs_g": 12
+    },
+    "allergens": [
+      "dairy"
+    ],
+    "stock_qty": 100,
+    "prep_complexity": "none"
+  },
+  {
+    "id": "G014",
+    "name": "Plain Greek Yogurt (4-pack)",
+    "nutrition": {
+      "sodium_mg": 60,
+      "carbs_g": 8
+    },
+    "allergens": [
+      "dairy"
+    ],
+    "stock_qty": 120,
+    "prep_complexity": "none"
+  },
+  {
+    "id": "G015",
+    "name": "Natural Peanut Butter (unsalted)",
+    "nutrition": {
+      "sodium_mg": 5,
+      "carbs_g": 7
+    },
+    "allergens": [
+      "peanut"
+    ],
+    "stock_qty": 90,
+    "prep_complexity": "none"
+  },
+  {
+    "id": "G016",
+    "name": "Microwavable Brown Rice Cup",
+    "nutrition": {
+      "sodium_mg": 15,
+      "carbs_g": 34
+    },
+    "allergens": [],
+    "stock_qty": 160,
+    "prep_complexity": "microwave"
+  },
+  {
+    "id": "G017",
+    "name": "Low-Sodium Chicken Noodle Soup",
+    "nutrition": {
+      "sodium_mg": 360,
+      "carbs_g": 16
+    },
+    "allergens": [
+      "gluten"
+    ],
+    "stock_qty": 140,
+    "prep_complexity": "microwave"
+  },
+  {
+    "id": "G018",
+    "name": "Steam-in-Bag Broccoli Florets",
+    "nutrition": {
+      "sodium_mg": 30,
+      "carbs_g": 6
+    },
+    "allergens": [],
+    "stock_qty": 180,
+    "prep_complexity": "microwave"
+  },
+  {
+    "id": "G019",
+    "name": "Canned No-Salt-Added Diced Tomatoes",
+    "nutrition": {
+      "sodium_mg": 20,
+      "carbs_g": 6
+    },
+    "allergens": [],
+    "stock_qty": 150,
+    "prep_complexity": "stovetop"
+  },
+  {
+    "id": "G020",
+    "name": "Dry Red Lentils (1 lb)",
+    "nutrition": {
+      "sodium_mg": 10,
+      "carbs_g": 30
+    },
+    "allergens": [],
+    "stock_qty": 100,
+    "prep_complexity": "stovetop"
+  },
+  {
+    "id": "G021",
+    "name": "Eggs (dozen)",
+    "nutrition": {
+      "sodium_mg": 70,
+      "carbs_g": 1
+    },
+    "allergens": [
+      "egg"
+    ],
+    "stock_qty": 110,
+    "prep_complexity": "stovetop"
+  },
+  {
+    "id": "G022",
+    "name": "Corn Tortillas (12-pack)",
+    "nutrition": {
+      "sodium_mg": 15,
+      "carbs_g": 22
+    },
+    "allergens": [],
+    "stock_qty": 130,
+    "prep_complexity": "microwave"
+  },
+  {
+    "id": "G023",
+    "name": "Unsalted Almonds (8 oz)",
+    "nutrition": {
+      "sodium_mg": 0,
+      "carbs_g": 8
+    },
+    "allergens": [
+      "tree_nut"
+    ],
+    "stock_qty": 90,
+    "prep_complexity": "none"
+  },
+  {
+    "id": "G024",
+    "name": "Shelf-Stable Hummus Cups",
+    "nutrition": {
+      "sodium_mg": 130,
+      "carbs_g": 9
+    },
+    "allergens": [
+      "sesame"
+    ],
+    "stock_qty": 100,
+    "prep_complexity": "none"
+  },
+  {
+    "id": "G025",
+    "name": "Frozen Berries (1 lb)",
+    "nutrition": {
+      "sodium_mg": 0,
+      "carbs_g": 17
+    },
+    "allergens": [],
+    "stock_qty": 120,
+    "prep_complexity": "none"
+  }
+]

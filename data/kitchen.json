@@ -1,0 +1,23 @@
+[
+  {
+    "date": "2026-07-20",
+    "labor_hours_available": 42,
+    "equipment_slots": 6,
+    "batch_min": 20,
+    "batch_max": 120
+  },
+  {
+    "date": "2026-07-21",
+    "labor_hours_available": 38,
+    "equipment_slots": 6,
+    "batch_min": 20,
+    "batch_max": 120
+  },
+  {
+    "date": "2026-07-22",
+    "labor_hours_available": 40,
+    "equipment_slots": 5,
+    "batch_min": 20,
+    "batch_max": 120
+  }
+]

@@ -1,0 +1,8 @@
+{
+  "id": "stockout_replan",
+  "title": "Stress beat: stock depletion re-plan",
+  "client_id": 1042,
+  "run": "agent_runs/client-1042-stockout.json",
+  "depleted_meal_id": "M001",
+  "description": "A meal's stock is marked depleted; agents re-plan the allocation live (PRD §4, FR10)."
+}
