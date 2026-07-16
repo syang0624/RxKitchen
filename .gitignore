@@ -43,3 +43,7 @@ next-env.d.ts
 # local tool state
 .claude/settings.local.json
 .omc/
+.claude
+.codex
+AGENTS.md
+CLAUDE.md
