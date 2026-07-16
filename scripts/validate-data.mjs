@@ -7,11 +7,15 @@
  *
  * Usage: node scripts/validate-data.mjs
  */
-import { readFileSync } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
+import Ajv from "ajv";
+import addFormats from "ajv-formats";
 
 const DATA = join(process.cwd(), "data");
+const SCHEMAS = join(process.cwd(), "schemas");
 const load = (f) => JSON.parse(readFileSync(join(DATA, f), "utf8"));
+const loadSchema = (f) => JSON.parse(readFileSync(join(SCHEMAS, f), "utf8"));
 
 const clients = load("clients.json");
 const meals = load("meals.json");
@@ -28,6 +32,41 @@ const DIET_TAG_REQUIRED = { diabetic: "diabetic-friendly", cardiovascular: "hear
 
 const violations = [];
 const flag = (clientId, itemId, rule, detail) => violations.push({ client_id: clientId, item: itemId, rule, detail });
+
+// --- schema conformance (schemas/ is the frozen contract the app builds against) ---
+const ajv = new Ajv({ allErrors: true });
+addFormats(ajv);
+ajv.addSchema(loadSchema("defs.schema.json"));
+const schemaFor = (name) => ajv.compile(loadSchema(name));
+
+const FILE_SCHEMAS = [
+  ["clients.json", "clients.schema.json"],
+  ["meals.json", "meals.schema.json"],
+  ["inventory.json", "inventory.schema.json"],
+  ["donations.json", "donations.schema.json"],
+  ["kitchen.json", "kitchen.schema.json"],
+  ["delivery.json", "delivery.schema.json"],
+  ["allocations.json", "allocations.schema.json"],
+  ["production_plan.json", "production_plan.schema.json"],
+];
+const validators = new Map(FILE_SCHEMAS.map(([data, schema]) => [data, schemaFor(schema)]));
+const agentRunValidator = schemaFor("agent_run.schema.json");
+const scenarioValidator = schemaFor("scenario.schema.json");
+
+let schemaErrors = 0;
+const checkSchema = (label, validate, doc) => {
+  if (!validate(doc)) {
+    schemaErrors += validate.errors.length;
+    for (const e of validate.errors.slice(0, 10)) console.error(`  schema ${label}${e.instancePath}: ${e.message}`);
+  }
+};
+for (const [file, validate] of validators) checkSchema(file, validate, load(file));
+for (const f of readdirSync(join(DATA, "agent_runs"))) checkSchema(`agent_runs/${f}`, agentRunValidator, load(`agent_runs/${f}`));
+for (const f of readdirSync(join(DATA, "scenarios"))) checkSchema(`scenarios/${f}`, scenarioValidator, load(`scenarios/${f}`));
+if (schemaErrors) {
+  console.error(`\n${schemaErrors} schema error(s) — the data no longer matches the frozen contract in schemas/`);
+  process.exit(1);
+}
 
 // --- hard-constraint re-verification (independent of generator logic) ---
 for (const alloc of allocations) {

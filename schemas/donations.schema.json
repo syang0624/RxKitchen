@@ -1,0 +1,40 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://nourishos.dev/schemas/donations.schema.json",
+  "title": "data/donations.json — Donation[]",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["id", "donor", "received_at", "condition", "items", "triage_status", "routed_to"],
+    "properties": {
+      "id": { "$ref": "defs.schema.json#/definitions/donationId" },
+      "donor": { "type": "string", "minLength": 1 },
+      "received_at": { "type": "string", "format": "date-time" },
+      "condition": { "type": "string", "enum": ["good", "fair", "expired", "over_ripe", "unknown_provenance"] },
+      "items": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["name", "qty", "unit", "allergens"],
+          "properties": {
+            "name": { "type": "string", "minLength": 1 },
+            "qty": { "type": "integer", "minimum": 1 },
+            "unit": { "type": "string", "minLength": 1 },
+            "allergens": { "type": "array", "items": { "$ref": "defs.schema.json#/definitions/allergen" }, "uniqueItems": true }
+          }
+        }
+      },
+      "triage_status": { "type": "string", "enum": ["usable_as_is", "kitchen_ingredient", "non_compliant"] },
+      "routed_to": {
+        "oneOf": [
+          { "type": "null" },
+          { "type": "string", "enum": ["inventory"] },
+          { "type": "string", "pattern": "^batch:B[0-9]+$" }
+        ]
+      }
+    }
+  }
+}

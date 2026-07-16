@@ -1,0 +1,29 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://nourishos.dev/schemas/production_plan.schema.json",
+  "title": "data/production_plan.json — ProductionPlan",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["week", "batches", "capacity_utilization"],
+  "properties": {
+    "week": { "$ref": "defs.schema.json#/definitions/isoDate" },
+    "batches": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "meal_id", "meal_name", "qty", "labor_hours", "date", "ingredients_from"],
+        "properties": {
+          "id": { "$ref": "defs.schema.json#/definitions/batchId" },
+          "meal_id": { "$ref": "defs.schema.json#/definitions/mealId" },
+          "meal_name": { "type": "string", "minLength": 1 },
+          "qty": { "type": "integer", "minimum": 1 },
+          "labor_hours": { "type": "number", "minimum": 0 },
+          "date": { "$ref": "defs.schema.json#/definitions/isoDate" },
+          "ingredients_from": { "type": "array", "items": { "$ref": "defs.schema.json#/definitions/donationId" }, "uniqueItems": true }
+        }
+      }
+    },
+    "capacity_utilization": { "type": "number", "minimum": 0, "maximum": 1 }
+  }
+}

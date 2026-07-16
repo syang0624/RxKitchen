@@ -5,9 +5,16 @@ All data here is **generated — never hand-edit** (PRD §11). To change anythin
 deterministic: the same command always produces byte-identical output.
 
 ```bash
-npm run data:generate   # regenerate everything in data/
-npm run data:validate   # re-verify zero clinical violations (also runs before `npm run build`)
+npm run data:generate    # regenerate everything in data/
+npm run data:validate    # schema conformance + zero clinical violations (also runs before `npm run build`)
+npm run agents:generate -- --client 1042 --force   # author an agent run offline via the Claude API
 ```
+
+Every file conforms to the frozen JSON Schemas in `schemas/` — that directory is
+the contract between the data pipeline and the app; the validator fails the build
+on any drift. `agent_runs/*.json` carry a `generator` field: `"template"`-less
+files were produced deterministically by `generate-data.mjs`; Claude-authored
+runs record the model id.
 
 ## Contents
 

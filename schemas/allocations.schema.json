@@ -1,0 +1,106 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://nourishos.dev/schemas/allocations.schema.json",
+  "title": "data/allocations.json — Allocation[]",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["client_id", "week", "items", "grocery_kit", "fallback_level", "fully_compliant_meals"],
+    "properties": {
+      "client_id": { "$ref": "defs.schema.json#/definitions/clientId" },
+      "week": { "$ref": "defs.schema.json#/definitions/isoDate" },
+      "items": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["meal_id", "meal_name", "qty", "day", "from_batch", "constraint_checks"],
+          "properties": {
+            "meal_id": { "$ref": "defs.schema.json#/definitions/mealId" },
+            "meal_name": { "type": "string", "minLength": 1 },
+            "qty": { "type": "integer", "minimum": 1 },
+            "day": { "$ref": "defs.schema.json#/definitions/day" },
+            "from_batch": {
+              "oneOf": [{ "type": "null" }, { "$ref": "defs.schema.json#/definitions/batchId" }]
+            },
+            "constraint_checks": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["allergen", "sodium", "carbs", "diet_orders"],
+              "properties": {
+                "allergen": {
+                  "type": "object",
+                  "required": ["status"],
+                  "properties": {
+                    "status": { "$ref": "defs.schema.json#/definitions/checkStatus" },
+                    "client_allergies": { "type": "array", "items": { "$ref": "defs.schema.json#/definitions/allergen" } },
+                    "meal_allergens": { "type": "array", "items": { "$ref": "defs.schema.json#/definitions/allergen" } }
+                  }
+                },
+                "sodium": {
+                  "type": "object",
+                  "required": ["status", "value", "limit"],
+                  "properties": {
+                    "status": { "$ref": "defs.schema.json#/definitions/checkStatus" },
+                    "value": { "type": "integer" },
+                    "limit": { "type": "integer" }
+                  }
+                },
+                "carbs": {
+                  "type": "object",
+                  "required": ["status", "value", "range"],
+                  "properties": {
+                    "status": { "$ref": "defs.schema.json#/definitions/checkStatus" },
+                    "value": { "type": "integer" },
+                    "range": { "type": "array", "items": { "type": "integer" }, "minItems": 2, "maxItems": 2 }
+                  }
+                },
+                "diet_orders": {
+                  "type": "object",
+                  "required": ["status"],
+                  "properties": {
+                    "status": { "$ref": "defs.schema.json#/definitions/checkStatus" },
+                    "orders": { "type": "array", "items": { "$ref": "defs.schema.json#/definitions/dietOrder" } },
+                    "meal_tags": { "type": "array", "items": { "$ref": "defs.schema.json#/definitions/dietTag" } }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "grocery_kit": {
+        "oneOf": [
+          { "type": "null" },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["items", "prep_instructions", "covers_days"],
+            "properties": {
+              "items": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["grocery_id", "name", "qty", "constraint_checks"],
+                  "properties": {
+                    "grocery_id": { "$ref": "defs.schema.json#/definitions/groceryId" },
+                    "name": { "type": "string" },
+                    "qty": { "type": "integer", "minimum": 1 },
+                    "constraint_checks": { "type": "object" }
+                  }
+                }
+              },
+              "prep_instructions": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+              "covers_days": { "type": "integer", "minimum": 1 }
+            }
+          }
+        ]
+      },
+      "fallback_level": { "type": "integer", "enum": [0, 1, 2] },
+      "fully_compliant_meals": { "type": "boolean" }
+    }
+  }
+}

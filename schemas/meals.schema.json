@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://nourishos.dev/schemas/meals.schema.json",
+  "title": "data/meals.json — Meal[]",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["id", "name", "cuisine", "sodium_mg", "carbs_g", "allergens", "key_ingredients", "diet_tags", "stock_qty", "source", "reheat_method"],
+    "properties": {
+      "id": { "$ref": "defs.schema.json#/definitions/mealId" },
+      "name": { "type": "string", "minLength": 1 },
+      "cuisine": { "$ref": "defs.schema.json#/definitions/cuisine" },
+      "sodium_mg": { "type": "integer", "minimum": 0, "maximum": 2000 },
+      "carbs_g": { "type": "integer", "minimum": 0, "maximum": 200 },
+      "allergens": { "type": "array", "items": { "$ref": "defs.schema.json#/definitions/allergen" }, "uniqueItems": true },
+      "key_ingredients": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+      "diet_tags": { "type": "array", "items": { "$ref": "defs.schema.json#/definitions/dietTag" }, "uniqueItems": true },
+      "stock_qty": { "type": "integer", "minimum": 0 },
+      "source": { "type": "string", "enum": ["kitchen", "donated", "purchased"] },
+      "reheat_method": { "$ref": "defs.schema.json#/definitions/reheatMethod" }
+    }
+  }
+}

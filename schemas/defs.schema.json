@@ -1,0 +1,43 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://nourishos.dev/schemas/defs.schema.json",
+  "title": "NourishOS shared definitions (frozen contract — PRD §7)",
+  "definitions": {
+    "allergen": {
+      "type": "string",
+      "enum": ["peanut", "shellfish", "dairy", "gluten", "soy", "egg", "tree_nut", "fish", "sesame"]
+    },
+    "cuisine": {
+      "type": "string",
+      "enum": ["Filipino", "Chinese", "Vietnamese", "Mexican", "American", "Mediterranean", "Indian", "Italian"]
+    },
+    "dietOrder": {
+      "type": "string",
+      "enum": ["diabetic", "cardiovascular", "renal", "low-sodium"]
+    },
+    "dietTag": {
+      "type": "string",
+      "enum": ["heart-healthy", "diabetic-friendly", "renal-friendly", "gluten-free", "vegetarian"]
+    },
+    "cookingAbility": {
+      "type": "string",
+      "enum": ["none", "microwave", "stovetop", "full"]
+    },
+    "reheatMethod": {
+      "type": "string",
+      "enum": ["none", "microwave", "oven", "stovetop"]
+    },
+    "prepComplexity": {
+      "type": "string",
+      "enum": ["none", "microwave", "stovetop"]
+    },
+    "mealId": { "type": "string", "pattern": "^M[0-9]{3}$" },
+    "groceryId": { "type": "string", "pattern": "^G[0-9]{3}$" },
+    "donationId": { "type": "string", "pattern": "^D[0-9]{3}$" },
+    "batchId": { "type": "string", "pattern": "^B[0-9]+$" },
+    "clientId": { "type": "integer", "minimum": 1001, "maximum": 1150 },
+    "isoDate": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" },
+    "day": { "type": "string", "enum": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"] },
+    "checkStatus": { "type": "string", "enum": ["pass", "fail"] }
+  }
+}

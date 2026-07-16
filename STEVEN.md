@@ -43,6 +43,13 @@ Own everything that happens **offline, before the demo**: the synthetic dataset,
 - **Never hand-edit nutrition numbers** — regenerate instead (§11).
 - The headline demo metric is **0 clinical violations, computed live by Nori's validators** — your data must actually pass, not look like it passes.
 
+## Status (updated 2026-07-16)
+
+- ✅ **Schemas frozen** in `schemas/` — one JSON Schema per data artifact plus `agent_run.schema.json` (the replay-engine event contract, which per PRD §11 is also the v2 live API contract). `npm run data:validate` now fails on any contract drift, before the clinical checks.
+- ✅ **Deterministic dataset** generated and validated: 0 violations, 98% compliant matches, 100% coverage, 76.9% donation utilization (`scripts/generate-data.mjs`).
+- ✅ **Claude generation pipeline** ready: `npm run agents:generate -- --client <id>` (or `--clients a,b,c` / `--limit N`) authors agent event streams offline via the Claude API (`claude-opus-4-8`). Prompts contain only facts recomputed from `data/` (shared rules in `scripts/lib/clinical.mjs`); outputs are grounding-audited (no invented meals/numbers/IDs, pass claims must match the allocation) and schema-validated before writing. Needs `ANTHROPIC_API_KEY` or `ant auth login`.
+- ⏭ Next: run the pipeline over the queue (start with `--client 1042 --force` to replace the templated hero run, then `--limit` batches), and generate the stockout stream variant.
+
 ## Interface with Nori
 
 - You produce JSON; Nori consumes it statically. Any schema change after Phase 1 must be coordinated on the spot.

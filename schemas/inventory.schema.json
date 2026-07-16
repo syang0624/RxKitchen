@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://nourishos.dev/schemas/inventory.schema.json",
+  "title": "data/inventory.json — GroceryItem[]",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["id", "name", "nutrition", "allergens", "stock_qty", "prep_complexity"],
+    "properties": {
+      "id": { "$ref": "defs.schema.json#/definitions/groceryId" },
+      "name": { "type": "string", "minLength": 1 },
+      "nutrition": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["sodium_mg", "carbs_g"],
+        "properties": {
+          "sodium_mg": { "type": "integer", "minimum": 0, "maximum": 2000 },
+          "carbs_g": { "type": "integer", "minimum": 0, "maximum": 200 }
+        }
+      },
+      "allergens": { "type": "array", "items": { "$ref": "defs.schema.json#/definitions/allergen" }, "uniqueItems": true },
+      "stock_qty": { "type": "integer", "minimum": 0 },
+      "prep_complexity": { "$ref": "defs.schema.json#/definitions/prepComplexity" }
+    }
+  }
+}

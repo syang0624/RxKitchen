@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://nourishos.dev/schemas/clients.schema.json",
+  "title": "data/clients.json — ClientProfile[]",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["id", "name", "referring_hospital", "diet_orders", "allergies", "max_sodium_mg", "carb_range_g", "cuisine_pref", "dislikes", "cooking_ability", "address_zone", "meals_per_week"],
+    "properties": {
+      "id": { "$ref": "defs.schema.json#/definitions/clientId" },
+      "name": { "type": "string", "minLength": 1 },
+      "referring_hospital": { "type": "string", "minLength": 1 },
+      "diet_orders": { "type": "array", "items": { "$ref": "defs.schema.json#/definitions/dietOrder" }, "uniqueItems": true },
+      "allergies": { "type": "array", "items": { "$ref": "defs.schema.json#/definitions/allergen" }, "uniqueItems": true },
+      "max_sodium_mg": { "type": "integer", "minimum": 300, "maximum": 1200 },
+      "carb_range_g": {
+        "type": "array",
+        "items": { "type": "integer", "minimum": 0, "maximum": 200 },
+        "minItems": 2,
+        "maxItems": 2
+      },
+      "cuisine_pref": { "$ref": "defs.schema.json#/definitions/cuisine" },
+      "dislikes": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+      "cooking_ability": { "$ref": "defs.schema.json#/definitions/cookingAbility" },
+      "address_zone": { "type": "string", "minLength": 1 },
+      "meals_per_week": { "type": "integer", "enum": [5, 7, 10] }
+    }
+  }
+}

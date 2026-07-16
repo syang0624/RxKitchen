@@ -8,6 +8,7 @@
  */
 import { mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
+import { hardCheck, softScore } from "./lib/clinical.mjs";
 
 const OUT = join(process.cwd(), "data");
 const SEED = 42;
@@ -328,36 +329,7 @@ const BATCHES = [
 ];
 
 // ---------- clinical matching (rule-based; hard constraints per PRD §5) ----------
-const DIET_TAG_REQUIRED = { diabetic: "diabetic-friendly", cardiovascular: "heart-healthy", renal: "renal-friendly", "low-sodium": "heart-healthy" };
-
-function reheatAllowed(client, meal) {
-  const ability = client.cooking_ability;
-  if (ability === "none") return meal.reheat_method === "none";
-  if (ability === "microwave") return meal.reheat_method === "none" || meal.reheat_method === "microwave";
-  return true; // stovetop / full can handle oven & stovetop too
-}
-
-function hardCheck(client, meal) {
-  const reasons = [];
-  const hit = meal.allergens.filter((a) => client.allergies.includes(a));
-  if (hit.length) reasons.push(`allergen: contains ${hit.join(", ")}`);
-  if (meal.sodium_mg > client.max_sodium_mg) reasons.push(`sodium: ${meal.sodium_mg} mg exceeds ${client.max_sodium_mg} mg ceiling`);
-  if (meal.carbs_g < client.carb_range_g[0] || meal.carbs_g > client.carb_range_g[1]) reasons.push(`carbs: ${meal.carbs_g} g outside ${client.carb_range_g[0]}–${client.carb_range_g[1]} g range`);
-  for (const order of client.diet_orders) {
-    const tag = DIET_TAG_REQUIRED[order];
-    if (tag && !meal.diet_tags.includes(tag)) reasons.push(`diet order '${order}': meal lacks '${tag}' tag`);
-  }
-  if (!reheatAllowed(client, meal)) reasons.push(`prep: requires ${meal.reheat_method}, client is ${client.cooking_ability}-only`);
-  return reasons;
-}
-
-function softScore(client, meal) {
-  let score = 0;
-  if (meal.cuisine === client.cuisine_pref) score += 10;
-  if (client.dislikes.some((d) => meal.key_ingredients.some((i) => i.includes(d)))) score -= 8;
-  score -= meal.sodium_mg / 1000; // gentle bias toward lower sodium
-  return score;
-}
+// hardCheck / softScore live in lib/clinical.mjs, shared with the agent-run pipeline.
 
 function constraintChecks(client, meal) {
   return {
