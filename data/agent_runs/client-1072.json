@@ -1,0 +1,118 @@
+{
+  "client_id": 1072,
+  "scenario": "happy_path",
+  "generator": "template",
+  "events": [
+    {
+      "seq": 0,
+      "t_offset_ms": 1126,
+      "agent": "orchestrator",
+      "type": "status",
+      "title": "Referral received",
+      "detail": "New referral from CPMC Van Ness for client 1072. Starting intake pipeline."
+    },
+    {
+      "seq": 1,
+      "t_offset_ms": 2734,
+      "agent": "intake",
+      "type": "output",
+      "title": "Client profile structured",
+      "detail": "Diet orders: diabetic. Allergies: gluten, egg. Sodium ceiling 800 mg/meal, carbs 45–60 g/meal. Prefers Italian; dislikes eggplant. Cooking ability: microwave. 5 meals/week, zone Mission."
+    },
+    {
+      "seq": 2,
+      "t_offset_ms": 4199,
+      "agent": "orchestrator",
+      "type": "status",
+      "title": "Dispatching Clinical Matching Agent",
+      "detail": "Hard constraint hierarchy locked: allergens → sodium → carbs → diet-order tags. Exclusion rules, never scoring penalties."
+    },
+    {
+      "seq": 3,
+      "t_offset_ms": 5580,
+      "agent": "matching",
+      "type": "thought",
+      "title": "Scanning inventory",
+      "detail": "Scoring all 80 meals against hard constraints, then ranking survivors by cuisine preference and dislike avoidance."
+    },
+    {
+      "seq": 4,
+      "t_offset_ms": 7048,
+      "agent": "matching",
+      "type": "check",
+      "title": "Rejected: Minestrone with Whole-Grain Roll",
+      "detail": "Excluded — allergen: contains gluten.",
+      "data": {
+        "meal_id": "M073",
+        "result": "fail"
+      }
+    },
+    {
+      "seq": 5,
+      "t_offset_ms": 9565,
+      "agent": "matching",
+      "type": "check",
+      "title": "Rejected: Chicken Pasta Primavera",
+      "detail": "Excluded — allergen: contains gluten.",
+      "data": {
+        "meal_id": "M071",
+        "result": "fail"
+      }
+    },
+    {
+      "seq": 6,
+      "t_offset_ms": 11281,
+      "agent": "matching",
+      "type": "check",
+      "title": "Matched: Tuscan White Bean Soup",
+      "detail": "All hard checks pass — sodium 413/800 mg ✓, carbs 53 g (target 45–60) ✓, no gluten/egg ✓.",
+      "data": {
+        "meal_id": "M079",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 7,
+      "t_offset_ms": 13702,
+      "agent": "matching",
+      "type": "check",
+      "title": "Matched: Grilled Chicken with Creamy Polenta",
+      "detail": "All hard checks pass — sodium 445/800 mg ✓, carbs 52 g (target 45–60) ✓, no gluten/egg ✓.",
+      "data": {
+        "meal_id": "M080",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 8,
+      "t_offset_ms": 15561,
+      "agent": "matching",
+      "type": "check",
+      "title": "Matched: Chicken Piccata with Rice",
+      "detail": "All hard checks pass — sodium 474/800 mg ✓, carbs 47 g (target 45–60) ✓, no gluten/egg ✓.",
+      "data": {
+        "meal_id": "M075",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 9,
+      "t_offset_ms": 17656,
+      "agent": "delivery",
+      "type": "output",
+      "title": "Route assigned",
+      "detail": "Client 1072 added to route R-MISS-1 (Mission), delivery 2026-07-21, window 14:00–16:00. Cold chain OK.",
+      "data": {
+        "route_id": "R-MISS-1"
+      }
+    },
+    {
+      "seq": 10,
+      "t_offset_ms": 19691,
+      "agent": "orchestrator",
+      "type": "output",
+      "title": "Plan complete",
+      "detail": "Client 1072: 5 compliant meal(s) at fallback level 0. 0 hard-constraint violations."
+    }
+  ]
+}

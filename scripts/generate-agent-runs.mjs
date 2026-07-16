@@ -13,14 +13,15 @@
  * audit are retried once with the errors fed back, then rejected.
  *
  * Usage:
- *   node scripts/generate-agent-runs.mjs --client 1042 --force   # hero rerun
+ *   node scripts/generate-agent-runs.mjs --client 1042 --force     # hero rerun
  *   node scripts/generate-agent-runs.mjs --clients 1001,1005
- *   node scripts/generate-agent-runs.mjs --limit 10              # first 10 without a run
- *   node scripts/generate-agent-runs.mjs --model claude-opus-4-8 # default
+ *   node scripts/generate-agent-runs.mjs --limit 10                # first 10 template runs
+ *   node scripts/generate-agent-runs.mjs --client 1042 --scenario stockout --force
+ *   node scripts/generate-agent-runs.mjs --model claude-opus-4-8   # default
  *
  * Auth: ANTHROPIC_API_KEY, or an `ant auth login` profile (SDK resolves both).
  */
-import { readFileSync, writeFileSync, existsSync, readdirSync } from "node:fs";
+import { readFileSync, writeFileSync, existsSync } from "node:fs";
 import { join } from "node:path";
 import Anthropic from "@anthropic-ai/sdk";
 import Ajv from "ajv";
@@ -38,6 +39,11 @@ const argVal = (name) => {
 };
 const FORCE = args.includes("--force");
 const MODEL = argVal("model") ?? "claude-opus-4-8";
+const SCENARIO = argVal("scenario") ?? "happy";
+if (!["happy", "stockout"].includes(SCENARIO)) {
+  console.error(`unknown --scenario '${SCENARIO}' (expected: happy | stockout)`);
+  process.exit(1);
+}
 
 // ---------- data + grounding facts ----------
 const clients = load("clients.json");
@@ -76,6 +82,30 @@ function factsFor(client) {
     kitchen_capacity_today: kitchen[0],
     delivery_route: route,
     total_meals_in_catalog: meals.length,
+  };
+}
+
+/** Stress-beat facts (PRD §4 / FR10): the first allocated meal is depleted; the
+ * matcher's best compliant substitute (recomputed with the same shared rules)
+ * is the only meal allowed to "pass" in the generated stream. */
+function stockoutFactsFor(client) {
+  const alloc = allocations.find((a) => a.client_id === client.id);
+  if (!alloc.items.length) throw new Error(`client ${client.id} has no allocated meals to deplete`);
+  const depleted = alloc.items[0];
+  const replacement = meals
+    .filter((m) => m.id !== depleted.meal_id && hardCheck(client, m).length === 0 && !alloc.items.some((i) => i.meal_id === m.id))
+    .sort((a, b) => softScore(client, b) - softScore(client, a))[0];
+  if (!replacement) throw new Error(`client ${client.id}: no compliant replacement exists for ${depleted.meal_id}`);
+  return {
+    client,
+    depleted: { meal_id: depleted.meal_id, name: depleted.meal_name, day: depleted.day },
+    replacement: {
+      meal_id: replacement.id, name: replacement.name, cuisine: replacement.cuisine,
+      sodium_mg: replacement.sodium_mg, sodium_limit: client.max_sodium_mg,
+      carbs_g: replacement.carbs_g, carb_range: client.carb_range_g,
+      reheat_method: replacement.reheat_method,
+      cuisine_preference_preserved: replacement.cuisine === client.cuisine_pref,
+    },
   };
 }
 
@@ -141,6 +171,22 @@ const OUTPUT_SCHEMA = {
 };
 
 // ---------- grounding audit ----------
+function auditStockout(events, facts) {
+  const errors = [];
+  if (events.length < 5 || events.length > 12) errors.push(`${events.length} events; a re-plan stream should have 5–10`);
+  for (const [i, e] of events.entries()) {
+    const d = e.data ?? {};
+    if (d.meal_id && ![facts.depleted.meal_id, facts.replacement.meal_id].includes(d.meal_id)) errors.push(`event ${i}: meal_id ${d.meal_id} is neither the depleted meal nor the replacement`);
+    if (d.result === "pass" && d.meal_id !== facts.replacement.meal_id) errors.push(`event ${i}: only the replacement ${facts.replacement.meal_id} may pass`);
+    if (d.batch_id || d.donation_id || d.route_id) errors.push(`event ${i}: re-plan streams must not reference batches, donations, or routes`);
+  }
+  const agents = new Set(events.map((e) => e.agent));
+  for (const required of ["orchestrator", "matching"]) {
+    if (!agents.has(required)) errors.push(`no events from required agent '${required}'`);
+  }
+  return errors;
+}
+
 function audit(events, facts) {
   const errors = [];
   const matchedIds = new Set(facts.matched_items.map((i) => i.meal_id));
@@ -188,8 +234,13 @@ function pace(events, clientId) {
 // ---------- generation ----------
 const client = new Anthropic();
 
-async function generateRun(profile) {
-  const facts = factsFor(profile);
+async function generateRun(profile, scenario) {
+  const facts = scenario === "stockout" ? stockoutFactsFor(profile) : factsFor(profile);
+  const runAudit = scenario === "stockout" ? auditStockout : audit;
+  const brief =
+    scenario === "stockout"
+      ? `STOCKOUT RE-PLAN. The depleted meal below was just marked out of stock; author a SHORT re-plan stream (6–10 events, orchestrator + matching, optionally one kitchen demand-signal thought). Tell the swap story: stock alert → re-scoring under the unchanged constraint hierarchy → the replacement passing on its real numbers → allocation updated (note whether the cuisine preference was preserved or relaxed) → wrap-up with 0 clinical violations.\n\nFACTS:\n${JSON.stringify(facts, null, 2)}`
+      : `FACTS:\n${JSON.stringify(facts, null, 2)}`;
   let feedback = null;
   for (let attempt = 1; attempt <= 2; attempt++) {
     const stream = client.messages.stream({
@@ -202,7 +253,7 @@ async function generateRun(profile) {
         {
           role: "user",
           content:
-            `FACTS:\n${JSON.stringify(facts, null, 2)}` +
+            brief +
             (feedback ? `\n\nYour previous attempt was rejected by the grounding audit:\n- ${feedback.join("\n- ")}\nRegenerate the full event stream fixing every issue.` : ""),
         },
       ],
@@ -211,8 +262,8 @@ async function generateRun(profile) {
     if (message.stop_reason === "refusal") throw new Error(`model refused (client ${profile.id})`);
     const text = message.content.find((b) => b.type === "text")?.text ?? "";
     const { events } = JSON.parse(text);
-    const errors = audit(events, facts);
-    if (errors.length === 0) return pace(events, profile.id);
+    const errors = runAudit(events, facts);
+    if (errors.length === 0) return pace(events, profile.id + (scenario === "stockout" ? 1 : 0));
     feedback = errors;
     console.warn(`  audit failed (attempt ${attempt}): ${errors.join("; ")}`);
   }
@@ -226,6 +277,13 @@ ajv.addSchema(JSON.parse(readFileSync(join(process.cwd(), "schemas", "defs.schem
 const validateRun = ajv.compile(JSON.parse(readFileSync(join(process.cwd(), "schemas", "agent_run.schema.json"), "utf8")));
 
 // ---------- main ----------
+const runFile = (id) => `client-${id}${SCENARIO === "stockout" ? "-stockout" : ""}.json`;
+const isClaudeAuthored = (path) => {
+  if (!existsSync(path)) return false;
+  const existing = JSON.parse(readFileSync(path, "utf8"));
+  return Boolean(existing.generator) && existing.generator !== "template";
+};
+
 function targetClients() {
   const single = argVal("client");
   if (single) return [Number(single)];
@@ -233,8 +291,8 @@ function targetClients() {
   if (list) return list.split(",").map(Number);
   const limit = Number(argVal("limit") ?? 0);
   if (limit > 0) {
-    const existing = new Set(readdirSync(join(DATA, "agent_runs")).map((f) => f.match(/client-(\d+)\.json/)?.[1]).filter(Boolean).map(Number));
-    return clients.map((c) => c.id).filter((id) => !existing.has(id)).slice(0, limit);
+    // Upgrade template (or missing) runs first; already-Claude-authored runs are done.
+    return clients.map((c) => c.id).filter((id) => !isClaudeAuthored(join(DATA, "agent_runs", runFile(id)))).slice(0, limit);
   }
   console.error("Specify --client <id>, --clients <id,id,...>, or --limit <n>");
   process.exit(1);
@@ -243,18 +301,18 @@ function targetClients() {
 for (const id of targetClients()) {
   const profile = clients.find((c) => c.id === id);
   if (!profile) { console.error(`unknown client ${id}`); process.exit(1); }
-  const outPath = join(DATA, "agent_runs", `client-${id}.json`);
-  if (existsSync(outPath) && !FORCE) {
-    console.log(`client ${id}: run exists, skipping (use --force to overwrite)`);
+  const outPath = join(DATA, "agent_runs", runFile(id));
+  if (isClaudeAuthored(outPath) && !FORCE) {
+    console.log(`client ${id}: already Claude-authored, skipping (use --force to regenerate)`);
     continue;
   }
-  console.log(`client ${id}: generating with ${MODEL}...`);
-  const events = await generateRun(profile);
-  const run = { client_id: id, scenario: "happy_path", generator: MODEL, events };
+  console.log(`client ${id} (${SCENARIO}): generating with ${MODEL}...`);
+  const events = await generateRun(profile, SCENARIO);
+  const run = { client_id: id, scenario: SCENARIO === "stockout" ? "stockout_replan" : "happy_path", generator: MODEL, events };
   if (!validateRun(run)) {
     console.error(validateRun.errors);
     throw new Error(`client ${id}: output violates agent_run.schema.json`);
   }
   writeFileSync(outPath, JSON.stringify(run, null, 2) + "\n");
-  console.log(`client ${id}: wrote ${events.length} events → data/agent_runs/client-${id}.json`);
+  console.log(`client ${id}: wrote ${events.length} events → data/agent_runs/${runFile(id)}`);
 }

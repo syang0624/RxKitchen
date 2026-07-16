@@ -1,0 +1,118 @@
+{
+  "client_id": 1096,
+  "scenario": "happy_path",
+  "generator": "template",
+  "events": [
+    {
+      "seq": 0,
+      "t_offset_ms": 1057,
+      "agent": "orchestrator",
+      "type": "status",
+      "title": "Referral received",
+      "detail": "New referral from Chinese Hospital for client 1096. Starting intake pipeline."
+    },
+    {
+      "seq": 1,
+      "t_offset_ms": 2663,
+      "agent": "intake",
+      "type": "output",
+      "title": "Client profile structured",
+      "detail": "Diet orders: cardiovascular. Allergies: none. Sodium ceiling 700 mg/meal, carbs 35–70 g/meal. Prefers Vietnamese; dislikes beef. Cooking ability: none. 10 meals/week, zone Bayview-Hunters Point."
+    },
+    {
+      "seq": 2,
+      "t_offset_ms": 5248,
+      "agent": "orchestrator",
+      "type": "status",
+      "title": "Dispatching Clinical Matching Agent",
+      "detail": "Hard constraint hierarchy locked: allergens → sodium → carbs → diet-order tags. Exclusion rules, never scoring penalties."
+    },
+    {
+      "seq": 3,
+      "t_offset_ms": 6391,
+      "agent": "matching",
+      "type": "thought",
+      "title": "Scanning inventory",
+      "detail": "Scoring all 80 meals against hard constraints, then ranking survivors by cuisine preference and dislike avoidance."
+    },
+    {
+      "seq": 4,
+      "t_offset_ms": 7510,
+      "agent": "matching",
+      "type": "check",
+      "title": "Rejected: Steamed Rice Rolls with Mushrooms",
+      "detail": "Excluded — prep: requires microwave, client is none-only.",
+      "data": {
+        "meal_id": "M030",
+        "result": "fail"
+      }
+    },
+    {
+      "seq": 5,
+      "t_offset_ms": 9930,
+      "agent": "matching",
+      "type": "check",
+      "title": "Rejected: Tofu and Vegetable Curry with Rice",
+      "detail": "Excluded — prep: requires microwave, client is none-only.",
+      "data": {
+        "meal_id": "M028",
+        "result": "fail"
+      }
+    },
+    {
+      "seq": 6,
+      "t_offset_ms": 11276,
+      "agent": "matching",
+      "type": "check",
+      "title": "Matched: Fresh Spring Rolls with Chicken",
+      "detail": "All hard checks pass — sodium 420/700 mg ✓, carbs 41 g (target 35–70) ✓.",
+      "data": {
+        "meal_id": "M026",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 7,
+      "t_offset_ms": 13572,
+      "agent": "matching",
+      "type": "check",
+      "title": "Matched: Overnight Oats with Berries",
+      "detail": "All hard checks pass — sodium 300/700 mg ✓, carbs 55 g (target 35–70) ✓.",
+      "data": {
+        "meal_id": "M050",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 8,
+      "t_offset_ms": 15392,
+      "agent": "matching",
+      "type": "check",
+      "title": "Matched: Grilled Chicken Garden Salad",
+      "detail": "All hard checks pass — sodium 333/700 mg ✓, carbs 39 g (target 35–70) ✓.",
+      "data": {
+        "meal_id": "M044",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 9,
+      "t_offset_ms": 17540,
+      "agent": "delivery",
+      "type": "output",
+      "title": "Route assigned",
+      "detail": "Client 1096 added to route R-BAYV-1 (Bayview-Hunters Point), delivery 2026-07-21, window 12:00–14:00. Cold chain OK.",
+      "data": {
+        "route_id": "R-BAYV-1"
+      }
+    },
+    {
+      "seq": 10,
+      "t_offset_ms": 19066,
+      "agent": "orchestrator",
+      "type": "output",
+      "title": "Plan complete",
+      "detail": "Client 1096: 10 compliant meal(s) at fallback level 0. 0 hard-constraint violations."
+    }
+  ]
+}

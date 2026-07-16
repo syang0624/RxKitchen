@@ -1,6 +1,7 @@
 {
   "client_id": 1042,
   "scenario": "stockout_replan",
+  "generator": "template",
   "events": [
     {
       "seq": 0,

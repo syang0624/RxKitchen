@@ -1,0 +1,118 @@
+{
+  "client_id": 1055,
+  "scenario": "happy_path",
+  "generator": "template",
+  "events": [
+    {
+      "seq": 0,
+      "t_offset_ms": 1154,
+      "agent": "orchestrator",
+      "type": "status",
+      "title": "Referral received",
+      "detail": "New referral from Chinese Hospital for client 1055. Starting intake pipeline."
+    },
+    {
+      "seq": 1,
+      "t_offset_ms": 2881,
+      "agent": "intake",
+      "type": "output",
+      "title": "Client profile structured",
+      "detail": "Diet orders: diabetic. Allergies: none. Sodium ceiling 800 mg/meal, carbs 45–65 g/meal. Prefers Filipino; dislikes nothing noted. Cooking ability: microwave. 10 meals/week, zone Bayview-Hunters Point."
+    },
+    {
+      "seq": 2,
+      "t_offset_ms": 5129,
+      "agent": "orchestrator",
+      "type": "status",
+      "title": "Dispatching Clinical Matching Agent",
+      "detail": "Hard constraint hierarchy locked: allergens → sodium → carbs → diet-order tags. Exclusion rules, never scoring penalties."
+    },
+    {
+      "seq": 3,
+      "t_offset_ms": 7363,
+      "agent": "matching",
+      "type": "thought",
+      "title": "Scanning inventory",
+      "detail": "Scoring all 80 meals against hard constraints, then ranking survivors by cuisine preference and dislike avoidance."
+    },
+    {
+      "seq": 4,
+      "t_offset_ms": 9063,
+      "agent": "matching",
+      "type": "check",
+      "title": "Rejected: Lumpiang Sariwa",
+      "detail": "Excluded — carbs: 41 g outside 45–65 g range.",
+      "data": {
+        "meal_id": "M010",
+        "result": "fail"
+      }
+    },
+    {
+      "seq": 5,
+      "t_offset_ms": 10072,
+      "agent": "matching",
+      "type": "check",
+      "title": "Rejected: Pancit Bihon",
+      "detail": "Excluded — diet order 'diabetic': meal lacks 'diabetic-friendly' tag.",
+      "data": {
+        "meal_id": "M005",
+        "result": "fail"
+      }
+    },
+    {
+      "seq": 6,
+      "t_offset_ms": 12338,
+      "agent": "matching",
+      "type": "check",
+      "title": "Matched: Baked Bangus with Garlic Rice",
+      "detail": "All hard checks pass — sodium 396/800 mg ✓, carbs 47 g (target 45–65) ✓.",
+      "data": {
+        "meal_id": "M007",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 7,
+      "t_offset_ms": 13459,
+      "agent": "matching",
+      "type": "check",
+      "title": "Matched: Ginataang Gulay with Rice",
+      "detail": "All hard checks pass — sodium 401/800 mg ✓, carbs 51 g (target 45–65) ✓.",
+      "data": {
+        "meal_id": "M006",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 8,
+      "t_offset_ms": 15611,
+      "agent": "matching",
+      "type": "check",
+      "title": "Matched: Chicken Tinola with Rice",
+      "detail": "All hard checks pass — sodium 412/800 mg ✓, carbs 48 g (target 45–65) ✓.",
+      "data": {
+        "meal_id": "M003",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 9,
+      "t_offset_ms": 16837,
+      "agent": "delivery",
+      "type": "output",
+      "title": "Route assigned",
+      "detail": "Client 1055 added to route R-BAYV-1 (Bayview-Hunters Point), delivery 2026-07-21, window 12:00–14:00. Cold chain OK.",
+      "data": {
+        "route_id": "R-BAYV-1"
+      }
+    },
+    {
+      "seq": 10,
+      "t_offset_ms": 18497,
+      "agent": "orchestrator",
+      "type": "output",
+      "title": "Plan complete",
+      "detail": "Client 1055: 10 compliant meal(s) at fallback level 0. 0 hard-constraint violations."
+    }
+  ]
+}

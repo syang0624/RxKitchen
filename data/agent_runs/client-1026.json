@@ -1,0 +1,118 @@
+{
+  "client_id": 1026,
+  "scenario": "happy_path",
+  "generator": "template",
+  "events": [
+    {
+      "seq": 0,
+      "t_offset_ms": 916,
+      "agent": "orchestrator",
+      "type": "status",
+      "title": "Referral received",
+      "detail": "New referral from UCSF Medical Center for client 1026. Starting intake pipeline."
+    },
+    {
+      "seq": 1,
+      "t_offset_ms": 2339,
+      "agent": "intake",
+      "type": "output",
+      "title": "Client profile structured",
+      "detail": "Diet orders: cardiovascular. Allergies: egg. Sodium ceiling 650 mg/meal, carbs 45–75 g/meal. Prefers Chinese; dislikes beef. Cooking ability: microwave. 5 meals/week, zone Tenderloin."
+    },
+    {
+      "seq": 2,
+      "t_offset_ms": 4502,
+      "agent": "orchestrator",
+      "type": "status",
+      "title": "Dispatching Clinical Matching Agent",
+      "detail": "Hard constraint hierarchy locked: allergens → sodium → carbs → diet-order tags. Exclusion rules, never scoring penalties."
+    },
+    {
+      "seq": 3,
+      "t_offset_ms": 5754,
+      "agent": "matching",
+      "type": "thought",
+      "title": "Scanning inventory",
+      "detail": "Scoring all 80 meals against hard constraints, then ranking survivors by cuisine preference and dislike avoidance."
+    },
+    {
+      "seq": 4,
+      "t_offset_ms": 7368,
+      "agent": "matching",
+      "type": "check",
+      "title": "Rejected: Vegetable Stir-Fry with Tofu",
+      "detail": "Excluded — carbs: 44 g outside 45–75 g range.",
+      "data": {
+        "meal_id": "M013",
+        "result": "fail"
+      }
+    },
+    {
+      "seq": 5,
+      "t_offset_ms": 8671,
+      "agent": "matching",
+      "type": "check",
+      "title": "Rejected: Vegetable Egg Fried Rice",
+      "detail": "Excluded — allergen: contains egg.",
+      "data": {
+        "meal_id": "M019",
+        "result": "fail"
+      }
+    },
+    {
+      "seq": 6,
+      "t_offset_ms": 10958,
+      "agent": "matching",
+      "type": "check",
+      "title": "Matched: Winter Melon Soup with Chicken and Rice",
+      "detail": "All hard checks pass — sodium 354/650 mg ✓, carbs 45 g (target 45–75) ✓, no egg ✓.",
+      "data": {
+        "meal_id": "M020",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 7,
+      "t_offset_ms": 11868,
+      "agent": "matching",
+      "type": "check",
+      "title": "Matched: Chicken Congee with Scallions",
+      "detail": "All hard checks pass — sodium 364/650 mg ✓, carbs 49 g (target 45–75) ✓, no egg ✓.",
+      "data": {
+        "meal_id": "M011",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 8,
+      "t_offset_ms": 12788,
+      "agent": "matching",
+      "type": "check",
+      "title": "Matched: Steamed Fish with Ginger and Rice",
+      "detail": "All hard checks pass — sodium 435/650 mg ✓, carbs 50 g (target 45–75) ✓, no egg ✓.",
+      "data": {
+        "meal_id": "M012",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 9,
+      "t_offset_ms": 14441,
+      "agent": "delivery",
+      "type": "output",
+      "title": "Route assigned",
+      "detail": "Client 1026 added to route R-TEND-1 (Tenderloin), delivery 2026-07-21, window 10:00–12:00. Cold chain OK.",
+      "data": {
+        "route_id": "R-TEND-1"
+      }
+    },
+    {
+      "seq": 10,
+      "t_offset_ms": 15879,
+      "agent": "orchestrator",
+      "type": "output",
+      "title": "Plan complete",
+      "detail": "Client 1026: 5 compliant meal(s) at fallback level 0. 0 hard-constraint violations."
+    }
+  ]
+}

@@ -1,0 +1,118 @@
+{
+  "client_id": 1120,
+  "scenario": "happy_path",
+  "generator": "template",
+  "events": [
+    {
+      "seq": 0,
+      "t_offset_ms": 2186,
+      "agent": "orchestrator",
+      "type": "status",
+      "title": "Referral received",
+      "detail": "New referral from Kaiser Permanente San Francisco for client 1120. Starting intake pipeline."
+    },
+    {
+      "seq": 1,
+      "t_offset_ms": 3211,
+      "agent": "intake",
+      "type": "output",
+      "title": "Client profile structured",
+      "detail": "Diet orders: diabetic. Allergies: fish, gluten. Sodium ceiling 800 mg/meal, carbs 45–65 g/meal. Prefers American; dislikes nothing noted. Cooking ability: stovetop. 10 meals/week, zone Visitacion Valley."
+    },
+    {
+      "seq": 2,
+      "t_offset_ms": 5036,
+      "agent": "orchestrator",
+      "type": "status",
+      "title": "Dispatching Clinical Matching Agent",
+      "detail": "Hard constraint hierarchy locked: allergens → sodium → carbs → diet-order tags. Exclusion rules, never scoring penalties."
+    },
+    {
+      "seq": 3,
+      "t_offset_ms": 6398,
+      "agent": "matching",
+      "type": "thought",
+      "title": "Scanning inventory",
+      "detail": "Scoring all 80 meals against hard constraints, then ranking survivors by cuisine preference and dislike avoidance."
+    },
+    {
+      "seq": 4,
+      "t_offset_ms": 8145,
+      "agent": "matching",
+      "type": "check",
+      "title": "Rejected: Grilled Chicken Garden Salad",
+      "detail": "Excluded — carbs: 39 g outside 45–65 g range.",
+      "data": {
+        "meal_id": "M044",
+        "result": "fail"
+      }
+    },
+    {
+      "seq": 5,
+      "t_offset_ms": 10599,
+      "agent": "matching",
+      "type": "check",
+      "title": "Rejected: Baked Salmon with Quinoa",
+      "detail": "Excluded — allergen: contains fish.",
+      "data": {
+        "meal_id": "M043",
+        "result": "fail"
+      }
+    },
+    {
+      "seq": 6,
+      "t_offset_ms": 12789,
+      "agent": "matching",
+      "type": "check",
+      "title": "Matched: Overnight Oats with Berries",
+      "detail": "All hard checks pass — sodium 300/800 mg ✓, carbs 55 g (target 45–65) ✓, no fish/gluten ✓.",
+      "data": {
+        "meal_id": "M050",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 7,
+      "t_offset_ms": 15108,
+      "agent": "matching",
+      "type": "check",
+      "title": "Matched: Three-Bean Veggie Chili",
+      "detail": "All hard checks pass — sodium 480/800 mg ✓, carbs 50 g (target 45–65) ✓, no fish/gluten ✓.",
+      "data": {
+        "meal_id": "M048",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 8,
+      "t_offset_ms": 17435,
+      "agent": "matching",
+      "type": "check",
+      "title": "Matched: BBQ Chicken with Corn and Slaw",
+      "detail": "All hard checks pass — sodium 575/800 mg ✓, carbs 55 g (target 45–65) ✓, no fish/gluten ✓.",
+      "data": {
+        "meal_id": "M049",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 9,
+      "t_offset_ms": 19455,
+      "agent": "delivery",
+      "type": "output",
+      "title": "Route assigned",
+      "detail": "Client 1120 added to route R-VISI-1 (Visitacion Valley), delivery 2026-07-21, window 12:00–14:00. Cold chain OK.",
+      "data": {
+        "route_id": "R-VISI-1"
+      }
+    },
+    {
+      "seq": 10,
+      "t_offset_ms": 20527,
+      "agent": "orchestrator",
+      "type": "output",
+      "title": "Plan complete",
+      "detail": "Client 1120: 10 compliant meal(s) at fallback level 0. 0 hard-constraint violations."
+    }
+  ]
+}

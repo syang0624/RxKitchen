@@ -1,0 +1,118 @@
+{
+  "client_id": 1128,
+  "scenario": "happy_path",
+  "generator": "template",
+  "events": [
+    {
+      "seq": 0,
+      "t_offset_ms": 1468,
+      "agent": "orchestrator",
+      "type": "status",
+      "title": "Referral received",
+      "detail": "New referral from Kaiser Permanente San Francisco for client 1128. Starting intake pipeline."
+    },
+    {
+      "seq": 1,
+      "t_offset_ms": 3150,
+      "agent": "intake",
+      "type": "output",
+      "title": "Client profile structured",
+      "detail": "Diet orders: cardiovascular. Allergies: none. Sodium ceiling 700 mg/meal, carbs 40–70 g/meal. Prefers Vietnamese; dislikes kidney beans. Cooking ability: stovetop. 5 meals/week, zone Bayview-Hunters Point."
+    },
+    {
+      "seq": 2,
+      "t_offset_ms": 5170,
+      "agent": "orchestrator",
+      "type": "status",
+      "title": "Dispatching Clinical Matching Agent",
+      "detail": "Hard constraint hierarchy locked: allergens → sodium → carbs → diet-order tags. Exclusion rules, never scoring penalties."
+    },
+    {
+      "seq": 3,
+      "t_offset_ms": 7635,
+      "agent": "matching",
+      "type": "thought",
+      "title": "Scanning inventory",
+      "detail": "Scoring all 80 meals against hard constraints, then ranking survivors by cuisine preference and dislike avoidance."
+    },
+    {
+      "seq": 4,
+      "t_offset_ms": 9079,
+      "agent": "matching",
+      "type": "check",
+      "title": "Rejected: Beef Pho with Rice Noodles",
+      "detail": "Excluded — diet order 'cardiovascular': meal lacks 'heart-healthy' tag.",
+      "data": {
+        "meal_id": "M029",
+        "result": "fail"
+      }
+    },
+    {
+      "seq": 5,
+      "t_offset_ms": 11284,
+      "agent": "matching",
+      "type": "check",
+      "title": "Rejected: Grilled Chicken Garden Salad",
+      "detail": "Excluded — carbs: 39 g outside 40–70 g range.",
+      "data": {
+        "meal_id": "M044",
+        "result": "fail"
+      }
+    },
+    {
+      "seq": 6,
+      "t_offset_ms": 13244,
+      "agent": "matching",
+      "type": "check",
+      "title": "Matched: Fresh Spring Rolls with Chicken",
+      "detail": "All hard checks pass — sodium 420/700 mg ✓, carbs 41 g (target 40–70) ✓.",
+      "data": {
+        "meal_id": "M026",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 7,
+      "t_offset_ms": 14611,
+      "agent": "matching",
+      "type": "check",
+      "title": "Matched: Steamed Rice Rolls with Mushrooms",
+      "detail": "All hard checks pass — sodium 423/700 mg ✓, carbs 46 g (target 40–70) ✓.",
+      "data": {
+        "meal_id": "M030",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 8,
+      "t_offset_ms": 17173,
+      "agent": "matching",
+      "type": "check",
+      "title": "Matched: Tofu and Vegetable Curry with Rice",
+      "detail": "All hard checks pass — sodium 439/700 mg ✓, carbs 54 g (target 40–70) ✓.",
+      "data": {
+        "meal_id": "M028",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 9,
+      "t_offset_ms": 18676,
+      "agent": "delivery",
+      "type": "output",
+      "title": "Route assigned",
+      "detail": "Client 1128 added to route R-BAYV-2 (Bayview-Hunters Point), delivery 2026-07-21, window 14:00–16:00. Cold chain OK.",
+      "data": {
+        "route_id": "R-BAYV-2"
+      }
+    },
+    {
+      "seq": 10,
+      "t_offset_ms": 20760,
+      "agent": "orchestrator",
+      "type": "output",
+      "title": "Plan complete",
+      "detail": "Client 1128: 5 compliant meal(s) at fallback level 0. 0 hard-constraint violations."
+    }
+  ]
+}

@@ -1,0 +1,118 @@
+{
+  "client_id": 1057,
+  "scenario": "happy_path",
+  "generator": "template",
+  "events": [
+    {
+      "seq": 0,
+      "t_offset_ms": 2210,
+      "agent": "orchestrator",
+      "type": "status",
+      "title": "Referral received",
+      "detail": "New referral from Chinese Hospital for client 1057. Starting intake pipeline."
+    },
+    {
+      "seq": 1,
+      "t_offset_ms": 4368,
+      "agent": "intake",
+      "type": "output",
+      "title": "Client profile structured",
+      "detail": "Diet orders: diabetic, cardiovascular. Allergies: none. Sodium ceiling 700 mg/meal, carbs 45–65 g/meal. Prefers Indian; dislikes nothing noted. Cooking ability: full. 7 meals/week, zone Tenderloin."
+    },
+    {
+      "seq": 2,
+      "t_offset_ms": 6593,
+      "agent": "orchestrator",
+      "type": "status",
+      "title": "Dispatching Clinical Matching Agent",
+      "detail": "Hard constraint hierarchy locked: allergens → sodium → carbs → diet-order tags. Exclusion rules, never scoring penalties."
+    },
+    {
+      "seq": 3,
+      "t_offset_ms": 8491,
+      "agent": "matching",
+      "type": "thought",
+      "title": "Scanning inventory",
+      "detail": "Scoring all 80 meals against hard constraints, then ranking survivors by cuisine preference and dislike avoidance."
+    },
+    {
+      "seq": 4,
+      "t_offset_ms": 10946,
+      "agent": "matching",
+      "type": "check",
+      "title": "Rejected: Grilled Chicken Garden Salad",
+      "detail": "Excluded — carbs: 39 g outside 45–65 g range.",
+      "data": {
+        "meal_id": "M044",
+        "result": "fail"
+      }
+    },
+    {
+      "seq": 5,
+      "t_offset_ms": 12720,
+      "agent": "matching",
+      "type": "check",
+      "title": "Rejected: Baked Cod with Herbed Couscous",
+      "detail": "Excluded — carbs: 41 g outside 45–65 g range.",
+      "data": {
+        "meal_id": "M055",
+        "result": "fail"
+      }
+    },
+    {
+      "seq": 6,
+      "t_offset_ms": 14125,
+      "agent": "matching",
+      "type": "check",
+      "title": "Matched: Kitchari with Seasonal Vegetables",
+      "detail": "All hard checks pass — sodium 373/700 mg ✓, carbs 52 g (target 45–65) ✓.",
+      "data": {
+        "meal_id": "M070",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 7,
+      "t_offset_ms": 16607,
+      "agent": "matching",
+      "type": "check",
+      "title": "Matched: Dal Tadka with Brown Rice",
+      "detail": "All hard checks pass — sodium 430/700 mg ✓, carbs 56 g (target 45–65) ✓.",
+      "data": {
+        "meal_id": "M062",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 8,
+      "t_offset_ms": 18163,
+      "agent": "matching",
+      "type": "check",
+      "title": "Matched: Rajma (Kidney Bean Curry) with Rice",
+      "detail": "All hard checks pass — sodium 450/700 mg ✓, carbs 59 g (target 45–65) ✓.",
+      "data": {
+        "meal_id": "M068",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 9,
+      "t_offset_ms": 19474,
+      "agent": "delivery",
+      "type": "output",
+      "title": "Route assigned",
+      "detail": "Client 1057 added to route R-TEND-1 (Tenderloin), delivery 2026-07-21, window 10:00–12:00. Cold chain OK.",
+      "data": {
+        "route_id": "R-TEND-1"
+      }
+    },
+    {
+      "seq": 10,
+      "t_offset_ms": 21875,
+      "agent": "orchestrator",
+      "type": "output",
+      "title": "Plan complete",
+      "detail": "Client 1057: 7 compliant meal(s) at fallback level 0. 0 hard-constraint violations."
+    }
+  ]
+}

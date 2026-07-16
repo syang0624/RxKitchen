@@ -6,7 +6,7 @@
  *
  * Usage: node scripts/generate-data.mjs
  */
-import { mkdirSync, writeFileSync } from "node:fs";
+import { mkdirSync, writeFileSync, existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { hardCheck, softScore } from "./lib/clinical.mjs";
 
@@ -518,6 +518,59 @@ function stockoutEvents(client, meals, allocation) {
   ];
 }
 
+/**
+ * Generic per-client event stream (Phase 4 batch-run: every referral gets a
+ * replayable run, so the scale view can drill into any client). Deliberately
+ * uses its own PRNG seeded by client id — pacing is stable per client and the
+ * global PRNG stream (which shapes the core dataset) is untouched. These are
+ * placeholders the Claude pipeline (generate-agent-runs.mjs) upgrades in place.
+ */
+function templateEvents(client, meals, allocation, route, donations) {
+  const localRand = mulberry32(client.id * 7919 + 17);
+  const jitter = (min, max) => min + Math.floor(localRand() * (max - min + 1));
+  let t = 0; let seq = 0;
+  const ev = (agent, type, title, detail, data = null) => {
+    t += jitter(900, 2600);
+    return { seq: seq++, t_offset_ms: t, agent, type, title, detail, ...(data ? { data } : {}) };
+  };
+  const or = (arr, fallbackText) => (arr.length ? arr.join(", ") : fallbackText);
+
+  const rejected = meals
+    .map((m) => ({ meal: m, failures: hardCheck(client, m) }))
+    .filter((x) => x.failures.length > 0)
+    .sort((a, b) => softScore(client, b.meal) - softScore(client, a.meal))
+    .slice(0, 2);
+  const passes = allocation.items.slice(0, 3);
+  const batchIds = [...new Set(allocation.items.map((i) => i.from_batch).filter(Boolean))];
+
+  const events = [
+    ev("orchestrator", "status", "Referral received", `New referral from ${client.referring_hospital} for client ${client.id}. Starting intake pipeline.`),
+    ev("intake", "output", "Client profile structured", `Diet orders: ${or(client.diet_orders, "general")}. Allergies: ${or(client.allergies, "none")}. Sodium ceiling ${client.max_sodium_mg} mg/meal, carbs ${client.carb_range_g[0]}–${client.carb_range_g[1]} g/meal. Prefers ${client.cuisine_pref}; dislikes ${or(client.dislikes, "nothing noted")}. Cooking ability: ${client.cooking_ability}. ${client.meals_per_week} meals/week, zone ${client.address_zone}.`),
+    ev("orchestrator", "status", "Dispatching Clinical Matching Agent", "Hard constraint hierarchy locked: allergens → sodium → carbs → diet-order tags. Exclusion rules, never scoring penalties."),
+    ev("matching", "thought", "Scanning inventory", `Scoring all ${meals.length} meals against hard constraints, then ranking survivors by cuisine preference and dislike avoidance.`),
+    ...rejected.map((x) => ev("matching", "check", `Rejected: ${x.meal.name}`, `Excluded — ${x.failures[0]}.`, { meal_id: x.meal.id, result: "fail" })),
+    ...passes.map((it) => ev("matching", "check", `Matched: ${it.meal_name}`, `All hard checks pass — sodium ${it.constraint_checks.sodium.value}/${it.constraint_checks.sodium.limit} mg ✓, carbs ${it.constraint_checks.carbs.value} g (target ${client.carb_range_g[0]}–${client.carb_range_g[1]}) ✓${client.allergies.length ? `, no ${client.allergies.join("/")} ✓` : ""}.${it.from_batch ? ` Sourced from kitchen batch ${it.from_batch}.` : ""}`, { meal_id: it.meal_id, result: "pass" })),
+  ];
+
+  if (allocation.items.length === 0) {
+    events.push(ev("matching", "thought", "No compliant meal in stock", "No existing meal passes every hard constraint for this profile. Escalating to Fallback Composer — preferences may be relaxed, clinical limits never are."));
+  }
+  for (const batchId of batchIds) {
+    const batch = BATCHES.find((b) => b.id === batchId);
+    events.push(ev("kitchen", "output", `Batch allocated: ${batch.meal_name}`, `Serving drawn from scheduled batch ${batch.id} (${batch.qty} servings, ${batch.labor_hours} labor hours on ${batch.date}).`, { batch_id: batch.id }));
+    const donation = donations.find((d) => batch.ingredients_from.includes(d.id));
+    if (donation) events.push(ev("donation", "check", `Donation ${donation.id} feeds batch ${batch.id}`, `${donation.items.map((i) => i.name).join(", ")} from ${donation.donor} — triaged as kitchen ingredient.`, { donation_id: donation.id, result: "kitchen_ingredient" }));
+  }
+  if (allocation.grocery_kit) {
+    events.push(ev("fallback", "output", "Grocery kit composed", `${allocation.grocery_kit.covers_days} gap day(s) covered: ${allocation.grocery_kit.items.map((i) => i.name).join(", ")}. All items allergen-safe for this client; prep steps match ${client.cooking_ability === "none" ? "no-cook" : client.cooking_ability} ability.`, { result: "pass" }));
+  }
+  if (route) {
+    events.push(ev("delivery", "output", "Route assigned", `Client ${client.id} added to route ${route.route_id} (${route.zone}), delivery ${route.delivery_date}, window ${route.window}. Cold chain OK.`, { route_id: route.route_id }));
+  }
+  events.push(ev("orchestrator", "output", "Plan complete", `Client ${client.id}: ${allocation.items.length} compliant meal(s)${allocation.grocery_kit ? ` + grocery kit covering ${allocation.grocery_kit.covers_days} day(s)` : ""} at fallback level ${allocation.fallback_level}. 0 hard-constraint violations.`));
+  return events;
+}
+
 // ---------- write everything ----------
 function main() {
   const meals = buildMeals();
@@ -548,8 +601,27 @@ function main() {
   write("delivery.json", delivery);
   write("allocations.json", allocations);
   write("production_plan.json", production_plan);
-  write("agent_runs/client-1042.json", { client_id: 1042, scenario: "happy_path", events: heroEvents(hero, meals, heroAlloc) });
-  write("agent_runs/client-1042-stockout.json", { client_id: 1042, scenario: "stockout_replan", events: stockoutEvents(hero, meals, heroAlloc) });
+  // Agent runs: never clobber a Claude-authored run (generator = model id).
+  // Template runs are placeholders the offline Claude pipeline upgrades in place.
+  let runsWritten = 0, runsPreserved = 0;
+  const writeRun = (rel, obj) => {
+    const path = join(OUT, rel);
+    if (existsSync(path)) {
+      const existing = JSON.parse(readFileSync(path, "utf8"));
+      if (existing.generator && existing.generator !== "template") { runsPreserved++; return; }
+    }
+    write(rel, obj);
+    runsWritten++;
+  };
+
+  writeRun("agent_runs/client-1042.json", { client_id: 1042, scenario: "happy_path", generator: "template", events: heroEvents(hero, meals, heroAlloc) });
+  writeRun("agent_runs/client-1042-stockout.json", { client_id: 1042, scenario: "stockout_replan", generator: "template", events: stockoutEvents(hero, meals, heroAlloc) });
+  for (const c of clients) {
+    if (c.id === 1042) continue;
+    const alloc = allocations.find((a) => a.client_id === c.id);
+    const route = delivery.batches.find((b) => b.clients.includes(c.id)) ?? null;
+    writeRun(`agent_runs/client-${c.id}.json`, { client_id: c.id, scenario: "happy_path", generator: "template", events: templateEvents(c, meals, alloc, route, donations) });
+  }
   write("scenarios/happy_path.json", { id: "happy_path", title: "Referral to doorstep: Client 1042", client_id: 1042, run: "agent_runs/client-1042.json", description: "Hospital referral arrives; minutes later a complete, clinically-safe doorstep plan exists (PRD §4)." });
   write("scenarios/stockout_replan.json", { id: "stockout_replan", title: "Stress beat: stock depletion re-plan", client_id: 1042, run: "agent_runs/client-1042-stockout.json", depleted_meal_id: heroAlloc.items[0].meal_id, description: "A meal's stock is marked depleted; agents re-plan the allocation live (PRD §4, FR10)." });
 
@@ -558,6 +630,7 @@ function main() {
   console.log(`clients: ${clients.length} | meals: ${meals.length} | grocery items: ${inventory.length} | donations: ${donations.length}`);
   console.log(`allocations: ${allocations.length} | matched to compliant meals (level 0/1): ${matched} (${((matched / allocations.length) * 100).toFixed(1)}%) | grocery kits issued: ${kits}`);
   console.log(`fallback levels: 0=${allocations.filter((a) => a.fallback_level === 0).length}, 1=${allocations.filter((a) => a.fallback_level === 1).length}, 2=${allocations.filter((a) => a.fallback_level === 2).length}`);
+  console.log(`agent runs: ${runsWritten} written, ${runsPreserved} Claude-authored preserved`);
 }
 
 main();

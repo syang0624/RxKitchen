@@ -12,9 +12,11 @@ npm run agents:generate -- --client 1042 --force   # author an agent run offline
 
 Every file conforms to the frozen JSON Schemas in `schemas/` — that directory is
 the contract between the data pipeline and the app; the validator fails the build
-on any drift. `agent_runs/*.json` carry a `generator` field: `"template"`-less
-files were produced deterministically by `generate-data.mjs`; Claude-authored
-runs record the model id.
+on any drift. `agent_runs/*.json` carry a `generator` field: `"template"` means
+the deterministic placeholder from `generate-data.mjs`; Claude-authored runs
+record the model id instead. `data:generate` never overwrites a Claude-authored
+run, so the two pipelines compose — regenerate the dataset freely, then upgrade
+runs with `agents:generate` (use `--scenario stockout` for re-plan streams).
 
 ## Contents
 
@@ -28,7 +30,7 @@ runs record the model id.
 | `delivery.json` | Zones + delivery route batches grouped by zone | 10 zones, 16 routes |
 | `allocations.json` | Per-client weekly allocation output with per-item constraint checks | 150 |
 | `production_plan.json` | Kitchen batches (B1 adobo / B2 congee / B3 cod) fed by donations | 3 batches |
-| `agent_runs/client-1042.json` | Hero event stream: intake → matching → kitchen → donation → delivery | 23 events |
+| `agent_runs/client-<id>.json` | One replayable event stream per client (scale view, FR8); Client 1042's is the rich scripted hero stream | 150 runs |
 | `agent_runs/client-1042-stockout.json` | Stress-beat stream: stock depletion re-plan (FR10) | 6 events |
 | `scenarios/` | `happy_path` and `stockout_replan` scenario manifests | 2 |
 

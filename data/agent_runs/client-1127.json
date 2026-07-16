@@ -1,0 +1,118 @@
+{
+  "client_id": 1127,
+  "scenario": "happy_path",
+  "generator": "template",
+  "events": [
+    {
+      "seq": 0,
+      "t_offset_ms": 1285,
+      "agent": "orchestrator",
+      "type": "status",
+      "title": "Referral received",
+      "detail": "New referral from Zuckerberg San Francisco General for client 1127. Starting intake pipeline."
+    },
+    {
+      "seq": 1,
+      "t_offset_ms": 2337,
+      "agent": "intake",
+      "type": "output",
+      "title": "Client profile structured",
+      "detail": "Diet orders: cardiovascular. Allergies: fish, soy, sesame. Sodium ceiling 700 mg/meal, carbs 35–70 g/meal. Prefers American; dislikes pork. Cooking ability: stovetop. 10 meals/week, zone Richmond."
+    },
+    {
+      "seq": 2,
+      "t_offset_ms": 3699,
+      "agent": "orchestrator",
+      "type": "status",
+      "title": "Dispatching Clinical Matching Agent",
+      "detail": "Hard constraint hierarchy locked: allergens → sodium → carbs → diet-order tags. Exclusion rules, never scoring penalties."
+    },
+    {
+      "seq": 3,
+      "t_offset_ms": 5899,
+      "agent": "matching",
+      "type": "thought",
+      "title": "Scanning inventory",
+      "detail": "Scoring all 80 meals against hard constraints, then ranking survivors by cuisine preference and dislike avoidance."
+    },
+    {
+      "seq": 4,
+      "t_offset_ms": 7442,
+      "agent": "matching",
+      "type": "check",
+      "title": "Rejected: Baked Salmon with Quinoa",
+      "detail": "Excluded — allergen: contains fish.",
+      "data": {
+        "meal_id": "M043",
+        "result": "fail"
+      }
+    },
+    {
+      "seq": 5,
+      "t_offset_ms": 9799,
+      "agent": "matching",
+      "type": "check",
+      "title": "Rejected: Turkey and Avocado Sandwich",
+      "detail": "Excluded — diet order 'cardiovascular': meal lacks 'heart-healthy' tag.",
+      "data": {
+        "meal_id": "M045",
+        "result": "fail"
+      }
+    },
+    {
+      "seq": 6,
+      "t_offset_ms": 11491,
+      "agent": "matching",
+      "type": "check",
+      "title": "Matched: Overnight Oats with Berries",
+      "detail": "All hard checks pass — sodium 300/700 mg ✓, carbs 55 g (target 35–70) ✓, no fish/soy/sesame ✓.",
+      "data": {
+        "meal_id": "M050",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 7,
+      "t_offset_ms": 12454,
+      "agent": "matching",
+      "type": "check",
+      "title": "Matched: Grilled Chicken Garden Salad",
+      "detail": "All hard checks pass — sodium 333/700 mg ✓, carbs 39 g (target 35–70) ✓, no fish/soy/sesame ✓.",
+      "data": {
+        "meal_id": "M044",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 8,
+      "t_offset_ms": 13942,
+      "agent": "matching",
+      "type": "check",
+      "title": "Matched: Herb Roasted Chicken with Mashed Potatoes",
+      "detail": "All hard checks pass — sodium 430/700 mg ✓, carbs 43 g (target 35–70) ✓, no fish/soy/sesame ✓.",
+      "data": {
+        "meal_id": "M041",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 9,
+      "t_offset_ms": 15176,
+      "agent": "delivery",
+      "type": "output",
+      "title": "Route assigned",
+      "detail": "Client 1127 added to route R-RICH-1 (Richmond), delivery 2026-07-21, window 12:00–14:00. Cold chain OK.",
+      "data": {
+        "route_id": "R-RICH-1"
+      }
+    },
+    {
+      "seq": 10,
+      "t_offset_ms": 16543,
+      "agent": "orchestrator",
+      "type": "output",
+      "title": "Plan complete",
+      "detail": "Client 1127: 10 compliant meal(s) at fallback level 0. 0 hard-constraint violations."
+    }
+  ]
+}

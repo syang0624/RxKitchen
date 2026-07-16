@@ -1,0 +1,118 @@
+{
+  "client_id": 1085,
+  "scenario": "happy_path",
+  "generator": "template",
+  "events": [
+    {
+      "seq": 0,
+      "t_offset_ms": 2191,
+      "agent": "orchestrator",
+      "type": "status",
+      "title": "Referral received",
+      "detail": "New referral from UCSF Medical Center for client 1085. Starting intake pipeline."
+    },
+    {
+      "seq": 1,
+      "t_offset_ms": 3742,
+      "agent": "intake",
+      "type": "output",
+      "title": "Client profile structured",
+      "detail": "Diet orders: renal. Allergies: tree_nut, shellfish. Sodium ceiling 500 mg/meal, carbs 40–70 g/meal. Prefers American; dislikes lentils, beef. Cooking ability: microwave. 5 meals/week, zone Mission."
+    },
+    {
+      "seq": 2,
+      "t_offset_ms": 4751,
+      "agent": "orchestrator",
+      "type": "status",
+      "title": "Dispatching Clinical Matching Agent",
+      "detail": "Hard constraint hierarchy locked: allergens → sodium → carbs → diet-order tags. Exclusion rules, never scoring penalties."
+    },
+    {
+      "seq": 3,
+      "t_offset_ms": 6327,
+      "agent": "matching",
+      "type": "thought",
+      "title": "Scanning inventory",
+      "detail": "Scoring all 80 meals against hard constraints, then ranking survivors by cuisine preference and dislike avoidance."
+    },
+    {
+      "seq": 4,
+      "t_offset_ms": 8815,
+      "agent": "matching",
+      "type": "check",
+      "title": "Rejected: Grilled Chicken Garden Salad",
+      "detail": "Excluded — carbs: 39 g outside 40–70 g range.",
+      "data": {
+        "meal_id": "M044",
+        "result": "fail"
+      }
+    },
+    {
+      "seq": 5,
+      "t_offset_ms": 10072,
+      "agent": "matching",
+      "type": "check",
+      "title": "Rejected: Turkey Meatloaf with Roasted Vegetables",
+      "detail": "Excluded — carbs: 39 g outside 40–70 g range.",
+      "data": {
+        "meal_id": "M042",
+        "result": "fail"
+      }
+    },
+    {
+      "seq": 6,
+      "t_offset_ms": 12162,
+      "agent": "matching",
+      "type": "check",
+      "title": "Matched: Overnight Oats with Berries",
+      "detail": "All hard checks pass — sodium 300/500 mg ✓, carbs 55 g (target 40–70) ✓, no tree_nut/shellfish ✓.",
+      "data": {
+        "meal_id": "M050",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 7,
+      "t_offset_ms": 13692,
+      "agent": "matching",
+      "type": "check",
+      "title": "Matched: Baked Salmon with Quinoa",
+      "detail": "All hard checks pass — sodium 395/500 mg ✓, carbs 40 g (target 40–70) ✓, no tree_nut/shellfish ✓.",
+      "data": {
+        "meal_id": "M043",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 8,
+      "t_offset_ms": 14635,
+      "agent": "matching",
+      "type": "check",
+      "title": "Matched: Herb Roasted Chicken with Mashed Potatoes",
+      "detail": "All hard checks pass — sodium 430/500 mg ✓, carbs 43 g (target 40–70) ✓, no tree_nut/shellfish ✓.",
+      "data": {
+        "meal_id": "M041",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 9,
+      "t_offset_ms": 17086,
+      "agent": "delivery",
+      "type": "output",
+      "title": "Route assigned",
+      "detail": "Client 1085 added to route R-MISS-1 (Mission), delivery 2026-07-21, window 14:00–16:00. Cold chain OK.",
+      "data": {
+        "route_id": "R-MISS-1"
+      }
+    },
+    {
+      "seq": 10,
+      "t_offset_ms": 19161,
+      "agent": "orchestrator",
+      "type": "output",
+      "title": "Plan complete",
+      "detail": "Client 1085: 5 compliant meal(s) at fallback level 0. 0 hard-constraint violations."
+    }
+  ]
+}

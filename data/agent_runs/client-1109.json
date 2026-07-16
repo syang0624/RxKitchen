@@ -1,0 +1,118 @@
+{
+  "client_id": 1109,
+  "scenario": "happy_path",
+  "generator": "template",
+  "events": [
+    {
+      "seq": 0,
+      "t_offset_ms": 2113,
+      "agent": "orchestrator",
+      "type": "status",
+      "title": "Referral received",
+      "detail": "New referral from CPMC Van Ness for client 1109. Starting intake pipeline."
+    },
+    {
+      "seq": 1,
+      "t_offset_ms": 3357,
+      "agent": "intake",
+      "type": "output",
+      "title": "Client profile structured",
+      "detail": "Diet orders: diabetic. Allergies: gluten, tree_nut. Sodium ceiling 800 mg/meal, carbs 45–65 g/meal. Prefers Mediterranean; dislikes mushrooms, kidney beans. Cooking ability: full. 5 meals/week, zone Western Addition."
+    },
+    {
+      "seq": 2,
+      "t_offset_ms": 5523,
+      "agent": "orchestrator",
+      "type": "status",
+      "title": "Dispatching Clinical Matching Agent",
+      "detail": "Hard constraint hierarchy locked: allergens → sodium → carbs → diet-order tags. Exclusion rules, never scoring penalties."
+    },
+    {
+      "seq": 3,
+      "t_offset_ms": 7907,
+      "agent": "matching",
+      "type": "thought",
+      "title": "Scanning inventory",
+      "detail": "Scoring all 80 meals against hard constraints, then ranking survivors by cuisine preference and dislike avoidance."
+    },
+    {
+      "seq": 4,
+      "t_offset_ms": 10453,
+      "agent": "matching",
+      "type": "check",
+      "title": "Rejected: Baked Cod with Herbed Couscous",
+      "detail": "Excluded — allergen: contains gluten.",
+      "data": {
+        "meal_id": "M055",
+        "result": "fail"
+      }
+    },
+    {
+      "seq": 5,
+      "t_offset_ms": 12470,
+      "agent": "matching",
+      "type": "check",
+      "title": "Rejected: Tabbouleh with Grilled Chicken",
+      "detail": "Excluded — allergen: contains gluten.",
+      "data": {
+        "meal_id": "M057",
+        "result": "fail"
+      }
+    },
+    {
+      "seq": 6,
+      "t_offset_ms": 15026,
+      "agent": "matching",
+      "type": "check",
+      "title": "Matched: Hearty Lentil Soup with Vegetables",
+      "detail": "All hard checks pass — sodium 410/800 mg ✓, carbs 47 g (target 45–65) ✓, no gluten/tree_nut ✓.",
+      "data": {
+        "meal_id": "M054",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 7,
+      "t_offset_ms": 16535,
+      "agent": "matching",
+      "type": "check",
+      "title": "Matched: Quinoa-Stuffed Bell Peppers",
+      "detail": "All hard checks pass — sodium 417/800 mg ✓, carbs 48 g (target 45–65) ✓, no gluten/tree_nut ✓.",
+      "data": {
+        "meal_id": "M058",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 8,
+      "t_offset_ms": 18930,
+      "agent": "matching",
+      "type": "check",
+      "title": "Matched: Chicken Shawarma Bowl",
+      "detail": "All hard checks pass — sodium 529/800 mg ✓, carbs 53 g (target 45–65) ✓, no gluten/tree_nut ✓.",
+      "data": {
+        "meal_id": "M051",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 9,
+      "t_offset_ms": 20629,
+      "agent": "delivery",
+      "type": "output",
+      "title": "Route assigned",
+      "detail": "Client 1109 added to route R-WEST-2 (Western Addition), delivery 2026-07-21, window 10:00–12:00. Cold chain OK.",
+      "data": {
+        "route_id": "R-WEST-2"
+      }
+    },
+    {
+      "seq": 10,
+      "t_offset_ms": 21676,
+      "agent": "orchestrator",
+      "type": "output",
+      "title": "Plan complete",
+      "detail": "Client 1109: 5 compliant meal(s) at fallback level 0. 0 hard-constraint violations."
+    }
+  ]
+}

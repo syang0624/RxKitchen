@@ -1,0 +1,118 @@
+{
+  "client_id": 1126,
+  "scenario": "happy_path",
+  "generator": "template",
+  "events": [
+    {
+      "seq": 0,
+      "t_offset_ms": 1084,
+      "agent": "orchestrator",
+      "type": "status",
+      "title": "Referral received",
+      "detail": "New referral from Kaiser Permanente San Francisco for client 1126. Starting intake pipeline."
+    },
+    {
+      "seq": 1,
+      "t_offset_ms": 2450,
+      "agent": "intake",
+      "type": "output",
+      "title": "Client profile structured",
+      "detail": "Diet orders: diabetic, cardiovascular. Allergies: none. Sodium ceiling 650 mg/meal, carbs 40–55 g/meal. Prefers Mediterranean; dislikes cilantro. Cooking ability: stovetop. 5 meals/week, zone Sunset."
+    },
+    {
+      "seq": 2,
+      "t_offset_ms": 3549,
+      "agent": "orchestrator",
+      "type": "status",
+      "title": "Dispatching Clinical Matching Agent",
+      "detail": "Hard constraint hierarchy locked: allergens → sodium → carbs → diet-order tags. Exclusion rules, never scoring penalties."
+    },
+    {
+      "seq": 3,
+      "t_offset_ms": 5836,
+      "agent": "matching",
+      "type": "thought",
+      "title": "Scanning inventory",
+      "detail": "Scoring all 80 meals against hard constraints, then ranking survivors by cuisine preference and dislike avoidance."
+    },
+    {
+      "seq": 4,
+      "t_offset_ms": 8106,
+      "agent": "matching",
+      "type": "check",
+      "title": "Rejected: Falafel Plate with Hummus",
+      "detail": "Excluded — carbs: 57 g outside 40–55 g range.",
+      "data": {
+        "meal_id": "M052",
+        "result": "fail"
+      }
+    },
+    {
+      "seq": 5,
+      "t_offset_ms": 10549,
+      "agent": "matching",
+      "type": "check",
+      "title": "Rejected: Grilled Chicken Garden Salad",
+      "detail": "Excluded — carbs: 39 g outside 40–55 g range.",
+      "data": {
+        "meal_id": "M044",
+        "result": "fail"
+      }
+    },
+    {
+      "seq": 6,
+      "t_offset_ms": 12449,
+      "agent": "matching",
+      "type": "check",
+      "title": "Matched: Baked Cod with Herbed Couscous",
+      "detail": "All hard checks pass — sodium 351/650 mg ✓, carbs 41 g (target 40–55) ✓.",
+      "data": {
+        "meal_id": "M055",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 7,
+      "t_offset_ms": 13875,
+      "agent": "matching",
+      "type": "check",
+      "title": "Matched: Tabbouleh with Grilled Chicken",
+      "detail": "All hard checks pass — sodium 378/650 mg ✓, carbs 40 g (target 40–55) ✓.",
+      "data": {
+        "meal_id": "M057",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 8,
+      "t_offset_ms": 16028,
+      "agent": "matching",
+      "type": "check",
+      "title": "Matched: Hearty Lentil Soup with Vegetables",
+      "detail": "All hard checks pass — sodium 410/650 mg ✓, carbs 47 g (target 40–55) ✓.",
+      "data": {
+        "meal_id": "M054",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 9,
+      "t_offset_ms": 18176,
+      "agent": "delivery",
+      "type": "output",
+      "title": "Route assigned",
+      "detail": "Client 1126 added to route R-SUNS-1 (Sunset), delivery 2026-07-21, window 10:00–12:00. Cold chain OK.",
+      "data": {
+        "route_id": "R-SUNS-1"
+      }
+    },
+    {
+      "seq": 10,
+      "t_offset_ms": 19076,
+      "agent": "orchestrator",
+      "type": "output",
+      "title": "Plan complete",
+      "detail": "Client 1126: 5 compliant meal(s) at fallback level 0. 0 hard-constraint violations."
+    }
+  ]
+}

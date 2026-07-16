@@ -1,0 +1,118 @@
+{
+  "client_id": 1025,
+  "scenario": "happy_path",
+  "generator": "template",
+  "events": [
+    {
+      "seq": 0,
+      "t_offset_ms": 1524,
+      "agent": "orchestrator",
+      "type": "status",
+      "title": "Referral received",
+      "detail": "New referral from UCSF Medical Center for client 1025. Starting intake pipeline."
+    },
+    {
+      "seq": 1,
+      "t_offset_ms": 3293,
+      "agent": "intake",
+      "type": "output",
+      "title": "Client profile structured",
+      "detail": "Diet orders: cardiovascular, diabetic, renal. Allergies: dairy. Sodium ceiling 550 mg/meal, carbs 40–55 g/meal. Prefers Filipino; dislikes cilantro, pork. Cooking ability: full. 10 meals/week, zone SoMa."
+    },
+    {
+      "seq": 2,
+      "t_offset_ms": 5367,
+      "agent": "orchestrator",
+      "type": "status",
+      "title": "Dispatching Clinical Matching Agent",
+      "detail": "Hard constraint hierarchy locked: allergens → sodium → carbs → diet-order tags. Exclusion rules, never scoring penalties."
+    },
+    {
+      "seq": 3,
+      "t_offset_ms": 6374,
+      "agent": "matching",
+      "type": "thought",
+      "title": "Scanning inventory",
+      "detail": "Scoring all 80 meals against hard constraints, then ranking survivors by cuisine preference and dislike avoidance."
+    },
+    {
+      "seq": 4,
+      "t_offset_ms": 8940,
+      "agent": "matching",
+      "type": "check",
+      "title": "Rejected: Lumpiang Sariwa",
+      "detail": "Excluded — diet order 'renal': meal lacks 'renal-friendly' tag.",
+      "data": {
+        "meal_id": "M010",
+        "result": "fail"
+      }
+    },
+    {
+      "seq": 5,
+      "t_offset_ms": 10824,
+      "agent": "matching",
+      "type": "check",
+      "title": "Rejected: Arroz Caldo",
+      "detail": "Excluded — carbs: 57 g outside 40–55 g range.",
+      "data": {
+        "meal_id": "M004",
+        "result": "fail"
+      }
+    },
+    {
+      "seq": 6,
+      "t_offset_ms": 12764,
+      "agent": "matching",
+      "type": "check",
+      "title": "Matched: Baked Bangus with Garlic Rice",
+      "detail": "All hard checks pass — sodium 396/550 mg ✓, carbs 47 g (target 40–55) ✓, no dairy ✓.",
+      "data": {
+        "meal_id": "M007",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 7,
+      "t_offset_ms": 14447,
+      "agent": "matching",
+      "type": "check",
+      "title": "Matched: Ginataang Gulay with Rice",
+      "detail": "All hard checks pass — sodium 401/550 mg ✓, carbs 51 g (target 40–55) ✓, no dairy ✓.",
+      "data": {
+        "meal_id": "M006",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 8,
+      "t_offset_ms": 15442,
+      "agent": "matching",
+      "type": "check",
+      "title": "Matched: Chicken Tinola with Rice",
+      "detail": "All hard checks pass — sodium 412/550 mg ✓, carbs 48 g (target 40–55) ✓, no dairy ✓.",
+      "data": {
+        "meal_id": "M003",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 9,
+      "t_offset_ms": 17548,
+      "agent": "delivery",
+      "type": "output",
+      "title": "Route assigned",
+      "detail": "Client 1025 added to route R-SOMA-1 (SoMa), delivery 2026-07-21, window 10:00–12:00. Cold chain OK.",
+      "data": {
+        "route_id": "R-SOMA-1"
+      }
+    },
+    {
+      "seq": 10,
+      "t_offset_ms": 18549,
+      "agent": "orchestrator",
+      "type": "output",
+      "title": "Plan complete",
+      "detail": "Client 1025: 10 compliant meal(s) at fallback level 0. 0 hard-constraint violations."
+    }
+  ]
+}

@@ -1,0 +1,118 @@
+{
+  "client_id": 1049,
+  "scenario": "happy_path",
+  "generator": "template",
+  "events": [
+    {
+      "seq": 0,
+      "t_offset_ms": 2450,
+      "agent": "orchestrator",
+      "type": "status",
+      "title": "Referral received",
+      "detail": "New referral from Kaiser Permanente San Francisco for client 1049. Starting intake pipeline."
+    },
+    {
+      "seq": 1,
+      "t_offset_ms": 4418,
+      "agent": "intake",
+      "type": "output",
+      "title": "Client profile structured",
+      "detail": "Diet orders: diabetic. Allergies: fish, egg. Sodium ceiling 800 mg/meal, carbs 40–55 g/meal. Prefers Mediterranean; dislikes nothing noted. Cooking ability: full. 5 meals/week, zone Western Addition."
+    },
+    {
+      "seq": 2,
+      "t_offset_ms": 6486,
+      "agent": "orchestrator",
+      "type": "status",
+      "title": "Dispatching Clinical Matching Agent",
+      "detail": "Hard constraint hierarchy locked: allergens → sodium → carbs → diet-order tags. Exclusion rules, never scoring penalties."
+    },
+    {
+      "seq": 3,
+      "t_offset_ms": 8875,
+      "agent": "matching",
+      "type": "thought",
+      "title": "Scanning inventory",
+      "detail": "Scoring all 80 meals against hard constraints, then ranking survivors by cuisine preference and dislike avoidance."
+    },
+    {
+      "seq": 4,
+      "t_offset_ms": 10646,
+      "agent": "matching",
+      "type": "check",
+      "title": "Rejected: Baked Cod with Herbed Couscous",
+      "detail": "Excluded — allergen: contains fish.",
+      "data": {
+        "meal_id": "M055",
+        "result": "fail"
+      }
+    },
+    {
+      "seq": 5,
+      "t_offset_ms": 13121,
+      "agent": "matching",
+      "type": "check",
+      "title": "Rejected: Falafel Plate with Hummus",
+      "detail": "Excluded — carbs: 57 g outside 40–55 g range.",
+      "data": {
+        "meal_id": "M052",
+        "result": "fail"
+      }
+    },
+    {
+      "seq": 6,
+      "t_offset_ms": 14158,
+      "agent": "matching",
+      "type": "check",
+      "title": "Matched: Tabbouleh with Grilled Chicken",
+      "detail": "All hard checks pass — sodium 378/800 mg ✓, carbs 40 g (target 40–55) ✓, no fish/egg ✓.",
+      "data": {
+        "meal_id": "M057",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 7,
+      "t_offset_ms": 15086,
+      "agent": "matching",
+      "type": "check",
+      "title": "Matched: Hearty Lentil Soup with Vegetables",
+      "detail": "All hard checks pass — sodium 410/800 mg ✓, carbs 47 g (target 40–55) ✓, no fish/egg ✓.",
+      "data": {
+        "meal_id": "M054",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 8,
+      "t_offset_ms": 16754,
+      "agent": "matching",
+      "type": "check",
+      "title": "Matched: Quinoa-Stuffed Bell Peppers",
+      "detail": "All hard checks pass — sodium 417/800 mg ✓, carbs 48 g (target 40–55) ✓, no fish/egg ✓.",
+      "data": {
+        "meal_id": "M058",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 9,
+      "t_offset_ms": 19214,
+      "agent": "delivery",
+      "type": "output",
+      "title": "Route assigned",
+      "detail": "Client 1049 added to route R-WEST-1 (Western Addition), delivery 2026-07-21, window 14:00–16:00. Cold chain OK.",
+      "data": {
+        "route_id": "R-WEST-1"
+      }
+    },
+    {
+      "seq": 10,
+      "t_offset_ms": 20457,
+      "agent": "orchestrator",
+      "type": "output",
+      "title": "Plan complete",
+      "detail": "Client 1049: 5 compliant meal(s) at fallback level 0. 0 hard-constraint violations."
+    }
+  ]
+}

@@ -47,8 +47,10 @@ Own everything that happens **offline, before the demo**: the synthetic dataset,
 
 - ✅ **Schemas frozen** in `schemas/` — one JSON Schema per data artifact plus `agent_run.schema.json` (the replay-engine event contract, which per PRD §11 is also the v2 live API contract). `npm run data:validate` now fails on any contract drift, before the clinical checks.
 - ✅ **Deterministic dataset** generated and validated: 0 violations, 98% compliant matches, 100% coverage, 76.9% donation utilization (`scripts/generate-data.mjs`).
-- ✅ **Claude generation pipeline** ready: `npm run agents:generate -- --client <id>` (or `--clients a,b,c` / `--limit N`) authors agent event streams offline via the Claude API (`claude-opus-4-8`). Prompts contain only facts recomputed from `data/` (shared rules in `scripts/lib/clinical.mjs`); outputs are grounding-audited (no invented meals/numbers/IDs, pass claims must match the allocation) and schema-validated before writing. Needs `ANTHROPIC_API_KEY` or `ant auth login`.
-- ⏭ Next: run the pipeline over the queue (start with `--client 1042 --force` to replace the templated hero run, then `--limit` batches), and generate the stockout stream variant.
+- ✅ **Claude generation pipeline** ready: `npm run agents:generate -- --client <id>` (or `--clients a,b,c` / `--limit N`, plus `--scenario stockout` for re-plan streams) authors agent event streams offline via the Claude API (`claude-opus-4-8`). Prompts contain only facts recomputed from `data/` (shared rules in `scripts/lib/clinical.mjs`); outputs are grounding-audited (no invented meals/numbers/IDs, pass claims must match the allocation) and schema-validated before writing. Needs `ANTHROPIC_API_KEY` or `ant auth login`.
+- ✅ **Phase 4 batch-run done (template tier):** all 150 clients now have a replayable `agent_runs/client-<id>.json` (deterministic template events grounded in each client's real allocation), so the scale view (FR8) can drill into anyone. Runs carry a `generator` field; `data:generate` never overwrites Claude-authored runs, so upgrading them is safe and incremental.
+- ✅ **CI** (`.github/workflows/ci.yml`): verifies committed `data/` matches the generator, then schema + clinical validation, lint, and build on every push/PR (PRD §11).
+- ⏭ Next (needs API credentials): upgrade runs with Claude — `--client 1042 --force`, `--client 1042 --scenario stockout --force`, then `--limit` batches across the queue.
 
 ## Interface with Nori
 

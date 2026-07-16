@@ -1,0 +1,118 @@
+{
+  "client_id": 1020,
+  "scenario": "happy_path",
+  "generator": "template",
+  "events": [
+    {
+      "seq": 0,
+      "t_offset_ms": 2552,
+      "agent": "orchestrator",
+      "type": "status",
+      "title": "Referral received",
+      "detail": "New referral from Kaiser Permanente San Francisco for client 1020. Starting intake pipeline."
+    },
+    {
+      "seq": 1,
+      "t_offset_ms": 4187,
+      "agent": "intake",
+      "type": "output",
+      "title": "Client profile structured",
+      "detail": "Diet orders: diabetic. Allergies: shellfish, tree_nut, egg. Sodium ceiling 800 mg/meal, carbs 40–55 g/meal. Prefers Vietnamese; dislikes coconut milk, lentils. Cooking ability: microwave. 10 meals/week, zone Tenderloin."
+    },
+    {
+      "seq": 2,
+      "t_offset_ms": 5235,
+      "agent": "orchestrator",
+      "type": "status",
+      "title": "Dispatching Clinical Matching Agent",
+      "detail": "Hard constraint hierarchy locked: allergens → sodium → carbs → diet-order tags. Exclusion rules, never scoring penalties."
+    },
+    {
+      "seq": 3,
+      "t_offset_ms": 7573,
+      "agent": "matching",
+      "type": "thought",
+      "title": "Scanning inventory",
+      "detail": "Scoring all 80 meals against hard constraints, then ranking survivors by cuisine preference and dislike avoidance."
+    },
+    {
+      "seq": 4,
+      "t_offset_ms": 8937,
+      "agent": "matching",
+      "type": "check",
+      "title": "Rejected: Bun Bowl with Grilled Pork",
+      "detail": "Excluded — carbs: 59 g outside 40–55 g range.",
+      "data": {
+        "meal_id": "M023",
+        "result": "fail"
+      }
+    },
+    {
+      "seq": 5,
+      "t_offset_ms": 11519,
+      "agent": "matching",
+      "type": "check",
+      "title": "Rejected: Pho Ga (Chicken Pho)",
+      "detail": "Excluded — carbs: 56 g outside 40–55 g range.",
+      "data": {
+        "meal_id": "M021",
+        "result": "fail"
+      }
+    },
+    {
+      "seq": 6,
+      "t_offset_ms": 13934,
+      "agent": "matching",
+      "type": "check",
+      "title": "Matched: Fresh Spring Rolls with Chicken",
+      "detail": "All hard checks pass — sodium 420/800 mg ✓, carbs 41 g (target 40–55) ✓, no shellfish/tree_nut/egg ✓.",
+      "data": {
+        "meal_id": "M026",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 7,
+      "t_offset_ms": 15789,
+      "agent": "matching",
+      "type": "check",
+      "title": "Matched: Steamed Rice Rolls with Mushrooms",
+      "detail": "All hard checks pass — sodium 423/800 mg ✓, carbs 46 g (target 40–55) ✓, no shellfish/tree_nut/egg ✓.",
+      "data": {
+        "meal_id": "M030",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 8,
+      "t_offset_ms": 18212,
+      "agent": "matching",
+      "type": "check",
+      "title": "Matched: Lemongrass Chicken with Rice",
+      "detail": "All hard checks pass — sodium 458/800 mg ✓, carbs 50 g (target 40–55) ✓, no shellfish/tree_nut/egg ✓.",
+      "data": {
+        "meal_id": "M022",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 9,
+      "t_offset_ms": 19469,
+      "agent": "delivery",
+      "type": "output",
+      "title": "Route assigned",
+      "detail": "Client 1020 added to route R-TEND-1 (Tenderloin), delivery 2026-07-21, window 10:00–12:00. Cold chain OK.",
+      "data": {
+        "route_id": "R-TEND-1"
+      }
+    },
+    {
+      "seq": 10,
+      "t_offset_ms": 21397,
+      "agent": "orchestrator",
+      "type": "output",
+      "title": "Plan complete",
+      "detail": "Client 1020: 10 compliant meal(s) at fallback level 0. 0 hard-constraint violations."
+    }
+  ]
+}

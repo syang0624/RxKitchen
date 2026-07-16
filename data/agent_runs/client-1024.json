@@ -1,0 +1,118 @@
+{
+  "client_id": 1024,
+  "scenario": "happy_path",
+  "generator": "template",
+  "events": [
+    {
+      "seq": 0,
+      "t_offset_ms": 2453,
+      "agent": "orchestrator",
+      "type": "status",
+      "title": "Referral received",
+      "detail": "New referral from Saint Francis Memorial for client 1024. Starting intake pipeline."
+    },
+    {
+      "seq": 1,
+      "t_offset_ms": 3499,
+      "agent": "intake",
+      "type": "output",
+      "title": "Client profile structured",
+      "detail": "Diet orders: low-sodium. Allergies: none. Sodium ceiling 650 mg/meal, carbs 45–75 g/meal. Prefers American; dislikes tofu, kidney beans. Cooking ability: microwave. 7 meals/week, zone SoMa."
+    },
+    {
+      "seq": 2,
+      "t_offset_ms": 4695,
+      "agent": "orchestrator",
+      "type": "status",
+      "title": "Dispatching Clinical Matching Agent",
+      "detail": "Hard constraint hierarchy locked: allergens → sodium → carbs → diet-order tags. Exclusion rules, never scoring penalties."
+    },
+    {
+      "seq": 3,
+      "t_offset_ms": 6240,
+      "agent": "matching",
+      "type": "thought",
+      "title": "Scanning inventory",
+      "detail": "Scoring all 80 meals against hard constraints, then ranking survivors by cuisine preference and dislike avoidance."
+    },
+    {
+      "seq": 4,
+      "t_offset_ms": 7178,
+      "agent": "matching",
+      "type": "check",
+      "title": "Rejected: Grilled Chicken Garden Salad",
+      "detail": "Excluded — carbs: 39 g outside 45–75 g range.",
+      "data": {
+        "meal_id": "M044",
+        "result": "fail"
+      }
+    },
+    {
+      "seq": 5,
+      "t_offset_ms": 8592,
+      "agent": "matching",
+      "type": "check",
+      "title": "Rejected: Baked Salmon with Quinoa",
+      "detail": "Excluded — carbs: 40 g outside 45–75 g range.",
+      "data": {
+        "meal_id": "M043",
+        "result": "fail"
+      }
+    },
+    {
+      "seq": 6,
+      "t_offset_ms": 11100,
+      "agent": "matching",
+      "type": "check",
+      "title": "Matched: Overnight Oats with Berries",
+      "detail": "All hard checks pass — sodium 300/650 mg ✓, carbs 55 g (target 45–75) ✓.",
+      "data": {
+        "meal_id": "M050",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 7,
+      "t_offset_ms": 12471,
+      "agent": "matching",
+      "type": "check",
+      "title": "Matched: Three-Bean Veggie Chili",
+      "detail": "All hard checks pass — sodium 480/650 mg ✓, carbs 50 g (target 45–75) ✓.",
+      "data": {
+        "meal_id": "M048",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 8,
+      "t_offset_ms": 13977,
+      "agent": "matching",
+      "type": "check",
+      "title": "Matched: Winter Melon Soup with Chicken and Rice",
+      "detail": "All hard checks pass — sodium 354/650 mg ✓, carbs 45 g (target 45–75) ✓.",
+      "data": {
+        "meal_id": "M020",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 9,
+      "t_offset_ms": 15360,
+      "agent": "delivery",
+      "type": "output",
+      "title": "Route assigned",
+      "detail": "Client 1024 added to route R-SOMA-1 (SoMa), delivery 2026-07-21, window 10:00–12:00. Cold chain OK.",
+      "data": {
+        "route_id": "R-SOMA-1"
+      }
+    },
+    {
+      "seq": 10,
+      "t_offset_ms": 16937,
+      "agent": "orchestrator",
+      "type": "output",
+      "title": "Plan complete",
+      "detail": "Client 1024: 7 compliant meal(s) at fallback level 0. 0 hard-constraint violations."
+    }
+  ]
+}

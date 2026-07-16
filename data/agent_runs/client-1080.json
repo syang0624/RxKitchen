@@ -1,0 +1,118 @@
+{
+  "client_id": 1080,
+  "scenario": "happy_path",
+  "generator": "template",
+  "events": [
+    {
+      "seq": 0,
+      "t_offset_ms": 1795,
+      "agent": "orchestrator",
+      "type": "status",
+      "title": "Referral received",
+      "detail": "New referral from Saint Francis Memorial for client 1080. Starting intake pipeline."
+    },
+    {
+      "seq": 1,
+      "t_offset_ms": 4373,
+      "agent": "intake",
+      "type": "output",
+      "title": "Client profile structured",
+      "detail": "Diet orders: diabetic, cardiovascular. Allergies: shellfish, fish. Sodium ceiling 650 mg/meal, carbs 40–55 g/meal. Prefers Italian; dislikes mushrooms. Cooking ability: stovetop. 10 meals/week, zone Mission."
+    },
+    {
+      "seq": 2,
+      "t_offset_ms": 6887,
+      "agent": "orchestrator",
+      "type": "status",
+      "title": "Dispatching Clinical Matching Agent",
+      "detail": "Hard constraint hierarchy locked: allergens → sodium → carbs → diet-order tags. Exclusion rules, never scoring penalties."
+    },
+    {
+      "seq": 3,
+      "t_offset_ms": 8728,
+      "agent": "matching",
+      "type": "thought",
+      "title": "Scanning inventory",
+      "detail": "Scoring all 80 meals against hard constraints, then ranking survivors by cuisine preference and dislike avoidance."
+    },
+    {
+      "seq": 4,
+      "t_offset_ms": 10740,
+      "agent": "matching",
+      "type": "check",
+      "title": "Rejected: Chicken Pasta Primavera",
+      "detail": "Excluded — carbs: 63 g outside 40–55 g range.",
+      "data": {
+        "meal_id": "M071",
+        "result": "fail"
+      }
+    },
+    {
+      "seq": 5,
+      "t_offset_ms": 12695,
+      "agent": "matching",
+      "type": "check",
+      "title": "Rejected: Turkey Bolognese with Whole-Wheat Pasta",
+      "detail": "Excluded — carbs: 56 g outside 40–55 g range.",
+      "data": {
+        "meal_id": "M072",
+        "result": "fail"
+      }
+    },
+    {
+      "seq": 6,
+      "t_offset_ms": 13961,
+      "agent": "matching",
+      "type": "check",
+      "title": "Matched: Tuscan White Bean Soup",
+      "detail": "All hard checks pass — sodium 413/650 mg ✓, carbs 53 g (target 40–55) ✓, no shellfish/fish ✓.",
+      "data": {
+        "meal_id": "M079",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 7,
+      "t_offset_ms": 16433,
+      "agent": "matching",
+      "type": "check",
+      "title": "Matched: Grilled Chicken with Creamy Polenta",
+      "detail": "All hard checks pass — sodium 445/650 mg ✓, carbs 52 g (target 40–55) ✓, no shellfish/fish ✓.",
+      "data": {
+        "meal_id": "M080",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 8,
+      "t_offset_ms": 17813,
+      "agent": "matching",
+      "type": "check",
+      "title": "Matched: Minestrone with Whole-Grain Roll",
+      "detail": "All hard checks pass — sodium 462/650 mg ✓, carbs 55 g (target 40–55) ✓, no shellfish/fish ✓.",
+      "data": {
+        "meal_id": "M073",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 9,
+      "t_offset_ms": 19235,
+      "agent": "delivery",
+      "type": "output",
+      "title": "Route assigned",
+      "detail": "Client 1080 added to route R-MISS-1 (Mission), delivery 2026-07-21, window 14:00–16:00. Cold chain OK.",
+      "data": {
+        "route_id": "R-MISS-1"
+      }
+    },
+    {
+      "seq": 10,
+      "t_offset_ms": 20377,
+      "agent": "orchestrator",
+      "type": "output",
+      "title": "Plan complete",
+      "detail": "Client 1080: 10 compliant meal(s) at fallback level 0. 0 hard-constraint violations."
+    }
+  ]
+}

@@ -1,0 +1,141 @@
+{
+  "client_id": 1140,
+  "scenario": "happy_path",
+  "generator": "template",
+  "events": [
+    {
+      "seq": 0,
+      "t_offset_ms": 1919,
+      "agent": "orchestrator",
+      "type": "status",
+      "title": "Referral received",
+      "detail": "New referral from Zuckerberg San Francisco General for client 1140. Starting intake pipeline."
+    },
+    {
+      "seq": 1,
+      "t_offset_ms": 3756,
+      "agent": "intake",
+      "type": "output",
+      "title": "Client profile structured",
+      "detail": "Diet orders: cardiovascular. Allergies: none. Sodium ceiling 600 mg/meal, carbs 35–70 g/meal. Prefers Chinese; dislikes cilantro. Cooking ability: microwave. 10 meals/week, zone Tenderloin."
+    },
+    {
+      "seq": 2,
+      "t_offset_ms": 5359,
+      "agent": "orchestrator",
+      "type": "status",
+      "title": "Dispatching Clinical Matching Agent",
+      "detail": "Hard constraint hierarchy locked: allergens → sodium → carbs → diet-order tags. Exclusion rules, never scoring penalties."
+    },
+    {
+      "seq": 3,
+      "t_offset_ms": 7809,
+      "agent": "matching",
+      "type": "thought",
+      "title": "Scanning inventory",
+      "detail": "Scoring all 80 meals against hard constraints, then ranking survivors by cuisine preference and dislike avoidance."
+    },
+    {
+      "seq": 4,
+      "t_offset_ms": 9417,
+      "agent": "matching",
+      "type": "check",
+      "title": "Rejected: Beef and Broccoli with Brown Rice",
+      "detail": "Excluded — diet order 'cardiovascular': meal lacks 'heart-healthy' tag.",
+      "data": {
+        "meal_id": "M014",
+        "result": "fail"
+      }
+    },
+    {
+      "seq": 5,
+      "t_offset_ms": 11598,
+      "agent": "matching",
+      "type": "check",
+      "title": "Rejected: Mild Mapo Tofu with Rice",
+      "detail": "Excluded — sodium: 607 mg exceeds 600 mg ceiling.",
+      "data": {
+        "meal_id": "M015",
+        "result": "fail"
+      }
+    },
+    {
+      "seq": 6,
+      "t_offset_ms": 13660,
+      "agent": "matching",
+      "type": "check",
+      "title": "Matched: Winter Melon Soup with Chicken and Rice",
+      "detail": "All hard checks pass — sodium 354/600 mg ✓, carbs 45 g (target 35–70) ✓.",
+      "data": {
+        "meal_id": "M020",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 7,
+      "t_offset_ms": 15030,
+      "agent": "matching",
+      "type": "check",
+      "title": "Matched: Chicken Congee with Scallions",
+      "detail": "All hard checks pass — sodium 364/600 mg ✓, carbs 49 g (target 35–70) ✓. Sourced from kitchen batch B2.",
+      "data": {
+        "meal_id": "M011",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 8,
+      "t_offset_ms": 17243,
+      "agent": "matching",
+      "type": "check",
+      "title": "Matched: Steamed Fish with Ginger and Rice",
+      "detail": "All hard checks pass — sodium 435/600 mg ✓, carbs 50 g (target 35–70) ✓.",
+      "data": {
+        "meal_id": "M012",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 9,
+      "t_offset_ms": 19234,
+      "agent": "kitchen",
+      "type": "output",
+      "title": "Batch allocated: Chicken Congee with Scallions",
+      "detail": "Serving drawn from scheduled batch B2 (100 servings, 7 labor hours on 2026-07-20).",
+      "data": {
+        "batch_id": "B2"
+      }
+    },
+    {
+      "seq": 10,
+      "t_offset_ms": 21686,
+      "agent": "donation",
+      "type": "check",
+      "title": "Donation D002 feeds batch B2",
+      "detail": "Fresh Bok Choy (cases), Carrots (25 lb bags) from Bay Area Produce Exchange — triaged as kitchen ingredient.",
+      "data": {
+        "donation_id": "D002",
+        "result": "kitchen_ingredient"
+      }
+    },
+    {
+      "seq": 11,
+      "t_offset_ms": 24157,
+      "agent": "delivery",
+      "type": "output",
+      "title": "Route assigned",
+      "detail": "Client 1140 added to route R-TEND-2 (Tenderloin), delivery 2026-07-21, window 12:00–14:00. Cold chain OK.",
+      "data": {
+        "route_id": "R-TEND-2"
+      }
+    },
+    {
+      "seq": 12,
+      "t_offset_ms": 26100,
+      "agent": "orchestrator",
+      "type": "output",
+      "title": "Plan complete",
+      "detail": "Client 1140: 10 compliant meal(s) at fallback level 1. 0 hard-constraint violations."
+    }
+  ]
+}

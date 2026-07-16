@@ -1,0 +1,118 @@
+{
+  "client_id": 1001,
+  "scenario": "happy_path",
+  "generator": "template",
+  "events": [
+    {
+      "seq": 0,
+      "t_offset_ms": 2060,
+      "agent": "orchestrator",
+      "type": "status",
+      "title": "Referral received",
+      "detail": "New referral from CPMC Van Ness for client 1001. Starting intake pipeline."
+    },
+    {
+      "seq": 1,
+      "t_offset_ms": 4108,
+      "agent": "intake",
+      "type": "output",
+      "title": "Client profile structured",
+      "detail": "Diet orders: diabetic, cardiovascular. Allergies: none. Sodium ceiling 600 mg/meal, carbs 45–65 g/meal. Prefers American; dislikes coconut milk. Cooking ability: stovetop. 5 meals/week, zone Chinatown."
+    },
+    {
+      "seq": 2,
+      "t_offset_ms": 6366,
+      "agent": "orchestrator",
+      "type": "status",
+      "title": "Dispatching Clinical Matching Agent",
+      "detail": "Hard constraint hierarchy locked: allergens → sodium → carbs → diet-order tags. Exclusion rules, never scoring penalties."
+    },
+    {
+      "seq": 3,
+      "t_offset_ms": 7328,
+      "agent": "matching",
+      "type": "thought",
+      "title": "Scanning inventory",
+      "detail": "Scoring all 80 meals against hard constraints, then ranking survivors by cuisine preference and dislike avoidance."
+    },
+    {
+      "seq": 4,
+      "t_offset_ms": 8987,
+      "agent": "matching",
+      "type": "check",
+      "title": "Rejected: Grilled Chicken Garden Salad",
+      "detail": "Excluded — carbs: 39 g outside 45–65 g range.",
+      "data": {
+        "meal_id": "M044",
+        "result": "fail"
+      }
+    },
+    {
+      "seq": 5,
+      "t_offset_ms": 9992,
+      "agent": "matching",
+      "type": "check",
+      "title": "Rejected: Baked Salmon with Quinoa",
+      "detail": "Excluded — carbs: 40 g outside 45–65 g range.",
+      "data": {
+        "meal_id": "M043",
+        "result": "fail"
+      }
+    },
+    {
+      "seq": 6,
+      "t_offset_ms": 11159,
+      "agent": "matching",
+      "type": "check",
+      "title": "Matched: Overnight Oats with Berries",
+      "detail": "All hard checks pass — sodium 300/600 mg ✓, carbs 55 g (target 45–65) ✓.",
+      "data": {
+        "meal_id": "M050",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 7,
+      "t_offset_ms": 12970,
+      "agent": "matching",
+      "type": "check",
+      "title": "Matched: Three-Bean Veggie Chili",
+      "detail": "All hard checks pass — sodium 480/600 mg ✓, carbs 50 g (target 45–65) ✓.",
+      "data": {
+        "meal_id": "M048",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 8,
+      "t_offset_ms": 15527,
+      "agent": "matching",
+      "type": "check",
+      "title": "Matched: Winter Melon Soup with Chicken and Rice",
+      "detail": "All hard checks pass — sodium 354/600 mg ✓, carbs 45 g (target 45–65) ✓.",
+      "data": {
+        "meal_id": "M020",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 9,
+      "t_offset_ms": 16842,
+      "agent": "delivery",
+      "type": "output",
+      "title": "Route assigned",
+      "detail": "Client 1001 added to route R-CHIN-1 (Chinatown), delivery 2026-07-21, window 12:00–14:00. Cold chain OK.",
+      "data": {
+        "route_id": "R-CHIN-1"
+      }
+    },
+    {
+      "seq": 10,
+      "t_offset_ms": 19419,
+      "agent": "orchestrator",
+      "type": "output",
+      "title": "Plan complete",
+      "detail": "Client 1001: 5 compliant meal(s) at fallback level 0. 0 hard-constraint violations."
+    }
+  ]
+}

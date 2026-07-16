@@ -1,0 +1,118 @@
+{
+  "client_id": 1004,
+  "scenario": "happy_path",
+  "generator": "template",
+  "events": [
+    {
+      "seq": 0,
+      "t_offset_ms": 1627,
+      "agent": "orchestrator",
+      "type": "status",
+      "title": "Referral received",
+      "detail": "New referral from UCSF Medical Center for client 1004. Starting intake pipeline."
+    },
+    {
+      "seq": 1,
+      "t_offset_ms": 3152,
+      "agent": "intake",
+      "type": "output",
+      "title": "Client profile structured",
+      "detail": "Diet orders: diabetic, cardiovascular. Allergies: fish, dairy. Sodium ceiling 600 mg/meal, carbs 40–55 g/meal. Prefers Mexican; dislikes nothing noted. Cooking ability: microwave. 7 meals/week, zone Chinatown."
+    },
+    {
+      "seq": 2,
+      "t_offset_ms": 4385,
+      "agent": "orchestrator",
+      "type": "status",
+      "title": "Dispatching Clinical Matching Agent",
+      "detail": "Hard constraint hierarchy locked: allergens → sodium → carbs → diet-order tags. Exclusion rules, never scoring penalties."
+    },
+    {
+      "seq": 3,
+      "t_offset_ms": 5646,
+      "agent": "matching",
+      "type": "thought",
+      "title": "Scanning inventory",
+      "detail": "Scoring all 80 meals against hard constraints, then ranking survivors by cuisine preference and dislike avoidance."
+    },
+    {
+      "seq": 4,
+      "t_offset_ms": 6594,
+      "agent": "matching",
+      "type": "check",
+      "title": "Rejected: Chicken Fajita Bowl",
+      "detail": "Excluded — carbs: 57 g outside 40–55 g range.",
+      "data": {
+        "meal_id": "M031",
+        "result": "fail"
+      }
+    },
+    {
+      "seq": 5,
+      "t_offset_ms": 7846,
+      "agent": "matching",
+      "type": "check",
+      "title": "Rejected: Black Bean and Rice Bowl",
+      "detail": "Excluded — carbs: 56 g outside 40–55 g range.",
+      "data": {
+        "meal_id": "M032",
+        "result": "fail"
+      }
+    },
+    {
+      "seq": 6,
+      "t_offset_ms": 9515,
+      "agent": "matching",
+      "type": "check",
+      "title": "Matched: Calabacitas con Pollo",
+      "detail": "All hard checks pass — sodium 374/600 mg ✓, carbs 43 g (target 40–55) ✓, no fish/dairy ✓.",
+      "data": {
+        "meal_id": "M038",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 7,
+      "t_offset_ms": 11582,
+      "agent": "matching",
+      "type": "check",
+      "title": "Matched: Turkey Picadillo with Rice",
+      "detail": "All hard checks pass — sodium 440/600 mg ✓, carbs 48 g (target 40–55) ✓, no fish/dairy ✓.",
+      "data": {
+        "meal_id": "M039",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 8,
+      "t_offset_ms": 13161,
+      "agent": "matching",
+      "type": "check",
+      "title": "Matched: Chicken Tinga with Rice",
+      "detail": "All hard checks pass — sodium 454/600 mg ✓, carbs 48 g (target 40–55) ✓, no fish/dairy ✓.",
+      "data": {
+        "meal_id": "M037",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 9,
+      "t_offset_ms": 15698,
+      "agent": "delivery",
+      "type": "output",
+      "title": "Route assigned",
+      "detail": "Client 1004 added to route R-CHIN-1 (Chinatown), delivery 2026-07-21, window 12:00–14:00. Cold chain OK.",
+      "data": {
+        "route_id": "R-CHIN-1"
+      }
+    },
+    {
+      "seq": 10,
+      "t_offset_ms": 18235,
+      "agent": "orchestrator",
+      "type": "output",
+      "title": "Plan complete",
+      "detail": "Client 1004: 7 compliant meal(s) at fallback level 0. 0 hard-constraint violations."
+    }
+  ]
+}

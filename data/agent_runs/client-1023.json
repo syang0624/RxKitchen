@@ -1,0 +1,118 @@
+{
+  "client_id": 1023,
+  "scenario": "happy_path",
+  "generator": "template",
+  "events": [
+    {
+      "seq": 0,
+      "t_offset_ms": 1735,
+      "agent": "orchestrator",
+      "type": "status",
+      "title": "Referral received",
+      "detail": "New referral from CPMC Van Ness for client 1023. Starting intake pipeline."
+    },
+    {
+      "seq": 1,
+      "t_offset_ms": 2839,
+      "agent": "intake",
+      "type": "output",
+      "title": "Client profile structured",
+      "detail": "Diet orders: cardiovascular. Allergies: sesame. Sodium ceiling 700 mg/meal, carbs 35–70 g/meal. Prefers Mediterranean; dislikes kidney beans. Cooking ability: microwave. 7 meals/week, zone Mission."
+    },
+    {
+      "seq": 2,
+      "t_offset_ms": 4107,
+      "agent": "orchestrator",
+      "type": "status",
+      "title": "Dispatching Clinical Matching Agent",
+      "detail": "Hard constraint hierarchy locked: allergens → sodium → carbs → diet-order tags. Exclusion rules, never scoring penalties."
+    },
+    {
+      "seq": 3,
+      "t_offset_ms": 5710,
+      "agent": "matching",
+      "type": "thought",
+      "title": "Scanning inventory",
+      "detail": "Scoring all 80 meals against hard constraints, then ranking survivors by cuisine preference and dislike avoidance."
+    },
+    {
+      "seq": 4,
+      "t_offset_ms": 7346,
+      "agent": "matching",
+      "type": "check",
+      "title": "Rejected: Hummus and Veggie Wrap",
+      "detail": "Excluded — allergen: contains sesame.",
+      "data": {
+        "meal_id": "M060",
+        "result": "fail"
+      }
+    },
+    {
+      "seq": 5,
+      "t_offset_ms": 9347,
+      "agent": "matching",
+      "type": "check",
+      "title": "Rejected: Falafel Plate with Hummus",
+      "detail": "Excluded — allergen: contains sesame.",
+      "data": {
+        "meal_id": "M052",
+        "result": "fail"
+      }
+    },
+    {
+      "seq": 6,
+      "t_offset_ms": 10450,
+      "agent": "matching",
+      "type": "check",
+      "title": "Matched: Baked Cod with Herbed Couscous",
+      "detail": "All hard checks pass — sodium 351/700 mg ✓, carbs 41 g (target 35–70) ✓, no sesame ✓.",
+      "data": {
+        "meal_id": "M055",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 7,
+      "t_offset_ms": 12445,
+      "agent": "matching",
+      "type": "check",
+      "title": "Matched: Tabbouleh with Grilled Chicken",
+      "detail": "All hard checks pass — sodium 378/700 mg ✓, carbs 40 g (target 35–70) ✓, no sesame ✓.",
+      "data": {
+        "meal_id": "M057",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 8,
+      "t_offset_ms": 14729,
+      "agent": "matching",
+      "type": "check",
+      "title": "Matched: Hearty Lentil Soup with Vegetables",
+      "detail": "All hard checks pass — sodium 410/700 mg ✓, carbs 47 g (target 35–70) ✓, no sesame ✓.",
+      "data": {
+        "meal_id": "M054",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 9,
+      "t_offset_ms": 16381,
+      "agent": "delivery",
+      "type": "output",
+      "title": "Route assigned",
+      "detail": "Client 1023 added to route R-MISS-1 (Mission), delivery 2026-07-21, window 14:00–16:00. Cold chain OK.",
+      "data": {
+        "route_id": "R-MISS-1"
+      }
+    },
+    {
+      "seq": 10,
+      "t_offset_ms": 18660,
+      "agent": "orchestrator",
+      "type": "output",
+      "title": "Plan complete",
+      "detail": "Client 1023: 7 compliant meal(s) at fallback level 0. 0 hard-constraint violations."
+    }
+  ]
+}

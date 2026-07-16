@@ -1,0 +1,118 @@
+{
+  "client_id": 1092,
+  "scenario": "happy_path",
+  "generator": "template",
+  "events": [
+    {
+      "seq": 0,
+      "t_offset_ms": 1391,
+      "agent": "orchestrator",
+      "type": "status",
+      "title": "Referral received",
+      "detail": "New referral from Saint Francis Memorial for client 1092. Starting intake pipeline."
+    },
+    {
+      "seq": 1,
+      "t_offset_ms": 2800,
+      "agent": "intake",
+      "type": "output",
+      "title": "Client profile structured",
+      "detail": "Diet orders: renal. Allergies: soy, egg. Sodium ceiling 500 mg/meal, carbs 40–70 g/meal. Prefers Indian; dislikes nothing noted. Cooking ability: stovetop. 7 meals/week, zone Excelsior."
+    },
+    {
+      "seq": 2,
+      "t_offset_ms": 4523,
+      "agent": "orchestrator",
+      "type": "status",
+      "title": "Dispatching Clinical Matching Agent",
+      "detail": "Hard constraint hierarchy locked: allergens → sodium → carbs → diet-order tags. Exclusion rules, never scoring penalties."
+    },
+    {
+      "seq": 3,
+      "t_offset_ms": 6911,
+      "agent": "matching",
+      "type": "thought",
+      "title": "Scanning inventory",
+      "detail": "Scoring all 80 meals against hard constraints, then ranking survivors by cuisine preference and dislike avoidance."
+    },
+    {
+      "seq": 4,
+      "t_offset_ms": 7827,
+      "agent": "matching",
+      "type": "check",
+      "title": "Rejected: Rajma (Kidney Bean Curry) with Rice",
+      "detail": "Excluded — diet order 'renal': meal lacks 'renal-friendly' tag.",
+      "data": {
+        "meal_id": "M068",
+        "result": "fail"
+      }
+    },
+    {
+      "seq": 5,
+      "t_offset_ms": 10386,
+      "agent": "matching",
+      "type": "check",
+      "title": "Rejected: Chana Masala with Rice",
+      "detail": "Excluded — diet order 'renal': meal lacks 'renal-friendly' tag.",
+      "data": {
+        "meal_id": "M063",
+        "result": "fail"
+      }
+    },
+    {
+      "seq": 6,
+      "t_offset_ms": 11677,
+      "agent": "matching",
+      "type": "check",
+      "title": "Matched: Kitchari with Seasonal Vegetables",
+      "detail": "All hard checks pass — sodium 373/500 mg ✓, carbs 52 g (target 40–70) ✓, no soy/egg ✓.",
+      "data": {
+        "meal_id": "M070",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 7,
+      "t_offset_ms": 12918,
+      "agent": "matching",
+      "type": "check",
+      "title": "Matched: Dal Tadka with Brown Rice",
+      "detail": "All hard checks pass — sodium 430/500 mg ✓, carbs 56 g (target 40–70) ✓, no soy/egg ✓.",
+      "data": {
+        "meal_id": "M062",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 8,
+      "t_offset_ms": 14409,
+      "agent": "matching",
+      "type": "check",
+      "title": "Matched: Overnight Oats with Berries",
+      "detail": "All hard checks pass — sodium 300/500 mg ✓, carbs 55 g (target 40–70) ✓, no soy/egg ✓.",
+      "data": {
+        "meal_id": "M050",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 9,
+      "t_offset_ms": 16701,
+      "agent": "delivery",
+      "type": "output",
+      "title": "Route assigned",
+      "detail": "Client 1092 added to route R-EXCE-2 (Excelsior), delivery 2026-07-21, window 10:00–12:00. Cold chain OK.",
+      "data": {
+        "route_id": "R-EXCE-2"
+      }
+    },
+    {
+      "seq": 10,
+      "t_offset_ms": 17907,
+      "agent": "orchestrator",
+      "type": "output",
+      "title": "Plan complete",
+      "detail": "Client 1092: 7 compliant meal(s) at fallback level 0. 0 hard-constraint violations."
+    }
+  ]
+}

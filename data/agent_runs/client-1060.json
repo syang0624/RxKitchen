@@ -1,0 +1,118 @@
+{
+  "client_id": 1060,
+  "scenario": "happy_path",
+  "generator": "template",
+  "events": [
+    {
+      "seq": 0,
+      "t_offset_ms": 930,
+      "agent": "orchestrator",
+      "type": "status",
+      "title": "Referral received",
+      "detail": "New referral from Kaiser Permanente San Francisco for client 1060. Starting intake pipeline."
+    },
+    {
+      "seq": 1,
+      "t_offset_ms": 2975,
+      "agent": "intake",
+      "type": "output",
+      "title": "Client profile structured",
+      "detail": "Diet orders: cardiovascular. Allergies: tree_nut, shellfish. Sodium ceiling 600 mg/meal, carbs 40–70 g/meal. Prefers Mediterranean; dislikes eggplant. Cooking ability: full. 7 meals/week, zone Excelsior."
+    },
+    {
+      "seq": 2,
+      "t_offset_ms": 4780,
+      "agent": "orchestrator",
+      "type": "status",
+      "title": "Dispatching Clinical Matching Agent",
+      "detail": "Hard constraint hierarchy locked: allergens → sodium → carbs → diet-order tags. Exclusion rules, never scoring penalties."
+    },
+    {
+      "seq": 3,
+      "t_offset_ms": 6065,
+      "agent": "matching",
+      "type": "thought",
+      "title": "Scanning inventory",
+      "detail": "Scoring all 80 meals against hard constraints, then ranking survivors by cuisine preference and dislike avoidance."
+    },
+    {
+      "seq": 4,
+      "t_offset_ms": 7495,
+      "agent": "matching",
+      "type": "check",
+      "title": "Rejected: Grilled Chicken Garden Salad",
+      "detail": "Excluded — carbs: 39 g outside 40–70 g range.",
+      "data": {
+        "meal_id": "M044",
+        "result": "fail"
+      }
+    },
+    {
+      "seq": 5,
+      "t_offset_ms": 10028,
+      "agent": "matching",
+      "type": "check",
+      "title": "Rejected: Turkey Meatloaf with Roasted Vegetables",
+      "detail": "Excluded — carbs: 39 g outside 40–70 g range.",
+      "data": {
+        "meal_id": "M042",
+        "result": "fail"
+      }
+    },
+    {
+      "seq": 6,
+      "t_offset_ms": 12066,
+      "agent": "matching",
+      "type": "check",
+      "title": "Matched: Baked Cod with Herbed Couscous",
+      "detail": "All hard checks pass — sodium 351/600 mg ✓, carbs 41 g (target 40–70) ✓, no tree_nut/shellfish ✓.",
+      "data": {
+        "meal_id": "M055",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 7,
+      "t_offset_ms": 13261,
+      "agent": "matching",
+      "type": "check",
+      "title": "Matched: Tabbouleh with Grilled Chicken",
+      "detail": "All hard checks pass — sodium 378/600 mg ✓, carbs 40 g (target 40–70) ✓, no tree_nut/shellfish ✓.",
+      "data": {
+        "meal_id": "M057",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 8,
+      "t_offset_ms": 14537,
+      "agent": "matching",
+      "type": "check",
+      "title": "Matched: Hearty Lentil Soup with Vegetables",
+      "detail": "All hard checks pass — sodium 410/600 mg ✓, carbs 47 g (target 40–70) ✓, no tree_nut/shellfish ✓.",
+      "data": {
+        "meal_id": "M054",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 9,
+      "t_offset_ms": 16072,
+      "agent": "delivery",
+      "type": "output",
+      "title": "Route assigned",
+      "detail": "Client 1060 added to route R-EXCE-1 (Excelsior), delivery 2026-07-21, window 14:00–16:00. Cold chain OK.",
+      "data": {
+        "route_id": "R-EXCE-1"
+      }
+    },
+    {
+      "seq": 10,
+      "t_offset_ms": 18266,
+      "agent": "orchestrator",
+      "type": "output",
+      "title": "Plan complete",
+      "detail": "Client 1060: 7 compliant meal(s) at fallback level 0. 0 hard-constraint violations."
+    }
+  ]
+}

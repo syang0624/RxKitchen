@@ -1,0 +1,118 @@
+{
+  "client_id": 1087,
+  "scenario": "happy_path",
+  "generator": "template",
+  "events": [
+    {
+      "seq": 0,
+      "t_offset_ms": 1036,
+      "agent": "orchestrator",
+      "type": "status",
+      "title": "Referral received",
+      "detail": "New referral from Saint Francis Memorial for client 1087. Starting intake pipeline."
+    },
+    {
+      "seq": 1,
+      "t_offset_ms": 2765,
+      "agent": "intake",
+      "type": "output",
+      "title": "Client profile structured",
+      "detail": "Diet orders: diabetic, cardiovascular. Allergies: none. Sodium ceiling 600 mg/meal, carbs 45–60 g/meal. Prefers Vietnamese; dislikes nothing noted. Cooking ability: stovetop. 7 meals/week, zone Mission."
+    },
+    {
+      "seq": 2,
+      "t_offset_ms": 4066,
+      "agent": "orchestrator",
+      "type": "status",
+      "title": "Dispatching Clinical Matching Agent",
+      "detail": "Hard constraint hierarchy locked: allergens → sodium → carbs → diet-order tags. Exclusion rules, never scoring penalties."
+    },
+    {
+      "seq": 3,
+      "t_offset_ms": 5139,
+      "agent": "matching",
+      "type": "thought",
+      "title": "Scanning inventory",
+      "detail": "Scoring all 80 meals against hard constraints, then ranking survivors by cuisine preference and dislike avoidance."
+    },
+    {
+      "seq": 4,
+      "t_offset_ms": 6615,
+      "agent": "matching",
+      "type": "check",
+      "title": "Rejected: Fresh Spring Rolls with Chicken",
+      "detail": "Excluded — carbs: 41 g outside 45–60 g range.",
+      "data": {
+        "meal_id": "M026",
+        "result": "fail"
+      }
+    },
+    {
+      "seq": 5,
+      "t_offset_ms": 8804,
+      "agent": "matching",
+      "type": "check",
+      "title": "Rejected: Beef Pho with Rice Noodles",
+      "detail": "Excluded — diet order 'cardiovascular': meal lacks 'heart-healthy' tag.",
+      "data": {
+        "meal_id": "M029",
+        "result": "fail"
+      }
+    },
+    {
+      "seq": 6,
+      "t_offset_ms": 11089,
+      "agent": "matching",
+      "type": "check",
+      "title": "Matched: Steamed Rice Rolls with Mushrooms",
+      "detail": "All hard checks pass — sodium 423/600 mg ✓, carbs 46 g (target 45–60) ✓.",
+      "data": {
+        "meal_id": "M030",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 7,
+      "t_offset_ms": 13241,
+      "agent": "matching",
+      "type": "check",
+      "title": "Matched: Tofu and Vegetable Curry with Rice",
+      "detail": "All hard checks pass — sodium 439/600 mg ✓, carbs 54 g (target 45–60) ✓.",
+      "data": {
+        "meal_id": "M028",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 8,
+      "t_offset_ms": 14606,
+      "agent": "matching",
+      "type": "check",
+      "title": "Matched: Lemongrass Chicken with Rice",
+      "detail": "All hard checks pass — sodium 458/600 mg ✓, carbs 50 g (target 45–60) ✓.",
+      "data": {
+        "meal_id": "M022",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 9,
+      "t_offset_ms": 17072,
+      "agent": "delivery",
+      "type": "output",
+      "title": "Route assigned",
+      "detail": "Client 1087 added to route R-MISS-1 (Mission), delivery 2026-07-21, window 14:00–16:00. Cold chain OK.",
+      "data": {
+        "route_id": "R-MISS-1"
+      }
+    },
+    {
+      "seq": 10,
+      "t_offset_ms": 18719,
+      "agent": "orchestrator",
+      "type": "output",
+      "title": "Plan complete",
+      "detail": "Client 1087: 7 compliant meal(s) at fallback level 0. 0 hard-constraint violations."
+    }
+  ]
+}

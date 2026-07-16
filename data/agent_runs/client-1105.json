@@ -1,0 +1,129 @@
+{
+  "client_id": 1105,
+  "scenario": "happy_path",
+  "generator": "template",
+  "events": [
+    {
+      "seq": 0,
+      "t_offset_ms": 2060,
+      "agent": "orchestrator",
+      "type": "status",
+      "title": "Referral received",
+      "detail": "New referral from UCSF Medical Center for client 1105. Starting intake pipeline."
+    },
+    {
+      "seq": 1,
+      "t_offset_ms": 3460,
+      "agent": "intake",
+      "type": "output",
+      "title": "Client profile structured",
+      "detail": "Diet orders: cardiovascular. Allergies: none. Sodium ceiling 600 mg/meal, carbs 45–75 g/meal. Prefers Indian; dislikes tofu, eggplant. Cooking ability: none. 7 meals/week, zone Western Addition."
+    },
+    {
+      "seq": 2,
+      "t_offset_ms": 4940,
+      "agent": "orchestrator",
+      "type": "status",
+      "title": "Dispatching Clinical Matching Agent",
+      "detail": "Hard constraint hierarchy locked: allergens → sodium → carbs → diet-order tags. Exclusion rules, never scoring penalties."
+    },
+    {
+      "seq": 3,
+      "t_offset_ms": 6215,
+      "agent": "matching",
+      "type": "thought",
+      "title": "Scanning inventory",
+      "detail": "Scoring all 80 meals against hard constraints, then ranking survivors by cuisine preference and dislike avoidance."
+    },
+    {
+      "seq": 4,
+      "t_offset_ms": 8002,
+      "agent": "matching",
+      "type": "check",
+      "title": "Rejected: Kitchari with Seasonal Vegetables",
+      "detail": "Excluded — prep: requires microwave, client is none-only.",
+      "data": {
+        "meal_id": "M070",
+        "result": "fail"
+      }
+    },
+    {
+      "seq": 5,
+      "t_offset_ms": 10193,
+      "agent": "matching",
+      "type": "check",
+      "title": "Rejected: Dal Tadka with Brown Rice",
+      "detail": "Excluded — prep: requires microwave, client is none-only.",
+      "data": {
+        "meal_id": "M062",
+        "result": "fail"
+      }
+    },
+    {
+      "seq": 6,
+      "t_offset_ms": 12495,
+      "agent": "matching",
+      "type": "check",
+      "title": "Matched: Overnight Oats with Berries",
+      "detail": "All hard checks pass — sodium 300/600 mg ✓, carbs 55 g (target 45–75) ✓.",
+      "data": {
+        "meal_id": "M050",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 7,
+      "t_offset_ms": 14882,
+      "agent": "matching",
+      "type": "check",
+      "title": "Matched: Hummus and Veggie Wrap",
+      "detail": "All hard checks pass — sodium 451/600 mg ✓, carbs 52 g (target 45–75) ✓.",
+      "data": {
+        "meal_id": "M060",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 8,
+      "t_offset_ms": 16052,
+      "agent": "matching",
+      "type": "check",
+      "title": "Matched: Overnight Oats with Berries",
+      "detail": "All hard checks pass — sodium 300/600 mg ✓, carbs 55 g (target 45–75) ✓.",
+      "data": {
+        "meal_id": "M050",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 9,
+      "t_offset_ms": 17921,
+      "agent": "fallback",
+      "type": "output",
+      "title": "Grocery kit composed",
+      "detail": "3 gap day(s) covered: Low-Sodium Canned Tuna, Fresh Apples (3-pack). All items allergen-safe for this client; prep steps match no-cook ability.",
+      "data": {
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 10,
+      "t_offset_ms": 20054,
+      "agent": "delivery",
+      "type": "output",
+      "title": "Route assigned",
+      "detail": "Client 1105 added to route R-WEST-1 (Western Addition), delivery 2026-07-21, window 14:00–16:00. Cold chain OK.",
+      "data": {
+        "route_id": "R-WEST-1"
+      }
+    },
+    {
+      "seq": 11,
+      "t_offset_ms": 21254,
+      "agent": "orchestrator",
+      "type": "output",
+      "title": "Plan complete",
+      "detail": "Client 1105: 4 compliant meal(s) + grocery kit covering 3 day(s) at fallback level 2. 0 hard-constraint violations."
+    }
+  ]
+}

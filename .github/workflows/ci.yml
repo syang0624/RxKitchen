@@ -1,0 +1,30 @@
+# PRD §11: the client-side validator is the safety net — run it over the entire
+# dataset in CI so a hidden clinical violation or contract drift fails the build
+# before demo day.
+name: CI
+
+on:
+  push:
+    branches: [main, steven, nori]
+  pull_request:
+
+jobs:
+  validate-and-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Dataset is regenerable and committed data matches the generator
+        run: |
+          npm run data:generate
+          git diff --exit-code -- data/ || { echo "::error::data/ is out of sync with scripts/generate-data.mjs — regenerate and commit"; exit 1; }
+      - name: Schema conformance + zero clinical violations
+        run: npm run data:validate
+      - name: Lint
+        run: npm run lint
+      - name: Build (runs data:validate again via prebuild)
+        run: npm run build

@@ -1,0 +1,141 @@
+{
+  "client_id": 1108,
+  "scenario": "happy_path",
+  "generator": "template",
+  "events": [
+    {
+      "seq": 0,
+      "t_offset_ms": 1038,
+      "agent": "orchestrator",
+      "type": "status",
+      "title": "Referral received",
+      "detail": "New referral from Kaiser Permanente San Francisco for client 1108. Starting intake pipeline."
+    },
+    {
+      "seq": 1,
+      "t_offset_ms": 2435,
+      "agent": "intake",
+      "type": "output",
+      "title": "Client profile structured",
+      "detail": "Diet orders: renal. Allergies: tree_nut. Sodium ceiling 550 mg/meal, carbs 45–75 g/meal. Prefers Filipino; dislikes nothing noted. Cooking ability: microwave. 7 meals/week, zone Mission."
+    },
+    {
+      "seq": 2,
+      "t_offset_ms": 4192,
+      "agent": "orchestrator",
+      "type": "status",
+      "title": "Dispatching Clinical Matching Agent",
+      "detail": "Hard constraint hierarchy locked: allergens → sodium → carbs → diet-order tags. Exclusion rules, never scoring penalties."
+    },
+    {
+      "seq": 3,
+      "t_offset_ms": 5095,
+      "agent": "matching",
+      "type": "thought",
+      "title": "Scanning inventory",
+      "detail": "Scoring all 80 meals against hard constraints, then ranking survivors by cuisine preference and dislike avoidance."
+    },
+    {
+      "seq": 4,
+      "t_offset_ms": 6738,
+      "agent": "matching",
+      "type": "check",
+      "title": "Rejected: Lumpiang Sariwa",
+      "detail": "Excluded — carbs: 41 g outside 45–75 g range.",
+      "data": {
+        "meal_id": "M010",
+        "result": "fail"
+      }
+    },
+    {
+      "seq": 5,
+      "t_offset_ms": 8848,
+      "agent": "matching",
+      "type": "check",
+      "title": "Rejected: Pork Sinigang with Brown Rice",
+      "detail": "Excluded — diet order 'renal': meal lacks 'renal-friendly' tag.",
+      "data": {
+        "meal_id": "M002",
+        "result": "fail"
+      }
+    },
+    {
+      "seq": 6,
+      "t_offset_ms": 11065,
+      "agent": "matching",
+      "type": "check",
+      "title": "Matched: Baked Bangus with Garlic Rice",
+      "detail": "All hard checks pass — sodium 396/550 mg ✓, carbs 47 g (target 45–75) ✓, no tree_nut ✓.",
+      "data": {
+        "meal_id": "M007",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 7,
+      "t_offset_ms": 12733,
+      "agent": "matching",
+      "type": "check",
+      "title": "Matched: Ginataang Gulay with Rice",
+      "detail": "All hard checks pass — sodium 401/550 mg ✓, carbs 51 g (target 45–75) ✓, no tree_nut ✓.",
+      "data": {
+        "meal_id": "M006",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 8,
+      "t_offset_ms": 15076,
+      "agent": "matching",
+      "type": "check",
+      "title": "Matched: Chicken Tinola with Rice",
+      "detail": "All hard checks pass — sodium 412/550 mg ✓, carbs 48 g (target 45–75) ✓, no tree_nut ✓.",
+      "data": {
+        "meal_id": "M003",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 9,
+      "t_offset_ms": 16619,
+      "agent": "kitchen",
+      "type": "output",
+      "title": "Batch allocated: Low-Sodium Chicken Adobo with Rice",
+      "detail": "Serving drawn from scheduled batch B1 (80 servings, 9 labor hours on 2026-07-20).",
+      "data": {
+        "batch_id": "B1"
+      }
+    },
+    {
+      "seq": 10,
+      "t_offset_ms": 17881,
+      "agent": "donation",
+      "type": "check",
+      "title": "Donation D001 feeds batch B1",
+      "detail": "Jasmine Rice (50 lb sacks) from Golden State Rice Cooperative — triaged as kitchen ingredient.",
+      "data": {
+        "donation_id": "D001",
+        "result": "kitchen_ingredient"
+      }
+    },
+    {
+      "seq": 11,
+      "t_offset_ms": 19425,
+      "agent": "delivery",
+      "type": "output",
+      "title": "Route assigned",
+      "detail": "Client 1108 added to route R-MISS-1 (Mission), delivery 2026-07-21, window 14:00–16:00. Cold chain OK.",
+      "data": {
+        "route_id": "R-MISS-1"
+      }
+    },
+    {
+      "seq": 12,
+      "t_offset_ms": 20517,
+      "agent": "orchestrator",
+      "type": "output",
+      "title": "Plan complete",
+      "detail": "Client 1108: 7 compliant meal(s) at fallback level 1. 0 hard-constraint violations."
+    }
+  ]
+}
