@@ -88,10 +88,10 @@
       "t_offset_ms": 15023,
       "agent": "matching",
       "type": "check",
-      "title": "Matched: Overnight Oats with Berries",
-      "detail": "All hard checks pass — sodium 300/550 mg ✓, carbs 55 g (target 45–75) ✓, no gluten ✓.",
+      "title": "Matched: Ginataang Gulay with Rice",
+      "detail": "All hard checks pass — sodium 401/550 mg ✓, carbs 51 g (target 45–75) ✓, no gluten ✓.",
       "data": {
-        "meal_id": "M050",
+        "meal_id": "M006",
         "result": "pass"
       }
     },
@@ -112,7 +112,7 @@
       "agent": "orchestrator",
       "type": "output",
       "title": "Plan complete",
-      "detail": "Client 1022: 10 compliant meal(s) at fallback level 0. 0 hard-constraint violations."
+      "detail": "Client 1022: 7 compliant meal(s) at fallback level 0. 0 hard-constraint violations."
     }
   ]
 }

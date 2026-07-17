@@ -64,10 +64,10 @@
       "t_offset_ms": 11500,
       "agent": "matching",
       "type": "check",
-      "title": "Matched: Baked Bangus with Garlic Rice",
-      "detail": "All hard checks pass — sodium 396/650 mg ✓, carbs 47 g (target 40–55) ✓, no sesame ✓.",
+      "title": "Matched: Low-Sodium Chicken Adobo with Rice",
+      "detail": "All hard checks pass — sodium 426/650 mg ✓, carbs 52 g (target 40–55) ✓, no sesame ✓. Sourced from kitchen batch B1.",
       "data": {
-        "meal_id": "M007",
+        "meal_id": "M001",
         "result": "pass"
       }
     },
@@ -76,10 +76,10 @@
       "t_offset_ms": 12863,
       "agent": "matching",
       "type": "check",
-      "title": "Matched: Ginataang Gulay with Rice",
-      "detail": "All hard checks pass — sodium 401/650 mg ✓, carbs 51 g (target 40–55) ✓, no sesame ✓.",
+      "title": "Matched: Baked Bangus with Garlic Rice",
+      "detail": "All hard checks pass — sodium 396/650 mg ✓, carbs 47 g (target 40–55) ✓, no sesame ✓.",
       "data": {
-        "meal_id": "M006",
+        "meal_id": "M007",
         "result": "pass"
       }
     },
@@ -88,10 +88,10 @@
       "t_offset_ms": 15038,
       "agent": "matching",
       "type": "check",
-      "title": "Matched: Chicken Tinola with Rice",
-      "detail": "All hard checks pass — sodium 412/650 mg ✓, carbs 48 g (target 40–55) ✓, no sesame ✓.",
+      "title": "Matched: Ginataang Gulay with Rice",
+      "detail": "All hard checks pass — sodium 401/650 mg ✓, carbs 51 g (target 40–55) ✓, no sesame ✓. Sourced from kitchen batch B4.",
       "data": {
-        "meal_id": "M003",
+        "meal_id": "M006",
         "result": "pass"
       }
     },
@@ -101,7 +101,7 @@
       "agent": "kitchen",
       "type": "output",
       "title": "Batch allocated: Low-Sodium Chicken Adobo with Rice",
-      "detail": "Serving drawn from scheduled batch B1 (80 servings, 9 labor hours on 2026-07-20).",
+      "detail": "Serving drawn from scheduled batch B1 (20 servings, 2 labor hours on 2026-07-20).",
       "data": {
         "batch_id": "B1"
       }
@@ -121,6 +121,51 @@
     {
       "seq": 11,
       "t_offset_ms": 19545,
+      "agent": "kitchen",
+      "type": "output",
+      "title": "Batch allocated: Ginataang Gulay with Rice",
+      "detail": "Serving drawn from scheduled batch B4 (30 servings, 3 labor hours on 2026-07-20).",
+      "data": {
+        "batch_id": "B4"
+      }
+    },
+    {
+      "seq": 12,
+      "t_offset_ms": 21346,
+      "agent": "kitchen",
+      "type": "output",
+      "title": "Batch allocated: Chicken Congee with Scallions",
+      "detail": "Serving drawn from scheduled batch B2 (120 servings, 10 labor hours on 2026-07-20).",
+      "data": {
+        "batch_id": "B2"
+      }
+    },
+    {
+      "seq": 13,
+      "t_offset_ms": 22818,
+      "agent": "donation",
+      "type": "check",
+      "title": "Donation D002 feeds batch B2",
+      "detail": "Fresh Bok Choy (cases), Carrots (25 lb bags) from Bay Area Produce Exchange — triaged as kitchen ingredient.",
+      "data": {
+        "donation_id": "D002",
+        "result": "kitchen_ingredient"
+      }
+    },
+    {
+      "seq": 14,
+      "t_offset_ms": 24676,
+      "agent": "kitchen",
+      "type": "output",
+      "title": "Batch allocated: Overnight Oats with Berries",
+      "detail": "Serving drawn from scheduled batch B7 (110 servings, 10 labor hours on 2026-07-20).",
+      "data": {
+        "batch_id": "B7"
+      }
+    },
+    {
+      "seq": 15,
+      "t_offset_ms": 26447,
       "agent": "delivery",
       "type": "output",
       "title": "Route assigned",
@@ -130,8 +175,8 @@
       }
     },
     {
-      "seq": 12,
-      "t_offset_ms": 21346,
+      "seq": 16,
+      "t_offset_ms": 28013,
       "agent": "orchestrator",
       "type": "output",
       "title": "Plan complete",

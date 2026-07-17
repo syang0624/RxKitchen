@@ -64,10 +64,10 @@
       "t_offset_ms": 11816,
       "agent": "matching",
       "type": "check",
-      "title": "Matched: Tuscan White Bean Soup",
-      "detail": "All hard checks pass — sodium 413/600 mg ✓, carbs 53 g (target 45–60) ✓.",
+      "title": "Matched: Overnight Oats with Berries",
+      "detail": "All hard checks pass — sodium 300/600 mg ✓, carbs 55 g (target 45–60) ✓.",
       "data": {
-        "meal_id": "M079",
+        "meal_id": "M050",
         "result": "pass"
       }
     },
@@ -76,10 +76,10 @@
       "t_offset_ms": 13895,
       "agent": "matching",
       "type": "check",
-      "title": "Matched: Grilled Chicken with Creamy Polenta",
-      "detail": "All hard checks pass — sodium 445/600 mg ✓, carbs 52 g (target 45–60) ✓.",
+      "title": "Matched: Winter Melon Soup with Chicken and Rice",
+      "detail": "All hard checks pass — sodium 354/600 mg ✓, carbs 45 g (target 45–60) ✓.",
       "data": {
-        "meal_id": "M080",
+        "meal_id": "M020",
         "result": "pass"
       }
     },
@@ -88,10 +88,10 @@
       "t_offset_ms": 15532,
       "agent": "matching",
       "type": "check",
-      "title": "Matched: Minestrone with Whole-Grain Roll",
-      "detail": "All hard checks pass — sodium 462/600 mg ✓, carbs 55 g (target 45–60) ✓.",
+      "title": "Matched: Ginataang Gulay with Rice",
+      "detail": "All hard checks pass — sodium 401/600 mg ✓, carbs 51 g (target 45–60) ✓.",
       "data": {
-        "meal_id": "M073",
+        "meal_id": "M006",
         "result": "pass"
       }
     },

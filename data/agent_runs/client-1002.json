@@ -64,10 +64,10 @@
       "t_offset_ms": 10648,
       "agent": "matching",
       "type": "check",
-      "title": "Matched: Steamed Rice Rolls with Mushrooms",
-      "detail": "All hard checks pass — sodium 423/600 mg ✓, carbs 46 g (target 45–75) ✓.",
+      "title": "Matched: Overnight Oats with Berries",
+      "detail": "All hard checks pass — sodium 300/600 mg ✓, carbs 55 g (target 45–75) ✓.",
       "data": {
-        "meal_id": "M030",
+        "meal_id": "M050",
         "result": "pass"
       }
     },
@@ -76,10 +76,10 @@
       "t_offset_ms": 11967,
       "agent": "matching",
       "type": "check",
-      "title": "Matched: Tofu and Vegetable Curry with Rice",
-      "detail": "All hard checks pass — sodium 439/600 mg ✓, carbs 54 g (target 45–75) ✓.",
+      "title": "Matched: Winter Melon Soup with Chicken and Rice",
+      "detail": "All hard checks pass — sodium 354/600 mg ✓, carbs 45 g (target 45–75) ✓.",
       "data": {
-        "meal_id": "M028",
+        "meal_id": "M020",
         "result": "pass"
       }
     },
@@ -88,10 +88,10 @@
       "t_offset_ms": 14415,
       "agent": "matching",
       "type": "check",
-      "title": "Matched: Lemongrass Chicken with Rice",
-      "detail": "All hard checks pass — sodium 458/600 mg ✓, carbs 50 g (target 45–75) ✓.",
+      "title": "Matched: Ginataang Gulay with Rice",
+      "detail": "All hard checks pass — sodium 401/600 mg ✓, carbs 51 g (target 45–75) ✓.",
       "data": {
-        "meal_id": "M022",
+        "meal_id": "M006",
         "result": "pass"
       }
     },

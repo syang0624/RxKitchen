@@ -19,6 +19,30 @@ export async function loadAgentRun(clientId: number): Promise<AgentRun | null> {
   }
 }
 
+export async function loadDonationRun(clientId: number): Promise<AgentRun | null> {
+  try {
+    const mod = await import(`../../data/agent_runs/client-${clientId}-donation.json`);
+    return mod.default as AgentRun;
+  } catch {
+    return null;
+  }
+}
+
+/** Loads the donation-sim stream for its anchor client (see loadDonationRun). */
+export function useDonationRun(clientId: number): AgentRun | null {
+  const [run, setRun] = useState<AgentRun | null>(null);
+  useEffect(() => {
+    let cancelled = false;
+    loadDonationRun(clientId).then((r) => {
+      if (!cancelled) setRun(r);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [clientId]);
+  return run;
+}
+
 /** Loads a client's run; returns null while loading or if none exists. */
 export function useAgentRun(clientId: number | null): AgentRun | null {
   // Keyed state so a stale run never leaks across a selection change

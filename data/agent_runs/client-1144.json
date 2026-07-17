@@ -65,7 +65,7 @@
       "agent": "matching",
       "type": "check",
       "title": "Matched: Winter Melon Soup with Chicken and Rice",
-      "detail": "All hard checks pass — sodium 354/700 mg ✓, carbs 45 g (target 45–60) ✓, no peanut/shellfish/tree_nut ✓.",
+      "detail": "All hard checks pass — sodium 354/700 mg ✓, carbs 45 g (target 45–60) ✓, no peanut/shellfish/tree_nut ✓. Sourced from kitchen batch B6.",
       "data": {
         "meal_id": "M020",
         "result": "pass"
@@ -89,7 +89,7 @@
       "agent": "matching",
       "type": "check",
       "title": "Matched: Steamed Fish with Ginger and Rice",
-      "detail": "All hard checks pass — sodium 435/700 mg ✓, carbs 50 g (target 45–60) ✓, no peanut/shellfish/tree_nut ✓.",
+      "detail": "All hard checks pass — sodium 435/700 mg ✓, carbs 50 g (target 45–60) ✓, no peanut/shellfish/tree_nut ✓. Sourced from kitchen batch B5.",
       "data": {
         "meal_id": "M012",
         "result": "pass"
@@ -100,15 +100,26 @@
       "t_offset_ms": 15510,
       "agent": "kitchen",
       "type": "output",
-      "title": "Batch allocated: Chicken Congee with Scallions",
-      "detail": "Serving drawn from scheduled batch B2 (100 servings, 7 labor hours on 2026-07-20).",
+      "title": "Batch allocated: Winter Melon Soup with Chicken and Rice",
+      "detail": "Serving drawn from scheduled batch B6 (80 servings, 7 labor hours on 2026-07-22).",
       "data": {
-        "batch_id": "B2"
+        "batch_id": "B6"
       }
     },
     {
       "seq": 10,
       "t_offset_ms": 17720,
+      "agent": "kitchen",
+      "type": "output",
+      "title": "Batch allocated: Chicken Congee with Scallions",
+      "detail": "Serving drawn from scheduled batch B2 (120 servings, 10 labor hours on 2026-07-20).",
+      "data": {
+        "batch_id": "B2"
+      }
+    },
+    {
+      "seq": 11,
+      "t_offset_ms": 18984,
       "agent": "donation",
       "type": "check",
       "title": "Donation D002 feeds batch B2",
@@ -119,8 +130,30 @@
       }
     },
     {
-      "seq": 11,
-      "t_offset_ms": 18984,
+      "seq": 12,
+      "t_offset_ms": 21036,
+      "agent": "kitchen",
+      "type": "output",
+      "title": "Batch allocated: Steamed Fish with Ginger and Rice",
+      "detail": "Serving drawn from scheduled batch B5 (20 servings, 2 labor hours on 2026-07-21).",
+      "data": {
+        "batch_id": "B5"
+      }
+    },
+    {
+      "seq": 13,
+      "t_offset_ms": 22831,
+      "agent": "kitchen",
+      "type": "output",
+      "title": "Batch allocated: Overnight Oats with Berries",
+      "detail": "Serving drawn from scheduled batch B7 (110 servings, 10 labor hours on 2026-07-20).",
+      "data": {
+        "batch_id": "B7"
+      }
+    },
+    {
+      "seq": 14,
+      "t_offset_ms": 24397,
       "agent": "delivery",
       "type": "output",
       "title": "Route assigned",
@@ -130,12 +163,12 @@
       }
     },
     {
-      "seq": 12,
-      "t_offset_ms": 21036,
+      "seq": 15,
+      "t_offset_ms": 25690,
       "agent": "orchestrator",
       "type": "output",
       "title": "Plan complete",
-      "detail": "Client 1144: 10 compliant meal(s) at fallback level 1. 0 hard-constraint violations."
+      "detail": "Client 1144: 7 compliant meal(s) at fallback level 1. 0 hard-constraint violations."
     }
   ]
 }

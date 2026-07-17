@@ -101,6 +101,16 @@ for (const alloc of allocations) {
   }
 }
 
+// --- menu discipline: the kitchen cooks at most 5 distinct recipes per day ---
+const DAY_NAMES = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+for (const day of DAY_NAMES) {
+  const distinct = new Set(
+    allocations.flatMap((a) => a.items.filter((i) => i.day === day).map((i) => i.meal_id)),
+  );
+  if (distinct.size > 5) flag(null, day, "menu", `${distinct.size} distinct meals on ${day}; kitchen max is 5`);
+  if (distinct.size > 0 && distinct.size < 3) flag(null, day, "menu", `only ${distinct.size} distinct meal(s) on ${day}; menu min is 3`);
+}
+
 // --- stock feasibility: demand must not exceed base stock + scheduled batches ---
 const demand = new Map();
 for (const alloc of allocations) for (const item of alloc.items) demand.set(item.meal_id, (demand.get(item.meal_id) ?? 0) + item.qty);

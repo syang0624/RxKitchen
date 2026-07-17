@@ -172,7 +172,7 @@
       "agent": "kitchen",
       "type": "output",
       "title": "Batch scheduled: Low-Sodium Chicken Adobo",
-      "detail": "Batch B1: 80 servings, 9 labor hours, fits today's remaining capacity (42 h available, 6 equipment slots). Recipe meets 600 mg sodium ceiling at 420 mg/serving.",
+      "detail": "Batch B1: 20 servings, 2 labor hours, fits today's remaining capacity (42 h available, 6 equipment slots). Recipe meets 600 mg sodium ceiling at 426 mg/serving.",
       "data": {
         "batch_id": "B1"
       }

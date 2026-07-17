@@ -76,10 +76,10 @@
       "t_offset_ms": 12970,
       "agent": "matching",
       "type": "check",
-      "title": "Matched: Three-Bean Veggie Chili",
-      "detail": "All hard checks pass — sodium 480/600 mg ✓, carbs 50 g (target 45–65) ✓.",
+      "title": "Matched: Winter Melon Soup with Chicken and Rice",
+      "detail": "All hard checks pass — sodium 354/600 mg ✓, carbs 45 g (target 45–65) ✓.",
       "data": {
-        "meal_id": "M048",
+        "meal_id": "M020",
         "result": "pass"
       }
     },
@@ -88,10 +88,10 @@
       "t_offset_ms": 15527,
       "agent": "matching",
       "type": "check",
-      "title": "Matched: Winter Melon Soup with Chicken and Rice",
-      "detail": "All hard checks pass — sodium 354/600 mg ✓, carbs 45 g (target 45–65) ✓.",
+      "title": "Matched: Steamed Fish with Ginger and Rice",
+      "detail": "All hard checks pass — sodium 435/600 mg ✓, carbs 50 g (target 45–65) ✓.",
       "data": {
-        "meal_id": "M020",
+        "meal_id": "M012",
         "result": "pass"
       }
     },

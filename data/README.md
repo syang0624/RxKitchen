@@ -40,8 +40,13 @@ runs with `agents:generate` (use `--scenario stockout` for re-plan streams,
 
 - **0 clinical violations** — every allocated item re-checked against allergens,
   sodium ceiling, carb range, diet-order tags, and cooking ability.
-- **98.0%** of clients matched to fully compliant meals (fallback level 0/1); the
-  remaining 3 clients are covered by grocery kits — **100% coverage**.
+- **100%** of clients matched to fully compliant meals (fallback level 0/1);
+  grocery kits cover any remaining gap days — **100% coverage**.
+- **Menu discipline:** the kitchen cooks **3–5 distinct recipes per day**
+  (planned by greedy set-cover over every client's eligible meals, seeded with
+  the hero's scripted week and the story batches). Production batches are
+  computed from real demand shortfall vs. stock; the validator enforces the
+  3–5 menu bound.
 - **76.9% donation utilization** (routed to inventory or production batches).
 - Stock feasibility: total demand per meal ≤ current stock + scheduled batch quantity.
 

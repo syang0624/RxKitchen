@@ -1,11 +1,11 @@
 {
-  "client_id": 1131,
+  "client_id": 1054,
   "scenario": "donation_sim",
   "generator": "template",
   "events": [
     {
       "seq": 0,
-      "t_offset_ms": 1733,
+      "t_offset_ms": 1435,
       "agent": "orchestrator",
       "type": "status",
       "title": "Donation intake",
@@ -16,7 +16,7 @@
     },
     {
       "seq": 1,
-      "t_offset_ms": 3856,
+      "t_offset_ms": 3649,
       "agent": "donation",
       "type": "thought",
       "title": "Inspecting condition and contents",
@@ -24,7 +24,7 @@
     },
     {
       "seq": 2,
-      "t_offset_ms": 5211,
+      "t_offset_ms": 4640,
       "agent": "donation",
       "type": "check",
       "title": "Food-safety gate",
@@ -36,11 +36,11 @@
     },
     {
       "seq": 3,
-      "t_offset_ms": 6300,
+      "t_offset_ms": 5786,
       "agent": "donation",
       "type": "check",
       "title": "Triaged: kitchen ingredient",
-      "detail": "condition good; matches an open ingredient need for scheduled batch B2 (Chicken Congee with Scallions, 100 servings on 2026-07-20).",
+      "detail": "condition good; matches an open ingredient need for scheduled batch B2 (Chicken Congee with Scallions, 120 servings on 2026-07-20).",
       "data": {
         "donation_id": "D011",
         "result": "kitchen_ingredient"
@@ -48,18 +48,18 @@
     },
     {
       "seq": 4,
-      "t_offset_ms": 8761,
+      "t_offset_ms": 8325,
       "agent": "kitchen",
       "type": "output",
       "title": "Ingredient logged for batch B2",
-      "detail": "Brown Rice (25 lb bags) × 10 bag booked as ingredient for batch B2 (Chicken Congee with Scallions, 100 servings on 2026-07-20). No change to scheduled labor hours.",
+      "detail": "Brown Rice (25 lb bags) × 10 bag booked as ingredient for batch B2 (Chicken Congee with Scallions, 120 servings on 2026-07-20). No change to scheduled labor hours.",
       "data": {
         "batch_id": "B2"
       }
     },
     {
       "seq": 5,
-      "t_offset_ms": 11231,
+      "t_offset_ms": 9779,
       "agent": "donation",
       "type": "check",
       "title": "Contrast: D006 rejected at the same gate",
@@ -71,11 +71,11 @@
     },
     {
       "seq": 6,
-      "t_offset_ms": 13419,
+      "t_offset_ms": 10877,
       "agent": "orchestrator",
       "type": "output",
       "title": "Donation processed",
-      "detail": "D011 routed to batch:B2. Batch B2 supplies 11 serving(s) across this week's plans, including Linda Mendoza's Tue Chicken Congee with Scallions (client 1131). 0 hard-constraint violations introduced; donation utilization updated."
+      "detail": "D011 routed to batch:B2. Batch B2 supplies 112 serving(s) across this week's plans, including Priya Kim's Thu Chicken Congee with Scallions (client 1054). 0 hard-constraint violations introduced; donation utilization updated."
     }
   ]
 }

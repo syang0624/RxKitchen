@@ -77,7 +77,7 @@
       "agent": "matching",
       "type": "check",
       "title": "Matched: Chicken Congee with Scallions",
-      "detail": "All hard checks pass — sodium 364/800 mg ✓, carbs 49 g (target 40–55) ✓.",
+      "detail": "All hard checks pass — sodium 364/800 mg ✓, carbs 49 g (target 40–55) ✓. Sourced from kitchen batch B2.",
       "data": {
         "meal_id": "M011",
         "result": "pass"
@@ -98,6 +98,29 @@
     {
       "seq": 9,
       "t_offset_ms": 16592,
+      "agent": "kitchen",
+      "type": "output",
+      "title": "Batch allocated: Chicken Congee with Scallions",
+      "detail": "Serving drawn from scheduled batch B2 (120 servings, 10 labor hours on 2026-07-20).",
+      "data": {
+        "batch_id": "B2"
+      }
+    },
+    {
+      "seq": 10,
+      "t_offset_ms": 17978,
+      "agent": "donation",
+      "type": "check",
+      "title": "Donation D002 feeds batch B2",
+      "detail": "Fresh Bok Choy (cases), Carrots (25 lb bags) from Bay Area Produce Exchange — triaged as kitchen ingredient.",
+      "data": {
+        "donation_id": "D002",
+        "result": "kitchen_ingredient"
+      }
+    },
+    {
+      "seq": 11,
+      "t_offset_ms": 19904,
       "agent": "delivery",
       "type": "output",
       "title": "Route assigned",
@@ -107,12 +130,12 @@
       }
     },
     {
-      "seq": 10,
-      "t_offset_ms": 17978,
+      "seq": 12,
+      "t_offset_ms": 21092,
       "agent": "orchestrator",
       "type": "output",
       "title": "Plan complete",
-      "detail": "Client 1074: 7 compliant meal(s) at fallback level 0. 0 hard-constraint violations."
+      "detail": "Client 1074: 7 compliant meal(s) at fallback level 1. 0 hard-constraint violations."
     }
   ]
 }

@@ -64,10 +64,10 @@
       "t_offset_ms": 10450,
       "agent": "matching",
       "type": "check",
-      "title": "Matched: Baked Cod with Herbed Couscous",
-      "detail": "All hard checks pass — sodium 351/700 mg ✓, carbs 41 g (target 35–70) ✓, no sesame ✓.",
+      "title": "Matched: Overnight Oats with Berries",
+      "detail": "All hard checks pass — sodium 300/700 mg ✓, carbs 55 g (target 35–70) ✓, no sesame ✓.",
       "data": {
-        "meal_id": "M055",
+        "meal_id": "M050",
         "result": "pass"
       }
     },
@@ -76,10 +76,10 @@
       "t_offset_ms": 12445,
       "agent": "matching",
       "type": "check",
-      "title": "Matched: Tabbouleh with Grilled Chicken",
-      "detail": "All hard checks pass — sodium 378/700 mg ✓, carbs 40 g (target 35–70) ✓, no sesame ✓.",
+      "title": "Matched: Winter Melon Soup with Chicken and Rice",
+      "detail": "All hard checks pass — sodium 354/700 mg ✓, carbs 45 g (target 35–70) ✓, no sesame ✓.",
       "data": {
-        "meal_id": "M057",
+        "meal_id": "M020",
         "result": "pass"
       }
     },
@@ -88,10 +88,10 @@
       "t_offset_ms": 14729,
       "agent": "matching",
       "type": "check",
-      "title": "Matched: Hearty Lentil Soup with Vegetables",
-      "detail": "All hard checks pass — sodium 410/700 mg ✓, carbs 47 g (target 35–70) ✓, no sesame ✓.",
+      "title": "Matched: Ginataang Gulay with Rice",
+      "detail": "All hard checks pass — sodium 401/700 mg ✓, carbs 51 g (target 35–70) ✓, no sesame ✓.",
       "data": {
-        "meal_id": "M054",
+        "meal_id": "M006",
         "result": "pass"
       }
     },

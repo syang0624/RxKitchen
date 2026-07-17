@@ -6,7 +6,7 @@
  *
  * Usage: node scripts/generate-data.mjs
  */
-import { mkdirSync, writeFileSync, existsSync, readFileSync } from "node:fs";
+import { mkdirSync, writeFileSync, existsSync, readFileSync, readdirSync, unlinkSync } from "node:fs";
 import { join } from "node:path";
 import { hardCheck, softScore, triageDonation } from "./lib/clinical.mjs";
 
@@ -365,76 +365,193 @@ function composeGroceryKit(client, inventory, days) {
   return { items, prep_instructions, covers_days: days };
 }
 
-function allocateAll(clients, meals, inventory) {
-  const stock = new Map(meals.map((m) => [m.id, m.stock_qty]));
-  const batchStock = new Map();
-  const batchMealIds = new Map(); // meal_id -> batch_id
-  for (const b of BATCHES) {
-    const meal = meals.find((m) => m.name === b.meal_name);
-    batchStock.set(meal.id, b.qty);
-    batchMealIds.set(meal.id, b.id);
-    b.meal_id = meal.id;
-  }
+// The kitchen cooks 3–5 recipes per day, not a bespoke plate per client.
+const MENU_MIN = 3;
+const MENU_MAX = 5;
 
+/**
+ * Plan the daily menus: seed each day with the hero's scripted Filipino week
+ * and the story-batch meals, then greedy set-cover so every coverable client
+ * can eat from that day's menu, breaking ties by cuisine-preference matches
+ * and week-level variety.
+ */
+function planDailyMenus(clients, meals) {
+  const slots = new Map(); // client_id -> Map(day -> servings)
+  for (const c of clients) {
+    const m = new Map();
+    for (let i = 0; i < c.meals_per_week; i++) {
+      const d = DAYS[i % 7];
+      m.set(d, (m.get(d) ?? 0) + 1);
+    }
+    slots.set(c.id, m);
+  }
+  const eligible = new Map(
+    clients.map((c) => [
+      c.id,
+      new Set(meals.filter((m) => hardCheck(c, m).length === 0).map((m) => m.id)),
+    ]),
+  );
+  const byName = new Map(meals.map((m) => [m.name, m]));
+  const SEEDS = {
+    Mon: ["Low-Sodium Chicken Adobo with Rice"],
+    Tue: ["Baked Bangus with Garlic Rice"],
+    Wed: ["Ginataang Gulay with Rice"],
+    Thu: ["Chicken Tinola with Rice"],
+    Fri: ["Pork Sinigang with Brown Rice"],
+    Sat: ["Chicken Congee with Scallions"],
+    Sun: ["Baked Cod with Herbed Couscous"],
+  };
+  const usedThisWeek = new Map(); // meal_id -> days already on a menu
+  const menus = new Map(); // day -> meal_id[]
+  for (const day of DAYS) {
+    const dayClients = clients.filter((c) => (slots.get(c.id).get(day) ?? 0) > 0);
+    const menu = [];
+    const covered = new Set();
+    const add = (meal) => {
+      menu.push(meal.id);
+      usedThisWeek.set(meal.id, (usedThisWeek.get(meal.id) ?? 0) + 1);
+      for (const c of dayClients) {
+        if (eligible.get(c.id).has(meal.id)) covered.add(c.id);
+      }
+    };
+    for (const name of SEEDS[day] ?? []) add(byName.get(name));
+    while (menu.length < MENU_MAX) {
+      let best = null;
+      let bestScore = -Infinity;
+      let bestGain = 0;
+      for (const m of meals) {
+        if (menu.includes(m.id)) continue;
+        let gain = 0;
+        let prefs = 0;
+        for (const c of dayClients) {
+          if (!eligible.get(c.id).has(m.id)) continue;
+          if (!covered.has(c.id)) gain++;
+          if (m.cuisine === c.cuisine_pref) prefs++;
+        }
+        const score = gain * 10000 + prefs * 10 - (usedThisWeek.get(m.id) ?? 0) * 40;
+        if (score > bestScore) {
+          bestScore = score;
+          best = m;
+          bestGain = gain;
+        }
+      }
+      if (!best) break;
+      // Once everyone coverable is covered, keep adding preference picks only
+      // up to a modest menu (variety without kitchen sprawl).
+      if (bestGain === 0 && menu.length >= Math.max(MENU_MIN, 4)) break;
+      add(best);
+    }
+    menus.set(day, menu);
+  }
+  return { menus, slots, eligible };
+}
+
+function allocateAll(clients, meals, inventory) {
+  const { menus, slots, eligible } = planDailyMenus(clients, meals);
+  const mealBy = new Map(meals.map((m) => [m.id, m]));
   const allocations = [];
   for (const client of clients) {
     const need = client.meals_per_week;
-    const eligible = meals
-      .map((m) => ({ meal: m, failures: hardCheck(client, m) }))
-      .filter((x) => x.failures.length === 0)
-      .map((x) => x.meal)
-      .sort((a, b) => softScore(client, b) - softScore(client, a));
-
+    // Hero (PRD §4, FR7): the scripted week is 5 matched meals Mon–Fri plus a
+    // grocery kit covering the 2 gap days — her weekend slots are skipped on purpose.
+    const skipDays = client.id === HERO.id ? new Set(["Sat", "Sun"]) : new Set();
     const items = [];
-    let usedBatch = false;
-    let day = 0;
-    const take = (meal, { forceBatch = false } = {}) => {
-      let fromBatch = false;
-      if (forceBatch && (batchStock.get(meal.id) ?? 0) > 0) {
-        batchStock.set(meal.id, batchStock.get(meal.id) - 1);
-        fromBatch = true;
-      } else if ((stock.get(meal.id) ?? 0) > 0) {
-        stock.set(meal.id, stock.get(meal.id) - 1);
-      } else if ((batchStock.get(meal.id) ?? 0) > 0) {
-        batchStock.set(meal.id, batchStock.get(meal.id) - 1);
-        fromBatch = true;
-      } else return false;
-      usedBatch ||= fromBatch;
+    let coveredServings = 0;
+    for (const day of DAYS) {
+      const count = slots.get(client.id).get(day) ?? 0;
+      if (!count || skipDays.has(day)) continue;
+      const options = menus
+        .get(day)
+        .map((id) => mealBy.get(id))
+        .filter((m) => eligible.get(client.id).has(m.id))
+        .sort((a, b) => softScore(client, b) - softScore(client, a));
+      if (!options.length) continue; // nothing on today's menu fits — kit day
+      const usedIds = new Set(items.map((i) => i.meal_id));
+      const pick = options.find((m) => !usedIds.has(m.id)) ?? options[0];
       items.push({
-        meal_id: meal.id, meal_name: meal.name, qty: 1, day: DAYS[day++ % 7],
-        from_batch: fromBatch ? batchMealIds.get(meal.id) : null,
-        constraint_checks: constraintChecks(client, meal),
+        meal_id: pick.id, meal_name: pick.name, qty: count, day,
+        from_batch: null, // assigned by markFromBatch once production is planned
+        constraint_checks: constraintChecks(client, pick),
       });
-      return true;
-    };
-
-    if (client.id === HERO.id) {
-      // Scripted hero path (PRD §4, FR7): 5 matched meals — the adobo sourced
-      // from today's kitchen batch B1 — plus a grocery kit for the 2 gap days.
-      const adobo = eligible.find((m) => m.name.startsWith("Low-Sodium Chicken Adobo"));
-      take(adobo, { forceBatch: true });
-      for (const meal of eligible) {
-        if (items.length >= 5) break;
-        if (meal.id !== adobo.id) take(meal);
-      }
-    } else {
-      // Variety first (soft constraint, PRD §5): fill with distinct meals,
-      // only doubling up when there aren't enough compliant options in stock.
-      for (const meal of eligible) { if (items.length >= need) break; take(meal); }
-      for (const meal of eligible) { if (items.length >= need) break; take(meal); }
+      coveredServings += count;
     }
-
-    const gapDays = need - items.length;
-    let grocery_kit = null;
-    if (gapDays > 0) grocery_kit = composeGroceryKit(client, inventory, gapDays);
-    const fallback_level = items.length === 0 ? 2 : usedBatch ? 1 : grocery_kit ? 2 : 0;
+    const gapDays = need - coveredServings;
+    const grocery_kit = gapDays > 0 ? composeGroceryKit(client, inventory, gapDays) : null;
     allocations.push({
       client_id: client.id, week: WEEK, items, grocery_kit,
-      fallback_level,
-      fully_compliant_meals: items.length >= need,
+      fallback_level: 0, // finalized by markFromBatch
+      fully_compliant_meals: gapDays === 0,
     });
   }
   return allocations;
+}
+
+/**
+ * Production planning from real demand: the story batches (B1–B3, wired to
+ * donations) always exist; any other menu meal whose weekly demand exceeds
+ * current stock gets its own batch. Labor ≈ 1 h per 12 servings.
+ */
+function planProduction(allocations, meals, kitchen) {
+  const mealBy = new Map(meals.map((m) => [m.id, m]));
+  const demand = new Map();
+  for (const a of allocations) {
+    for (const it of a.items) demand.set(it.meal_id, (demand.get(it.meal_id) ?? 0) + it.qty);
+  }
+  const round10 = (n) => Math.ceil(n / 10) * 10;
+  const batches = [];
+  for (const b of BATCHES) {
+    const meal = meals.find((m) => m.name === b.meal_name);
+    b.meal_id = meal.id;
+    const shortfall = Math.max(0, (demand.get(meal.id) ?? 0) - meal.stock_qty);
+    b.qty = Math.max(20, round10(shortfall + 5));
+    b.labor_hours = Math.max(2, Math.ceil(b.qty / 12));
+    batches.push(b);
+  }
+  const storyIds = new Set(batches.map((b) => b.meal_id));
+  let n = BATCHES.length + 1;
+  const extras = [...demand.entries()]
+    .filter(([id, q]) => !storyIds.has(id) && q > mealBy.get(id).stock_qty)
+    .sort(([a], [b]) => (a < b ? -1 : 1));
+  for (const [id, q] of extras) {
+    const meal = mealBy.get(id);
+    const qty = Math.max(20, round10(q - meal.stock_qty + 5));
+    batches.push({
+      id: `B${n}`,
+      meal_id: id,
+      meal_name: meal.name,
+      qty,
+      labor_hours: Math.max(2, Math.ceil(qty / 12)),
+      date: kitchen[(n - 1) % kitchen.length].date,
+      ingredients_from: [],
+    });
+    n++;
+  }
+  return batches;
+}
+
+/**
+ * Walk allocations in order: the first `stock_qty` servings of each meal come
+ * from current stock, the rest from that meal's scheduled batch. Then finalize
+ * each client's fallback level (PRD §5 ladder).
+ */
+function markFromBatch(allocations, meals, batches) {
+  const left = new Map(meals.map((m) => [m.id, m.stock_qty]));
+  const batchByMeal = new Map(batches.map((b) => [b.meal_id, b.id]));
+  for (const a of allocations) {
+    for (const it of a.items) {
+      const l = left.get(it.meal_id) ?? 0;
+      if (l >= it.qty) left.set(it.meal_id, l - it.qty);
+      else if (batchByMeal.has(it.meal_id)) it.from_batch = batchByMeal.get(it.meal_id);
+    }
+  }
+  // Hero story beat: her adobo serving is explicitly the batch-B1 unit (PRD §4).
+  const heroAlloc = allocations.find((a) => a.client_id === HERO.id);
+  const adoboItem = heroAlloc?.items.find((i) => i.meal_name.startsWith("Low-Sodium Chicken Adobo"));
+  if (adoboItem) adoboItem.from_batch = "B1";
+  for (const a of allocations) {
+    const usedBatch = a.items.some((i) => i.from_batch);
+    a.fallback_level = a.items.length === 0 ? 2 : usedBatch ? 1 : a.grocery_kit ? 2 : 0;
+  }
 }
 
 // ---------- delivery ----------
@@ -459,7 +576,7 @@ function buildDelivery(clients) {
 }
 
 // ---------- agent runs (hero + stockout) ----------
-function heroEvents(client, meals, allocation) {
+function heroEvents(client, meals, allocation, batchB1, kitchenToday) {
   const chosen = allocation.items;
   const rejectedExamples = meals
     .filter((m) => m.cuisine === "Filipino")
@@ -484,7 +601,7 @@ function heroEvents(client, meals, allocation) {
     ...chosen.slice(0, 5).map((it) => ev("matching", "check", `Matched: ${it.meal_name}`, `All hard checks pass — sodium ${it.constraint_checks.sodium.value}/${it.constraint_checks.sodium.limit} mg ✓, carbs ${it.constraint_checks.carbs.value} g (target ${client.carb_range_g[0]}–${client.carb_range_g[1]}) ✓, no ${client.allergies.join("/")} ✓.${it.from_batch ? " Sourced from today's kitchen batch." : ""}`, { meal_id: it.meal_id, result: "pass" })),
     ev("matching", "thought", "Shortfall detected", `Only ${chosen.filter((i) => !i.from_batch).length} compliant servings available from current stock against a ${client.meals_per_week}-meal plan. Escalating shortfall to Kitchen Planning; composing grocery bundle for remaining gap days.`),
     ev("kitchen", "thought", "Aggregating unmet demand", "Compliant Filipino-style, diabetic + heart-healthy meals are stock-constrained across today's queue. Evaluating a production batch against remaining capacity."),
-    ev("kitchen", "output", "Batch scheduled: Low-Sodium Chicken Adobo", `Batch B1: 80 servings, 9 labor hours, fits today's remaining capacity (42 h available, 6 equipment slots). Recipe meets 600 mg sodium ceiling at 420 mg/serving.`, { batch_id: "B1" }),
+    ev("kitchen", "output", "Batch scheduled: Low-Sodium Chicken Adobo", `Batch B1: ${batchB1.qty} servings, ${batchB1.labor_hours} labor hours, fits today's remaining capacity (${kitchenToday.labor_hours_available} h available, ${kitchenToday.equipment_slots} equipment slots). Recipe meets ${client.max_sodium_mg} mg sodium ceiling at ${meals.find((m) => m.id === batchB1.meal_id).sodium_mg} mg/serving.`, { batch_id: "B1" }),
     ev("donation", "check", "Donation D001 triaged", "Incoming jasmine rice donation (12 × 50 lb) classified as kitchen ingredient — condition good, no allergens. Routing to batch B1.", { donation_id: "D001", result: "kitchen_ingredient" }),
     ev("donation", "check", "Donation D007 triaged", "Chicken thighs (9 cases) — cold chain intact. Routing to batch B1 as primary protein.", { donation_id: "D007", result: "kitchen_ingredient" }),
     ev("fallback", "output", "Grocery kit composed", `Gap of ${allocation.grocery_kit ? allocation.grocery_kit.covers_days : 0} day(s) covered with a microwave-only kit: ${allocation.grocery_kit ? allocation.grocery_kit.items.map((i) => i.name).join(", ") : ""}. All items peanut-free; numbered prep steps limited to microwave use.`, { fallback_level: allocation.fallback_level }),
@@ -558,7 +675,7 @@ function donationSimEvents({ donation, triage, batch, contrast, contrastTriage, 
  * global PRNG stream (which shapes the core dataset) is untouched. These are
  * placeholders the Claude pipeline (generate-agent-runs.mjs) upgrades in place.
  */
-function templateEvents(client, meals, allocation, route, donations) {
+function templateEvents(client, meals, allocation, route, donations, batches) {
   const localRand = mulberry32(client.id * 7919 + 17);
   const jitter = (min, max) => min + Math.floor(localRand() * (max - min + 1));
   let t = 0; let seq = 0;
@@ -589,7 +706,7 @@ function templateEvents(client, meals, allocation, route, donations) {
     events.push(ev("matching", "thought", "No compliant meal in stock", "No existing meal passes every hard constraint for this profile. Escalating to Fallback Composer — preferences may be relaxed, clinical limits never are."));
   }
   for (const batchId of batchIds) {
-    const batch = BATCHES.find((b) => b.id === batchId);
+    const batch = batches.find((b) => b.id === batchId);
     events.push(ev("kitchen", "output", `Batch allocated: ${batch.meal_name}`, `Serving drawn from scheduled batch ${batch.id} (${batch.qty} servings, ${batch.labor_hours} labor hours on ${batch.date}).`, { batch_id: batch.id }));
     const donation = donations.find((d) => batch.ingredients_from.includes(d.id));
     if (donation) events.push(ev("donation", "check", `Donation ${donation.id} feeds batch ${batch.id}`, `${donation.items.map((i) => i.name).join(", ")} from ${donation.donor} — triaged as kitchen ingredient.`, { donation_id: donation.id, result: "kitchen_ingredient" }));
@@ -612,14 +729,16 @@ function main() {
   const donations = buildDonations();
   const kitchen = buildKitchen();
   const allocations = allocateAll(clients, meals, inventory);
+  const productionBatches = planProduction(allocations, meals, kitchen);
+  markFromBatch(allocations, meals, productionBatches);
   const delivery = buildDelivery(clients);
   const hero = clients.find((c) => c.id === 1042);
   const heroAlloc = allocations.find((a) => a.client_id === 1042);
 
   const production_plan = {
     week: WEEK,
-    batches: BATCHES.map(({ id, meal_id, meal_name, qty, labor_hours, date, ingredients_from }) => ({ id, meal_id, meal_name, qty, labor_hours, date, ingredients_from })),
-    capacity_utilization: Number((BATCHES.reduce((s, b) => s + b.labor_hours, 0) / kitchen.reduce((s, k) => s + k.labor_hours_available, 0)).toFixed(2)),
+    batches: productionBatches.map(({ id, meal_id, meal_name, qty, labor_hours, date, ingredients_from }) => ({ id, meal_id, meal_name, qty, labor_hours, date, ingredients_from })),
+    capacity_utilization: Number((productionBatches.reduce((s, b) => s + b.labor_hours, 0) / kitchen.reduce((s, k) => s + k.labor_hours_available, 0)).toFixed(2)),
   };
 
   mkdirSync(join(OUT, "agent_runs"), { recursive: true });
@@ -647,18 +766,25 @@ function main() {
     runsWritten++;
   };
 
-  writeRun("agent_runs/client-1042.json", { client_id: 1042, scenario: "happy_path", generator: "template", events: heroEvents(hero, meals, heroAlloc) });
+  writeRun("agent_runs/client-1042.json", { client_id: 1042, scenario: "happy_path", generator: "template", events: heroEvents(hero, meals, heroAlloc, productionBatches.find((b) => b.id === "B1"), kitchen[0]) });
   writeRun("agent_runs/client-1042-stockout.json", { client_id: 1042, scenario: "stockout_replan", generator: "template", events: stockoutEvents(hero, meals, heroAlloc) });
   for (const c of clients) {
     if (c.id === 1042) continue;
     const alloc = allocations.find((a) => a.client_id === c.id);
     const route = delivery.batches.find((b) => b.clients.includes(c.id)) ?? null;
-    writeRun(`agent_runs/client-${c.id}.json`, { client_id: c.id, scenario: "happy_path", generator: "template", events: templateEvents(c, meals, alloc, route, donations) });
+    writeRun(`agent_runs/client-${c.id}.json`, { client_id: c.id, scenario: "happy_path", generator: "template", events: templateEvents(c, meals, alloc, route, donations, productionBatches) });
   }
   // Donation-intake sim (FR12): D011 arrives demo morning (2026-07-20) and the
   // triage rule routes it into batch B2; the contrast donation shows the
   // food-safety gate rejecting. Anchor = first client drawing from that batch.
   const SIM_DONATION_ID = "D011";
+  // The anchor client can move when the allocator changes — drop stale
+  // template donation runs so exactly one sim stream exists.
+  for (const f of readdirSync(join(OUT, "agent_runs"))) {
+    if (!f.endsWith("-donation.json")) continue;
+    const existing = JSON.parse(readFileSync(join(OUT, "agent_runs", f), "utf8"));
+    if (!existing.generator || existing.generator === "template") unlinkSync(join(OUT, "agent_runs", f));
+  }
   const simDonation = donations.find((d) => d.id === SIM_DONATION_ID);
   const simTriage = triageDonation(simDonation, BATCHES);
   const simBatch = BATCHES.find((b) => b.ingredients_from.includes(SIM_DONATION_ID)) ?? null;
@@ -683,6 +809,8 @@ function main() {
   console.log(`allocations: ${allocations.length} | matched to compliant meals (level 0/1): ${matched} (${((matched / allocations.length) * 100).toFixed(1)}%) | grocery kits issued: ${kits}`);
   console.log(`fallback levels: 0=${allocations.filter((a) => a.fallback_level === 0).length}, 1=${allocations.filter((a) => a.fallback_level === 1).length}, 2=${allocations.filter((a) => a.fallback_level === 2).length}`);
   console.log(`agent runs: ${runsWritten} written, ${runsPreserved} Claude-authored preserved`);
+  const menuSizes = DAYS.map((d) => new Set(allocations.flatMap((a) => a.items.filter((i) => i.day === d).map((i) => i.meal_id))).size);
+  console.log(`daily menu sizes (Mon–Sun): ${menuSizes.join(", ")} | batches: ${productionBatches.length} | labor: ${productionBatches.reduce((x, b) => x + b.labor_hours, 0)}h of ${kitchen.reduce((x, k) => x + k.labor_hours_available, 0)}h`);
 }
 
 main();

@@ -5,8 +5,8 @@
       "id": "B1",
       "meal_id": "M001",
       "meal_name": "Low-Sodium Chicken Adobo with Rice",
-      "qty": 80,
-      "labor_hours": 9,
+      "qty": 20,
+      "labor_hours": 2,
       "date": "2026-07-20",
       "ingredients_from": [
         "D001",
@@ -17,8 +17,8 @@
       "id": "B2",
       "meal_id": "M011",
       "meal_name": "Chicken Congee with Scallions",
-      "qty": 100,
-      "labor_hours": 7,
+      "qty": 120,
+      "labor_hours": 10,
       "date": "2026-07-20",
       "ingredients_from": [
         "D002",
@@ -29,13 +29,49 @@
       "id": "B3",
       "meal_id": "M055",
       "meal_name": "Baked Cod with Herbed Couscous",
-      "qty": 60,
-      "labor_hours": 8,
+      "qty": 20,
+      "labor_hours": 2,
       "date": "2026-07-21",
       "ingredients_from": [
         "D005"
       ]
+    },
+    {
+      "id": "B4",
+      "meal_id": "M006",
+      "meal_name": "Ginataang Gulay with Rice",
+      "qty": 30,
+      "labor_hours": 3,
+      "date": "2026-07-20",
+      "ingredients_from": []
+    },
+    {
+      "id": "B5",
+      "meal_id": "M012",
+      "meal_name": "Steamed Fish with Ginger and Rice",
+      "qty": 20,
+      "labor_hours": 2,
+      "date": "2026-07-21",
+      "ingredients_from": []
+    },
+    {
+      "id": "B6",
+      "meal_id": "M020",
+      "meal_name": "Winter Melon Soup with Chicken and Rice",
+      "qty": 80,
+      "labor_hours": 7,
+      "date": "2026-07-22",
+      "ingredients_from": []
+    },
+    {
+      "id": "B7",
+      "meal_id": "M050",
+      "meal_name": "Overnight Oats with Berries",
+      "qty": 110,
+      "labor_hours": 10,
+      "date": "2026-07-20",
+      "ingredients_from": []
     }
   ],
-  "capacity_utilization": 0.2
+  "capacity_utilization": 0.3
 }

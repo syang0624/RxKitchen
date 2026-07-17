@@ -76,10 +76,10 @@
       "t_offset_ms": 12745,
       "agent": "matching",
       "type": "check",
-      "title": "Matched: Hummus and Veggie Wrap",
-      "detail": "All hard checks pass — sodium 451/800 mg ✓, carbs 52 g (target 45–60) ✓.",
+      "title": "Matched: Overnight Oats with Berries",
+      "detail": "All hard checks pass — sodium 300/800 mg ✓, carbs 55 g (target 45–60) ✓.",
       "data": {
-        "meal_id": "M060",
+        "meal_id": "M050",
         "result": "pass"
       }
     },
@@ -88,27 +88,16 @@
       "t_offset_ms": 14788,
       "agent": "matching",
       "type": "check",
-      "title": "Matched: Turkey and Avocado Sandwich",
-      "detail": "All hard checks pass — sodium 559/800 mg ✓, carbs 51 g (target 45–60) ✓.",
+      "title": "Matched: Hummus and Veggie Wrap",
+      "detail": "All hard checks pass — sodium 451/800 mg ✓, carbs 52 g (target 45–60) ✓.",
       "data": {
-        "meal_id": "M045",
+        "meal_id": "M060",
         "result": "pass"
       }
     },
     {
       "seq": 9,
       "t_offset_ms": 16838,
-      "agent": "fallback",
-      "type": "output",
-      "title": "Grocery kit composed",
-      "detail": "1 gap day(s) covered: Low-Sodium Canned Tuna, Fresh Apples (3-pack). All items allergen-safe for this client; prep steps match no-cook ability.",
-      "data": {
-        "result": "pass"
-      }
-    },
-    {
-      "seq": 10,
-      "t_offset_ms": 18065,
       "agent": "delivery",
       "type": "output",
       "title": "Route assigned",
@@ -118,12 +107,12 @@
       }
     },
     {
-      "seq": 11,
-      "t_offset_ms": 19143,
+      "seq": 10,
+      "t_offset_ms": 18065,
       "agent": "orchestrator",
       "type": "output",
       "title": "Plan complete",
-      "detail": "Client 1003: 6 compliant meal(s) + grocery kit covering 1 day(s) at fallback level 2. 0 hard-constraint violations."
+      "detail": "Client 1003: 7 compliant meal(s) at fallback level 0. 0 hard-constraint violations."
     }
   ]
 }

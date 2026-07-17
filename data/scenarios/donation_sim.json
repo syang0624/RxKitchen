@@ -1,8 +1,8 @@
 {
   "id": "donation_sim",
   "title": "Donation intake: a new arrival is triaged live",
-  "client_id": 1131,
-  "run": "agent_runs/client-1131-donation.json",
+  "client_id": 1054,
+  "run": "agent_runs/client-1054-donation.json",
   "donation_id": "D011",
   "description": "A new donation is dropped off; the Donation Triage Agent classifies it against the food-safety gate and routes it into a scheduled kitchen batch (FR12, PRD §4)."
 }

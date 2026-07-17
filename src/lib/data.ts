@@ -26,7 +26,6 @@ import allocationsJson from "../../data/allocations.json";
 import productionPlanJson from "../../data/production_plan.json";
 import heroRunJson from "../../data/agent_runs/client-1042.json";
 import stockoutRunJson from "../../data/agent_runs/client-1042-stockout.json";
-import donationRunJson from "../../data/agent_runs/client-1131-donation.json";
 import happyPathJson from "../../data/scenarios/happy_path.json";
 import stockoutScenarioJson from "../../data/scenarios/stockout_replan.json";
 import donationScenarioJson from "../../data/scenarios/donation_sim.json";
@@ -42,7 +41,6 @@ export const productionPlan = productionPlanJson as ProductionPlan;
 
 export const heroRun = heroRunJson as AgentRun;
 export const stockoutRun = stockoutRunJson as AgentRun;
-export const donationRun = donationRunJson as AgentRun;
 export const happyPathScenario = happyPathJson as Scenario;
 export const stockoutScenario = stockoutScenarioJson as Scenario;
 export const donationScenario = donationScenarioJson as Scenario;

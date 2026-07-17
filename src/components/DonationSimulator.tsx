@@ -16,18 +16,20 @@ import {
   SkipForward,
   X,
 } from "lucide-react";
-import {
-  donationById,
-  donationRun,
-  donationScenario,
-  productionPlan,
-} from "@/lib/data";
+import { donationById, donationScenario, productionPlan } from "@/lib/data";
+import type { AgentEvent } from "@/lib/types";
 import { useReplay } from "@/lib/replay";
+import { useDonationRun } from "@/lib/runs";
 import { EventRow } from "./ActivityFeed";
 import { formatClock } from "./ui";
 
+const EMPTY_EVENTS: AgentEvent[] = [];
+
 export default function DonationSimulator({ onClose }: { onClose: () => void }) {
-  const replay = useReplay(donationRun.events);
+  // The sim stream is anchored to whichever client draws from the target batch
+  // first — that moves when the allocator changes, so load it by scenario.
+  const donationRun = useDonationRun(donationScenario.client_id);
+  const replay = useReplay(donationRun?.events ?? EMPTY_EVENTS);
 
   const donation = donationById.get(donationScenario.donation_id ?? "");
   const routedBatchId = donation?.routed_to?.startsWith("batch:")
@@ -127,10 +129,11 @@ export default function DonationSimulator({ onClose }: { onClose: () => void }) 
               </p>
               <button
                 onClick={replay.play}
-                className="inline-flex min-h-11 items-center justify-center gap-2 rounded-2xl bg-[#e60023] px-5 py-3 text-sm font-bold text-white transition-colors hover:bg-[#cc001f] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#435ee5]"
+                disabled={!donationRun}
+                className="inline-flex min-h-11 items-center justify-center gap-2 rounded-2xl bg-[#e60023] px-5 py-3 text-sm font-bold text-white transition-colors hover:bg-[#cc001f] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#435ee5] disabled:opacity-50"
               >
                 <PackageOpen size={18} aria-hidden="true" />
-                Drop off this donation
+                {donationRun ? "Drop off this donation" : "Loading…"}
               </button>
             </div>
           ) : (

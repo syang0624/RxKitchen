@@ -64,10 +64,10 @@
       "t_offset_ms": 12560,
       "agent": "matching",
       "type": "check",
-      "title": "Matched: Turkey Picadillo with Rice",
-      "detail": "All hard checks pass — sodium 440/800 mg ✓, carbs 48 g (target 45–65) ✓, no peanut/dairy ✓.",
+      "title": "Matched: Winter Melon Soup with Chicken and Rice",
+      "detail": "All hard checks pass — sodium 354/800 mg ✓, carbs 45 g (target 45–65) ✓, no peanut/dairy ✓.",
       "data": {
-        "meal_id": "M039",
+        "meal_id": "M020",
         "result": "pass"
       }
     },
@@ -76,10 +76,10 @@
       "t_offset_ms": 14464,
       "agent": "matching",
       "type": "check",
-      "title": "Matched: Chicken Fajita Bowl",
-      "detail": "All hard checks pass — sodium 450/800 mg ✓, carbs 57 g (target 45–65) ✓, no peanut/dairy ✓.",
+      "title": "Matched: Chicken Congee with Scallions",
+      "detail": "All hard checks pass — sodium 364/800 mg ✓, carbs 49 g (target 45–65) ✓, no peanut/dairy ✓.",
       "data": {
-        "meal_id": "M031",
+        "meal_id": "M011",
         "result": "pass"
       }
     },
@@ -88,10 +88,10 @@
       "t_offset_ms": 15815,
       "agent": "matching",
       "type": "check",
-      "title": "Matched: Chicken Tinga with Rice",
-      "detail": "All hard checks pass — sodium 454/800 mg ✓, carbs 48 g (target 45–65) ✓, no peanut/dairy ✓.",
+      "title": "Matched: Ginataang Gulay with Rice",
+      "detail": "All hard checks pass — sodium 401/800 mg ✓, carbs 51 g (target 45–65) ✓, no peanut/dairy ✓.",
       "data": {
-        "meal_id": "M037",
+        "meal_id": "M006",
         "result": "pass"
       }
     },

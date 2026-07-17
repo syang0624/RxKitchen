@@ -64,10 +64,10 @@
       "t_offset_ms": 12428,
       "agent": "matching",
       "type": "check",
-      "title": "Matched: Turkey Picadillo with Rice",
-      "detail": "All hard checks pass — sodium 440/800 mg ✓, carbs 48 g (target 45–60) ✓.",
+      "title": "Matched: Overnight Oats with Berries",
+      "detail": "All hard checks pass — sodium 300/800 mg ✓, carbs 55 g (target 45–60) ✓. Sourced from kitchen batch B7.",
       "data": {
-        "meal_id": "M039",
+        "meal_id": "M050",
         "result": "pass"
       }
     },
@@ -76,10 +76,10 @@
       "t_offset_ms": 13563,
       "agent": "matching",
       "type": "check",
-      "title": "Matched: Chicken Fajita Bowl",
-      "detail": "All hard checks pass — sodium 450/800 mg ✓, carbs 57 g (target 45–60) ✓.",
+      "title": "Matched: Winter Melon Soup with Chicken and Rice",
+      "detail": "All hard checks pass — sodium 354/800 mg ✓, carbs 45 g (target 45–60) ✓. Sourced from kitchen batch B6.",
       "data": {
-        "meal_id": "M031",
+        "meal_id": "M020",
         "result": "pass"
       }
     },
@@ -88,10 +88,10 @@
       "t_offset_ms": 15224,
       "agent": "matching",
       "type": "check",
-      "title": "Matched: Chicken Tinga with Rice",
-      "detail": "All hard checks pass — sodium 454/800 mg ✓, carbs 48 g (target 45–60) ✓.",
+      "title": "Matched: Steamed Fish with Ginger and Rice",
+      "detail": "All hard checks pass — sodium 435/800 mg ✓, carbs 50 g (target 45–60) ✓. Sourced from kitchen batch B5.",
       "data": {
-        "meal_id": "M037",
+        "meal_id": "M012",
         "result": "pass"
       }
     },
@@ -100,15 +100,48 @@
       "t_offset_ms": 16801,
       "agent": "kitchen",
       "type": "output",
-      "title": "Batch allocated: Chicken Congee with Scallions",
-      "detail": "Serving drawn from scheduled batch B2 (100 servings, 7 labor hours on 2026-07-20).",
+      "title": "Batch allocated: Overnight Oats with Berries",
+      "detail": "Serving drawn from scheduled batch B7 (110 servings, 10 labor hours on 2026-07-20).",
       "data": {
-        "batch_id": "B2"
+        "batch_id": "B7"
       }
     },
     {
       "seq": 10,
       "t_offset_ms": 19374,
+      "agent": "kitchen",
+      "type": "output",
+      "title": "Batch allocated: Winter Melon Soup with Chicken and Rice",
+      "detail": "Serving drawn from scheduled batch B6 (80 servings, 7 labor hours on 2026-07-22).",
+      "data": {
+        "batch_id": "B6"
+      }
+    },
+    {
+      "seq": 11,
+      "t_offset_ms": 20396,
+      "agent": "kitchen",
+      "type": "output",
+      "title": "Batch allocated: Steamed Fish with Ginger and Rice",
+      "detail": "Serving drawn from scheduled batch B5 (20 servings, 2 labor hours on 2026-07-21).",
+      "data": {
+        "batch_id": "B5"
+      }
+    },
+    {
+      "seq": 12,
+      "t_offset_ms": 21296,
+      "agent": "kitchen",
+      "type": "output",
+      "title": "Batch allocated: Chicken Congee with Scallions",
+      "detail": "Serving drawn from scheduled batch B2 (120 servings, 10 labor hours on 2026-07-20).",
+      "data": {
+        "batch_id": "B2"
+      }
+    },
+    {
+      "seq": 13,
+      "t_offset_ms": 23662,
       "agent": "donation",
       "type": "check",
       "title": "Donation D002 feeds batch B2",
@@ -119,8 +152,8 @@
       }
     },
     {
-      "seq": 11,
-      "t_offset_ms": 20396,
+      "seq": 14,
+      "t_offset_ms": 25056,
       "agent": "delivery",
       "type": "output",
       "title": "Route assigned",
@@ -130,12 +163,12 @@
       }
     },
     {
-      "seq": 12,
-      "t_offset_ms": 21296,
+      "seq": 15,
+      "t_offset_ms": 26755,
       "agent": "orchestrator",
       "type": "output",
       "title": "Plan complete",
-      "detail": "Client 1145: 10 compliant meal(s) at fallback level 1. 0 hard-constraint violations."
+      "detail": "Client 1145: 7 compliant meal(s) at fallback level 1. 0 hard-constraint violations."
     }
   ]
 }

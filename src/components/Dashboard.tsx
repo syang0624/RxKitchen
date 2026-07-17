@@ -33,6 +33,7 @@ import {
 import { useReplay } from "@/lib/replay";
 import { useAgentRun } from "@/lib/runs";
 import ActivityFeed from "./ActivityFeed";
+import BatchRunTicker from "./BatchRunTicker";
 import ClientPlanCard from "./ClientPlanCard";
 import DonationSimulator from "./DonationSimulator";
 import IntakeQueue from "./IntakeQueue";
@@ -286,7 +287,10 @@ export default function Dashboard() {
       </div>
 
       {view === "week" && (
-        <WeeklyCookList effectiveAllocations={effectiveAllocations} />
+        <>
+          <BatchRunTicker />
+          <WeeklyCookList effectiveAllocations={effectiveAllocations} />
+        </>
       )}
 
       {view === "clients" && (

@@ -64,10 +64,10 @@
       "t_offset_ms": 14158,
       "agent": "matching",
       "type": "check",
-      "title": "Matched: Tabbouleh with Grilled Chicken",
-      "detail": "All hard checks pass — sodium 378/800 mg ✓, carbs 40 g (target 40–55) ✓, no fish/egg ✓.",
+      "title": "Matched: Overnight Oats with Berries",
+      "detail": "All hard checks pass — sodium 300/800 mg ✓, carbs 55 g (target 40–55) ✓, no fish/egg ✓.",
       "data": {
-        "meal_id": "M057",
+        "meal_id": "M050",
         "result": "pass"
       }
     },
@@ -76,10 +76,10 @@
       "t_offset_ms": 15086,
       "agent": "matching",
       "type": "check",
-      "title": "Matched: Hearty Lentil Soup with Vegetables",
-      "detail": "All hard checks pass — sodium 410/800 mg ✓, carbs 47 g (target 40–55) ✓, no fish/egg ✓.",
+      "title": "Matched: Winter Melon Soup with Chicken and Rice",
+      "detail": "All hard checks pass — sodium 354/800 mg ✓, carbs 45 g (target 40–55) ✓, no fish/egg ✓.",
       "data": {
-        "meal_id": "M054",
+        "meal_id": "M020",
         "result": "pass"
       }
     },
@@ -88,10 +88,10 @@
       "t_offset_ms": 16754,
       "agent": "matching",
       "type": "check",
-      "title": "Matched: Quinoa-Stuffed Bell Peppers",
-      "detail": "All hard checks pass — sodium 417/800 mg ✓, carbs 48 g (target 40–55) ✓, no fish/egg ✓.",
+      "title": "Matched: Hummus and Veggie Wrap",
+      "detail": "All hard checks pass — sodium 451/800 mg ✓, carbs 52 g (target 40–55) ✓, no fish/egg ✓.",
       "data": {
-        "meal_id": "M058",
+        "meal_id": "M060",
         "result": "pass"
       }
     },

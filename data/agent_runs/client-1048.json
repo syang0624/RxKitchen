@@ -88,10 +88,10 @@
       "t_offset_ms": 15603,
       "agent": "matching",
       "type": "check",
-      "title": "Matched: Overnight Oats with Berries",
-      "detail": "All hard checks pass — sodium 300/600 mg ✓, carbs 55 g (target 45–75) ✓.",
+      "title": "Matched: Ginataang Gulay with Rice",
+      "detail": "All hard checks pass — sodium 401/600 mg ✓, carbs 51 g (target 45–75) ✓.",
       "data": {
-        "meal_id": "M050",
+        "meal_id": "M006",
         "result": "pass"
       }
     },

@@ -64,10 +64,10 @@
       "t_offset_ms": 10380,
       "agent": "matching",
       "type": "check",
-      "title": "Matched: Calabacitas con Pollo",
-      "detail": "All hard checks pass — sodium 374/800 mg ✓, carbs 43 g (target 40–55) ✓.",
+      "title": "Matched: Overnight Oats with Berries",
+      "detail": "All hard checks pass — sodium 300/800 mg ✓, carbs 55 g (target 40–55) ✓.",
       "data": {
-        "meal_id": "M038",
+        "meal_id": "M050",
         "result": "pass"
       }
     },
@@ -76,10 +76,10 @@
       "t_offset_ms": 11312,
       "agent": "matching",
       "type": "check",
-      "title": "Matched: Turkey Picadillo with Rice",
-      "detail": "All hard checks pass — sodium 440/800 mg ✓, carbs 48 g (target 40–55) ✓.",
+      "title": "Matched: Winter Melon Soup with Chicken and Rice",
+      "detail": "All hard checks pass — sodium 354/800 mg ✓, carbs 45 g (target 40–55) ✓.",
       "data": {
-        "meal_id": "M039",
+        "meal_id": "M020",
         "result": "pass"
       }
     },
@@ -88,16 +88,39 @@
       "t_offset_ms": 13063,
       "agent": "matching",
       "type": "check",
-      "title": "Matched: Chicken Tinga with Rice",
-      "detail": "All hard checks pass — sodium 454/800 mg ✓, carbs 48 g (target 40–55) ✓.",
+      "title": "Matched: Ginataang Gulay with Rice",
+      "detail": "All hard checks pass — sodium 401/800 mg ✓, carbs 51 g (target 40–55) ✓.",
       "data": {
-        "meal_id": "M037",
+        "meal_id": "M006",
         "result": "pass"
       }
     },
     {
       "seq": 9,
       "t_offset_ms": 14484,
+      "agent": "kitchen",
+      "type": "output",
+      "title": "Batch allocated: Chicken Congee with Scallions",
+      "detail": "Serving drawn from scheduled batch B2 (120 servings, 10 labor hours on 2026-07-20).",
+      "data": {
+        "batch_id": "B2"
+      }
+    },
+    {
+      "seq": 10,
+      "t_offset_ms": 15968,
+      "agent": "donation",
+      "type": "check",
+      "title": "Donation D002 feeds batch B2",
+      "detail": "Fresh Bok Choy (cases), Carrots (25 lb bags) from Bay Area Produce Exchange — triaged as kitchen ingredient.",
+      "data": {
+        "donation_id": "D002",
+        "result": "kitchen_ingredient"
+      }
+    },
+    {
+      "seq": 11,
+      "t_offset_ms": 17072,
       "agent": "delivery",
       "type": "output",
       "title": "Route assigned",
@@ -107,12 +130,12 @@
       }
     },
     {
-      "seq": 10,
-      "t_offset_ms": 15968,
+      "seq": 12,
+      "t_offset_ms": 18643,
       "agent": "orchestrator",
       "type": "output",
       "title": "Plan complete",
-      "detail": "Client 1067: 7 compliant meal(s) at fallback level 0. 0 hard-constraint violations."
+      "detail": "Client 1067: 7 compliant meal(s) at fallback level 1. 0 hard-constraint violations."
     }
   ]
 }

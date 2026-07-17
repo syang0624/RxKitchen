@@ -88,10 +88,10 @@
       "t_offset_ms": 17085,
       "agent": "matching",
       "type": "check",
-      "title": "Matched: Chicken Congee with Scallions",
-      "detail": "All hard checks pass — sodium 364/550 mg ✓, carbs 49 g (target 45–75) ✓.",
+      "title": "Matched: Ginataang Gulay with Rice",
+      "detail": "All hard checks pass — sodium 401/550 mg ✓, carbs 51 g (target 45–75) ✓.",
       "data": {
-        "meal_id": "M011",
+        "meal_id": "M006",
         "result": "pass"
       }
     },
@@ -112,7 +112,7 @@
       "agent": "orchestrator",
       "type": "output",
       "title": "Plan complete",
-      "detail": "Client 1037: 10 compliant meal(s) at fallback level 0. 0 hard-constraint violations."
+      "detail": "Client 1037: 7 compliant meal(s) at fallback level 0. 0 hard-constraint violations."
     }
   ]
 }

@@ -112,7 +112,7 @@
       "agent": "orchestrator",
       "type": "output",
       "title": "Plan complete",
-      "detail": "Client 1029: 10 compliant meal(s) at fallback level 0. 0 hard-constraint violations."
+      "detail": "Client 1029: 7 compliant meal(s) at fallback level 0. 0 hard-constraint violations."
     }
   ]
 }

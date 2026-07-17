@@ -64,10 +64,10 @@
       "t_offset_ms": 12604,
       "agent": "matching",
       "type": "check",
-      "title": "Matched: Hearty Lentil Soup with Vegetables",
-      "detail": "All hard checks pass — sodium 410/600 mg ✓, carbs 47 g (target 45–75) ✓, no peanut ✓.",
+      "title": "Matched: Overnight Oats with Berries",
+      "detail": "All hard checks pass — sodium 300/600 mg ✓, carbs 55 g (target 45–75) ✓, no peanut ✓.",
       "data": {
-        "meal_id": "M054",
+        "meal_id": "M050",
         "result": "pass"
       }
     },
@@ -76,10 +76,10 @@
       "t_offset_ms": 15031,
       "agent": "matching",
       "type": "check",
-      "title": "Matched: Quinoa-Stuffed Bell Peppers",
-      "detail": "All hard checks pass — sodium 417/600 mg ✓, carbs 48 g (target 45–75) ✓, no peanut ✓.",
+      "title": "Matched: Winter Melon Soup with Chicken and Rice",
+      "detail": "All hard checks pass — sodium 354/600 mg ✓, carbs 45 g (target 45–75) ✓, no peanut ✓.",
       "data": {
-        "meal_id": "M058",
+        "meal_id": "M020",
         "result": "pass"
       }
     },

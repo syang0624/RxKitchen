@@ -64,10 +64,10 @@
       "t_offset_ms": 13934,
       "agent": "matching",
       "type": "check",
-      "title": "Matched: Fresh Spring Rolls with Chicken",
-      "detail": "All hard checks pass — sodium 420/800 mg ✓, carbs 41 g (target 40–55) ✓, no shellfish/tree_nut/egg ✓.",
+      "title": "Matched: Overnight Oats with Berries",
+      "detail": "All hard checks pass — sodium 300/800 mg ✓, carbs 55 g (target 40–55) ✓, no shellfish/tree_nut/egg ✓.",
       "data": {
-        "meal_id": "M026",
+        "meal_id": "M050",
         "result": "pass"
       }
     },
@@ -76,10 +76,10 @@
       "t_offset_ms": 15789,
       "agent": "matching",
       "type": "check",
-      "title": "Matched: Steamed Rice Rolls with Mushrooms",
-      "detail": "All hard checks pass — sodium 423/800 mg ✓, carbs 46 g (target 40–55) ✓, no shellfish/tree_nut/egg ✓.",
+      "title": "Matched: Winter Melon Soup with Chicken and Rice",
+      "detail": "All hard checks pass — sodium 354/800 mg ✓, carbs 45 g (target 40–55) ✓, no shellfish/tree_nut/egg ✓.",
       "data": {
-        "meal_id": "M030",
+        "meal_id": "M020",
         "result": "pass"
       }
     },
@@ -88,10 +88,10 @@
       "t_offset_ms": 18212,
       "agent": "matching",
       "type": "check",
-      "title": "Matched: Lemongrass Chicken with Rice",
-      "detail": "All hard checks pass — sodium 458/800 mg ✓, carbs 50 g (target 40–55) ✓, no shellfish/tree_nut/egg ✓.",
+      "title": "Matched: Steamed Fish with Ginger and Rice",
+      "detail": "All hard checks pass — sodium 435/800 mg ✓, carbs 50 g (target 40–55) ✓, no shellfish/tree_nut/egg ✓.",
       "data": {
-        "meal_id": "M022",
+        "meal_id": "M012",
         "result": "pass"
       }
     },
@@ -112,7 +112,7 @@
       "agent": "orchestrator",
       "type": "output",
       "title": "Plan complete",
-      "detail": "Client 1020: 10 compliant meal(s) at fallback level 0. 0 hard-constraint violations."
+      "detail": "Client 1020: 7 compliant meal(s) at fallback level 0. 0 hard-constraint violations."
     }
   ]
 }

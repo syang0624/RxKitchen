@@ -64,10 +64,10 @@
       "t_offset_ms": 13247,
       "agent": "matching",
       "type": "check",
-      "title": "Matched: Baked Bangus with Garlic Rice",
-      "detail": "All hard checks pass — sodium 396/500 mg ✓, carbs 47 g (target 35–70) ✓.",
+      "title": "Matched: Low-Sodium Chicken Adobo with Rice",
+      "detail": "All hard checks pass — sodium 426/500 mg ✓, carbs 52 g (target 35–70) ✓.",
       "data": {
-        "meal_id": "M007",
+        "meal_id": "M001",
         "result": "pass"
       }
     },
@@ -76,10 +76,10 @@
       "t_offset_ms": 15521,
       "agent": "matching",
       "type": "check",
-      "title": "Matched: Ginataang Gulay with Rice",
-      "detail": "All hard checks pass — sodium 401/500 mg ✓, carbs 51 g (target 35–70) ✓.",
+      "title": "Matched: Baked Bangus with Garlic Rice",
+      "detail": "All hard checks pass — sodium 396/500 mg ✓, carbs 47 g (target 35–70) ✓.",
       "data": {
-        "meal_id": "M006",
+        "meal_id": "M007",
         "result": "pass"
       }
     },
@@ -88,10 +88,10 @@
       "t_offset_ms": 17598,
       "agent": "matching",
       "type": "check",
-      "title": "Matched: Chicken Tinola with Rice",
-      "detail": "All hard checks pass — sodium 412/500 mg ✓, carbs 48 g (target 35–70) ✓.",
+      "title": "Matched: Ginataang Gulay with Rice",
+      "detail": "All hard checks pass — sodium 401/500 mg ✓, carbs 51 g (target 35–70) ✓.",
       "data": {
-        "meal_id": "M003",
+        "meal_id": "M006",
         "result": "pass"
       }
     },

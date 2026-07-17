@@ -64,10 +64,10 @@
       "t_offset_ms": 13194,
       "agent": "matching",
       "type": "check",
-      "title": "Matched: Hearty Lentil Soup with Vegetables",
-      "detail": "All hard checks pass — sodium 410/800 mg ✓, carbs 47 g (target 45–65) ✓, no tree_nut ✓.",
+      "title": "Matched: Overnight Oats with Berries",
+      "detail": "All hard checks pass — sodium 300/800 mg ✓, carbs 55 g (target 45–65) ✓, no tree_nut ✓. Sourced from kitchen batch B7.",
       "data": {
-        "meal_id": "M054",
+        "meal_id": "M050",
         "result": "pass"
       }
     },
@@ -76,10 +76,10 @@
       "t_offset_ms": 14401,
       "agent": "matching",
       "type": "check",
-      "title": "Matched: Quinoa-Stuffed Bell Peppers",
-      "detail": "All hard checks pass — sodium 417/800 mg ✓, carbs 48 g (target 45–65) ✓, no tree_nut ✓.",
+      "title": "Matched: Winter Melon Soup with Chicken and Rice",
+      "detail": "All hard checks pass — sodium 354/800 mg ✓, carbs 45 g (target 45–65) ✓, no tree_nut ✓. Sourced from kitchen batch B6.",
       "data": {
-        "meal_id": "M058",
+        "meal_id": "M020",
         "result": "pass"
       }
     },
@@ -98,6 +98,62 @@
     {
       "seq": 9,
       "t_offset_ms": 17063,
+      "agent": "kitchen",
+      "type": "output",
+      "title": "Batch allocated: Overnight Oats with Berries",
+      "detail": "Serving drawn from scheduled batch B7 (110 servings, 10 labor hours on 2026-07-20).",
+      "data": {
+        "batch_id": "B7"
+      }
+    },
+    {
+      "seq": 10,
+      "t_offset_ms": 18985,
+      "agent": "kitchen",
+      "type": "output",
+      "title": "Batch allocated: Winter Melon Soup with Chicken and Rice",
+      "detail": "Serving drawn from scheduled batch B6 (80 servings, 7 labor hours on 2026-07-22).",
+      "data": {
+        "batch_id": "B6"
+      }
+    },
+    {
+      "seq": 11,
+      "t_offset_ms": 20229,
+      "agent": "kitchen",
+      "type": "output",
+      "title": "Batch allocated: Chicken Congee with Scallions",
+      "detail": "Serving drawn from scheduled batch B2 (120 servings, 10 labor hours on 2026-07-20).",
+      "data": {
+        "batch_id": "B2"
+      }
+    },
+    {
+      "seq": 12,
+      "t_offset_ms": 22180,
+      "agent": "donation",
+      "type": "check",
+      "title": "Donation D002 feeds batch B2",
+      "detail": "Fresh Bok Choy (cases), Carrots (25 lb bags) from Bay Area Produce Exchange — triaged as kitchen ingredient.",
+      "data": {
+        "donation_id": "D002",
+        "result": "kitchen_ingredient"
+      }
+    },
+    {
+      "seq": 13,
+      "t_offset_ms": 24192,
+      "agent": "kitchen",
+      "type": "output",
+      "title": "Batch allocated: Steamed Fish with Ginger and Rice",
+      "detail": "Serving drawn from scheduled batch B5 (20 servings, 2 labor hours on 2026-07-21).",
+      "data": {
+        "batch_id": "B5"
+      }
+    },
+    {
+      "seq": 14,
+      "t_offset_ms": 25144,
       "agent": "delivery",
       "type": "output",
       "title": "Route assigned",
@@ -107,12 +163,12 @@
       }
     },
     {
-      "seq": 10,
-      "t_offset_ms": 18985,
+      "seq": 15,
+      "t_offset_ms": 27078,
       "agent": "orchestrator",
       "type": "output",
       "title": "Plan complete",
-      "detail": "Client 1139: 7 compliant meal(s) at fallback level 0. 0 hard-constraint violations."
+      "detail": "Client 1139: 7 compliant meal(s) at fallback level 1. 0 hard-constraint violations."
     }
   ]
 }

@@ -64,10 +64,10 @@
       "t_offset_ms": 11436,
       "agent": "matching",
       "type": "check",
-      "title": "Matched: Calabacitas con Pollo",
-      "detail": "All hard checks pass — sodium 374/650 mg ✓, carbs 43 g (target 35–70) ✓.",
+      "title": "Matched: Overnight Oats with Berries",
+      "detail": "All hard checks pass — sodium 300/650 mg ✓, carbs 55 g (target 35–70) ✓.",
       "data": {
-        "meal_id": "M038",
+        "meal_id": "M050",
         "result": "pass"
       }
     },
@@ -76,10 +76,10 @@
       "t_offset_ms": 13715,
       "agent": "matching",
       "type": "check",
-      "title": "Matched: Turkey Picadillo with Rice",
-      "detail": "All hard checks pass — sodium 440/650 mg ✓, carbs 48 g (target 35–70) ✓.",
+      "title": "Matched: Winter Melon Soup with Chicken and Rice",
+      "detail": "All hard checks pass — sodium 354/650 mg ✓, carbs 45 g (target 35–70) ✓.",
       "data": {
-        "meal_id": "M039",
+        "meal_id": "M020",
         "result": "pass"
       }
     },
@@ -88,10 +88,10 @@
       "t_offset_ms": 16273,
       "agent": "matching",
       "type": "check",
-      "title": "Matched: Chicken Fajita Bowl",
-      "detail": "All hard checks pass — sodium 450/650 mg ✓, carbs 57 g (target 35–70) ✓.",
+      "title": "Matched: Ginataang Gulay with Rice",
+      "detail": "All hard checks pass — sodium 401/650 mg ✓, carbs 51 g (target 35–70) ✓.",
       "data": {
-        "meal_id": "M031",
+        "meal_id": "M006",
         "result": "pass"
       }
     },
@@ -112,7 +112,7 @@
       "agent": "orchestrator",
       "type": "output",
       "title": "Plan complete",
-      "detail": "Client 1011: 10 compliant meal(s) at fallback level 0. 0 hard-constraint violations."
+      "detail": "Client 1011: 7 compliant meal(s) at fallback level 0. 0 hard-constraint violations."
     }
   ]
 }

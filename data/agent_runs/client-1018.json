@@ -76,10 +76,10 @@
       "t_offset_ms": 15129,
       "agent": "matching",
       "type": "check",
-      "title": "Matched: Grilled Chicken Garden Salad",
-      "detail": "All hard checks pass — sodium 333/600 mg ✓, carbs 39 g (target 35–70) ✓, no tree_nut ✓.",
+      "title": "Matched: Winter Melon Soup with Chicken and Rice",
+      "detail": "All hard checks pass — sodium 354/600 mg ✓, carbs 45 g (target 35–70) ✓, no tree_nut ✓.",
       "data": {
-        "meal_id": "M044",
+        "meal_id": "M020",
         "result": "pass"
       }
     },
@@ -88,10 +88,10 @@
       "t_offset_ms": 16606,
       "agent": "matching",
       "type": "check",
-      "title": "Matched: Baked Salmon with Quinoa",
-      "detail": "All hard checks pass — sodium 395/600 mg ✓, carbs 40 g (target 35–70) ✓, no tree_nut ✓.",
+      "title": "Matched: Ginataang Gulay with Rice",
+      "detail": "All hard checks pass — sodium 401/600 mg ✓, carbs 51 g (target 35–70) ✓, no tree_nut ✓.",
       "data": {
-        "meal_id": "M043",
+        "meal_id": "M006",
         "result": "pass"
       }
     },
@@ -112,7 +112,7 @@
       "agent": "orchestrator",
       "type": "output",
       "title": "Plan complete",
-      "detail": "Client 1018: 10 compliant meal(s) at fallback level 0. 0 hard-constraint violations."
+      "detail": "Client 1018: 7 compliant meal(s) at fallback level 0. 0 hard-constraint violations."
     }
   ]
 }
