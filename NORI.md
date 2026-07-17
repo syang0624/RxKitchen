@@ -1,55 +1,75 @@
-# NORI — Workstream B: Next.js Dashboard & Replay Engine
+# NORI — Round 2: Backend (Data, Generation Pipeline & CI)
 
 > Owner: Nori (`nori` branch) · Counterpart: [STEVEN.md](STEVEN.md) · Source of truth: [PRD.md](PRD.md)
+>
+> **Roles swapped after the Phase 1–4 merge (2026-07-16):** Nori now owns the
+> backend/data pipeline; Steven owns the frontend. Round 1 recap is at the bottom.
 
 ## Mission
 
-Own the **Next.js app the judges actually see**: a deterministic playback engine (App Router, TypeScript, Tailwind) that loads Steven's pre-generated JSON statically, replays agent event streams as a live activity feed, and re-verifies every allocation with client-side validators — zero live inference, zero API risk on stage (PRD §6).
+Own everything that happens **offline, before the demo** (PRD §6): the dataset,
+the schemas, the Claude generation pipeline, and CI. Your headline deliverable
+for round 2 is upgrading the templated agent runs to Claude-authored reasoning
+and freezing a demo-safe dataset.
 
-## Deliverables (P0 first — FR1–FR7 are the demo)
+## What already exists (don't rebuild)
 
-| Feature | What it is | PRD ref |
-| --- | --- | --- |
-| Intake queue | Incoming referrals list; selecting one starts the pipeline replay | FR1 |
-| Agent activity feed | Timestamped per-agent events with reasoning snippets, streamed on a timer with realistic pacing; configurable speed + pause/scrub for judge Q&A | FR2, §6 |
-| Client plan card | Matched meals with per-constraint pass indicators (allergen ✓, sodium 480/600 mg ✓, carbs 52 g ✓), preference badges, dislike avoidance | FR3 |
-| Grocery-kit fallback view | Itemized bundle + numbered microwave-safe prep steps when `fallback_level = 2` | FR4 |
-| Kitchen production plan view | Batches, quantities, capacity bar, donation→batch links | FR5 |
-| **Live metrics banner** | Clinical violations (must read **0**), % fully compliant, donation utilization — **computed live by client-side validators, never hardcoded** | FR6, §9 |
-| Hero path | Client 1042 replay works flawlessly end-to-end | FR7 |
+- `scripts/generate-data.mjs` — seeded, deterministic dataset generator (regenerating never clobbers Claude-authored runs — the `generator` field guards it)
+- `scripts/generate-agent-runs.mjs` — Claude pipeline (`claude-opus-4-8`): grounded facts in, grounding-audited + schema-validated event streams out; `--scenario stockout` for re-plan streams
+- `scripts/lib/clinical.mjs` — shared hard/soft constraint rules
+- `scripts/validate-data.mjs` — independent safety net: schema conformance + zero-clinical-violations, runs on `prebuild` and in CI
+- `schemas/` — the frozen contract; `.github/workflows/ci.yml` — regenerability check + validate + lint + build
+- `data/` — 150 clients, 80 meals, allocations (98% compliant matches, 0 violations), 151 agent runs (all `generator: "template"` so far)
 
-**P1 (strongly desired):** scale view of ~150 clients (FR8), delivery route panel — static map ok (FR9), stockout re-plan trigger (FR10).
-**P2 (stretch):** "explain this decision" drawer (FR11), donation intake simulator (FR12).
+## Backlog (priority order)
 
-## Task order (maps to PRD §10)
+1. **Upgrade agent runs with Claude** (needs `ANTHROPIC_API_KEY` or `ant auth login` — currently the only blocker):
+   ```bash
+   npm run agents:generate -- --client 1042 --force              # hero first
+   npm run agents:generate -- --client 1042 --scenario stockout --force
+   npm run agents:generate -- --limit 20                         # then batches
+   ```
+   Hand-verify the hero run end-to-end (FR7) before batching. `--limit`
+   targets template runs and skips Claude-authored ones, so it's resumable.
+   After the hero upgrade, sit with Steven to re-time the 4-minute narrative.
+2. **Donation-sim stream for FR12 (P2).** Steven's donation-intake simulator
+   needs a second pre-generated stream: a new donation arrives → triage agent
+   classifies it → routes to inventory or a batch. Add a
+   `--scenario donation` mode to the pipeline (facts: the donation, its
+   allergens/condition, the routing decision recomputed from rules) + a
+   `data/scenarios/donation_sim.json` manifest. Coordinate the event shape
+   with Steven before he builds UI; it must conform to `agent_run.schema.json`.
+3. **Validator parity watch.** `scripts/validate-data.mjs` (yours) and
+   `src/lib/validators.ts` (Steven's) must enforce identical rules. Any rule
+   change is a joint edit: schema + both validators + regenerated data.
+4. **Phase 5 — dataset freeze (final 4 h).** Regenerate, run the full
+   validator, `npm run build`, then tag (`git tag demo-freeze`). After the
+   freeze: no regeneration, no run upgrades. If a violation surfaces, fix the
+   generator and regenerate — never hand-edit JSON (PRD §11).
+5. **CI stewardship.** Keep `.github/workflows/ci.yml` green; it fails if
+   committed `data/` drifts from the generator, on any schema/clinical
+   violation, and on lint/build errors.
 
-### Phase 2 — hours 4–20 (start from Steven's frozen schemas)
+## Hard rules (unchanged)
 
-1. Layout shell: intake queue, activity feed, client card, metrics banner.
-2. **Event-replay engine**: consumes `agent_runs/*.json`, emits events on a timer (speed control, pause, scrub). Build against Steven's event schema — this schema is also the future live API (§11), so keep the engine swappable.
-3. **Client-side constraint validators**: re-check every allocation against hard constraints (allergens, sodium, carbs, diet rules) in real time. This powers the honest "0 violations" banner and is the safety net for Steven's data (§11).
-4. Use mock/fixture JSON matching the schemas until Steven's real artifacts land.
-
-### Phase 3 — hours 16–32 (with Steven)
-
-5. Swap in real `agent_runs`; build kitchen plan + grocery-kit views; polish feed pacing.
-
-### Phase 4 — hours 32–44
-
-6. Scale view + batch-run animation (FR8); stockout scenario trigger (FR10) swapping in the second pre-generated stream.
-
-### Phase 5 — final 4 h
-
-7. Demo hardening: script the 4-minute narrative (§4), pause/scrub polish, rehearse.
-
-## Hard rules
-
-- **The metrics banner is computed live from data by your validators — never hardcoded** (§6, §9). Judges may inspect any meal card and see the checks pass.
-- Deterministic only: no LLM calls, no network dependencies at demo time.
-- Scope discipline (§11): **the activity feed + client card + metrics banner are the product**; everything else is garnish. Cut order if behind: P2 → delivery panel (FR9) → scale animation (keep the static metrics banner).
+- **Constraint hierarchy (§5) is non-negotiable:** allergens, sodium ceiling, carb range, diet-order rules are never violated in generated data — failing meals are excluded, never scored down.
+- **Never hand-edit `data/`** — change the generator and regenerate (§11).
+- Claude runs must survive the grounding audit: no invented meals, numbers, or IDs. If the audit rejects twice, fix the facts/prompt — don't loosen the audit.
+- The demo metric is **0 violations computed live by Steven's client-side validators** — your data must actually pass.
 
 ## Interface with Steven
 
-- You consume Steven's JSON statically; he owns generation. Report validator failures to him — he regenerates, nobody hand-edits data.
-- Blocked until Steven freezes schemas (end of his Phase 1, hours 0–8) — use that window for layout + replay-engine scaffolding with fixtures.
-- Shared checkpoints: schema freeze, Phase 3 integration, Phase 5 dataset freeze.
+- `schemas/` is the frozen contract; Steven's `src/lib/types.ts` mirrors it. Contract changes are joint edits announced before merging.
+- Steven is about to dynamic-import `data/agent_runs/client-<id>.json` per client — keep filenames and the `AgentRun` shape stable.
+- Shared checkpoints: hero Claude-run upgrade (re-time narrative), donation-sim stream handoff (FR12), Phase 5 dataset freeze.
+
+---
+
+## Round 1 recap (done, merged to main)
+
+Nori built the frontend in round 1: the full dashboard shell
+(`src/components/` — intake queue, activity feed, client plan card, metrics
+banner, kitchen plan, delivery panel, scale view), the replay engine with
+speed/pause/scrub (`src/lib/replay.ts`), client-side validators
+(`src/lib/validators.ts`), and the typed data layer. All of that is now
+**Steven's** to operate and extend.

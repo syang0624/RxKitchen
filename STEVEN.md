@@ -1,59 +1,72 @@
-# STEVEN — Workstream A: Data & Agent Generation Pipeline
+# STEVEN — Round 2: Frontend (Dashboard & Demo Experience)
 
 > Owner: Steven (`steven` branch) · Counterpart: [NORI.md](NORI.md) · Source of truth: [PRD.md](PRD.md)
+>
+> **Roles swapped after the Phase 1–4 merge (2026-07-16):** Steven now owns the
+> frontend; Nori owns the backend/data pipeline. Round 1 recap is at the bottom.
 
 ## Mission
 
-Own everything that happens **offline, before the demo**: the synthetic dataset, the Claude-powered generation pipeline, and the pre-generated agent event streams that Nori's dashboard replays (PRD §6). Your output is a set of frozen JSON artifacts; Nori's app never calls an LLM.
+Own everything the judges see and touch: the Next.js dashboard, the replay
+experience, and the 4-minute demo narrative (PRD §4). The shell Nori built in
+round 1 covers FR1–FR10 — your job is to finish the P1/P2 features, absorb the
+richer Claude-authored runs as Nori lands them, and harden the demo.
 
-## Deliverables
+## What already exists (don't rebuild)
 
-| Artifact | Contents | PRD ref |
-| --- | --- | --- |
-| `data/clients.json` | ~150 synthetic client profiles; **Client 1042 verbatim as the hero case** | §6, §7 |
-| `data/meals.json` | ~80 meals with full nutrition (sodium, carbs, allergens, cuisine, diet tags) | §6, §7 |
-| `data/inventory.json`, `data/donations.json`, `data/kitchen.json`, `data/delivery.json` | Stock, incoming donations, kitchen capacity slots, delivery zones/windows | §6, §7 |
-| `data/agent_runs/*.json` | Per-referral ordered event streams: agent "thoughts", tool calls, constraint checks, outputs — authored by Claude offline | §6 |
-| `data/scenarios/` | `happy_path` (Client 1042 end-to-end) and `stockout_replan` (stretch) | §6 |
-| `scripts/generate.*` | The generation pipeline itself (Python or Node calling the Claude API) | §6 |
+- `src/components/Dashboard.tsx` — shell with intake queue, scenario switching (happy path / stockout swap), kitchen/delivery/scale tabs
+- `src/lib/replay.ts` — replay engine with speed (0.5–4×), pause, scrub, skip-to-end; `ActivityFeed` exposes the scrub slider
+- `src/lib/validators.ts` — client-side hard-constraint re-verification powering the live metrics banner (FR6)
+- `src/lib/types.ts` — TS mirror of the frozen contract in `schemas/`
+- All FR1–FR7 views plus scale view (FR8), delivery panel (FR9), stockout trigger (FR10)
 
-## Task order (maps to PRD §10)
+## Backlog (priority order)
 
-### Phase 1 — hours 0–8 (critical path, Nori is blocked on schemas)
+1. **Per-client replay (finish FR8).** `data/agent_runs/` now has a run for
+   *every* client, but `src/lib/data.ts` statically imports only the hero +
+   stockout streams, and `Dashboard.tsx` hardcodes `EMPTY_EVENTS` for non-hero
+   clients. Load `client-<id>.json` on demand (dynamic `import()` keeps the
+   initial bundle small) so clicking any client in the scale view or intake
+   queue replays their pipeline run.
+2. **FR11 — "Explain this decision" drawer (P2).** For any allocation item,
+   show the reasoning trail: the constraint checks, the run events that
+   reference that `meal_id`, and why alternatives were rejected. The per-item
+   `constraint_checks` and event `data.meal_id` refs are already in the data.
+3. **Absorb Claude-authored runs.** When Nori upgrades runs (the `generator`
+   field flips from `"template"` to a model id), streams get longer and more
+   deliberative. Re-check feed pacing, autoscroll, and the hero narrative
+   timing at 1× speed (~4 min target); surface `generator` subtly if useful
+   for judge Q&A ("reasoning pre-computed by Claude offline" — PRD §11).
+4. **FR12 — donation intake simulator (P2, first cut line).** Drop a new
+   donation, watch the triage stream replay. Blocked on Nori producing the
+   pre-generated donation-sim stream — coordinate before building UI.
+5. **Phase 5 — demo hardening (final 4 h).** Script the 4-minute narrative
+   against the real dataset; add keyboard shortcuts (space = pause, arrows =
+   scrub) for judge Q&A; static map image for the delivery panel if time
+   permits (FR9 allows it); rehearse the stockout beat.
 
-1. **Freeze the JSON schemas first** (data model in PRD §7: `ClientProfile`, `Meal`, `GroceryItem`, `Donation`, `KitchenCapacity`, `Allocation`, `ProductionPlan`, `DeliveryBatch`) **plus the agent-run event schema**. Commit them early — this is the contract Nori builds against, and per §11 the event schema is the v2 API contract.
-2. Write the Claude-powered generator for clients, meals, inventory, donations, kitchen, delivery.
-3. Generate and **hand-verify the Client 1042 hero run**: diabetes + cardiovascular, peanut allergy, ≤600 mg sodium/meal, 45–60 g carbs/meal, Filipino cuisine pref, microwave-only, dislikes lentils (§4).
+**Cut lines if behind (PRD §10):** FR12 → FR11 → delivery-panel polish. The
+activity feed + client card + metrics banner *are* the product (§11).
 
-### Phase 3 — hours 16–32 (with Nori)
+## Hard rules (unchanged from round 1)
 
-4. Wire real `agent_runs` into Nori's replay engine; iterate on event pacing/reasoning text so the feed reads as honest agent work (§11: agents should visibly consider and reject options).
-
-### Phase 4 — hours 32–44
-
-5. Batch-run all ~150 clients through the pipeline; generate the `stockout_replan` second event stream (FR10).
-
-### Phase 5 — final 4 h
-
-6. **Freeze the dataset.** Run Nori's validators over the entire dataset in CI/build; regenerate (never hand-edit) any failing allocation (§11).
-
-## Hard rules
-
-- **Constraint hierarchy (§5) is non-negotiable in generated data:** allergens, sodium ceiling, carb range, and diet-order rules are never violated — a failing meal is excluded, never scored down. Fallback ladder: existing meal → new kitchen batch → grocery kit.
-- **Never hand-edit nutrition numbers** — regenerate instead (§11).
-- The headline demo metric is **0 clinical violations, computed live by Nori's validators** — your data must actually pass, not look like it passes.
-
-## Status (updated 2026-07-16)
-
-- ✅ **Schemas frozen** in `schemas/` — one JSON Schema per data artifact plus `agent_run.schema.json` (the replay-engine event contract, which per PRD §11 is also the v2 live API contract). `npm run data:validate` now fails on any contract drift, before the clinical checks.
-- ✅ **Deterministic dataset** generated and validated: 0 violations, 98% compliant matches, 100% coverage, 76.9% donation utilization (`scripts/generate-data.mjs`).
-- ✅ **Claude generation pipeline** ready: `npm run agents:generate -- --client <id>` (or `--clients a,b,c` / `--limit N`, plus `--scenario stockout` for re-plan streams) authors agent event streams offline via the Claude API (`claude-opus-4-8`). Prompts contain only facts recomputed from `data/` (shared rules in `scripts/lib/clinical.mjs`); outputs are grounding-audited (no invented meals/numbers/IDs, pass claims must match the allocation) and schema-validated before writing. Needs `ANTHROPIC_API_KEY` or `ant auth login`.
-- ✅ **Phase 4 batch-run done (template tier):** all 150 clients now have a replayable `agent_runs/client-<id>.json` (deterministic template events grounded in each client's real allocation), so the scale view (FR8) can drill into anyone. Runs carry a `generator` field; `data:generate` never overwrites Claude-authored runs, so upgrading them is safe and incremental.
-- ✅ **CI** (`.github/workflows/ci.yml`): verifies committed `data/` matches the generator, then schema + clinical validation, lint, and build on every push/PR (PRD §11).
-- ⏭ Next (needs API credentials): upgrade runs with Claude — `--client 1042 --force`, `--client 1042 --scenario stockout --force`, then `--limit` batches across the queue.
+- **The metrics banner is computed live by the validators — never hardcoded** (§6, §9).
+- Deterministic only: no LLM calls, no network dependencies at demo time. All data loads from `data/` at build time (dynamic imports of bundled JSON are fine; fetches are not).
+- Don't hand-edit anything in `data/` — that's Nori's regeneration pipeline. Frontend needs a data change → ask Nori.
 
 ## Interface with Nori
 
-- You produce JSON; Nori consumes it statically. Any schema change after Phase 1 must be coordinated on the spot.
-- Nori's client-side validators are the safety net for your data — treat a validator failure as a generation bug, not a validator bug (unless it demonstrably is).
-- Shared checkpoints: end of Phase 1 (schemas + hero run), Phase 3 integration, Phase 5 dataset freeze.
+- `schemas/` is the frozen contract; `src/lib/types.ts` mirrors it. Any contract change is a joint edit (schema + types + both validators) — never drift silently.
+- Validator parity: `src/lib/validators.ts` (yours now) and `scripts/validate-data.mjs` (Nori's) must enforce identical rules.
+- Shared checkpoints: Claude-run upgrade of the hero (re-time the narrative together), donation-sim stream handoff (FR12), Phase 5 dataset freeze.
+
+---
+
+## Round 1 recap (done, merged to main)
+
+Steven built the backend in round 1: deterministic dataset generator
+(`scripts/generate-data.mjs` — 150 clients, 80 meals, allocations with 0
+violations), frozen schemas (`schemas/`), independent validator wired into
+build + CI, per-client template agent runs, and the Claude generation pipeline
+(`scripts/generate-agent-runs.mjs`, happy + stockout scenarios, grounding
+audit). All of that is now **Nori's** to operate and extend.
