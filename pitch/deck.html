@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>RxKitchen — 3-slide pitch</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #fbfbf9;
+    --ink: #211922;
+    --muted: #62625b;
+    --primary: #e60023;
+    --mint: #c7f0da;
+    --mint-ink: #103c25;
+    --hairline: #e5e5e0;
+    --card: #ffffff;
+  }
+  * { box-sizing: border-box; margin: 0; }
+  html, body { height: 100%; }
+  body {
+    background: #1a1a17;
+    font-family: "Manrope", -apple-system, "Segoe UI", sans-serif;
+    color: var(--ink);
+    overflow: hidden;
+  }
+  .slide {
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    aspect-ratio: 16 / 9;
+    max-width: min(100vw, 177.78vh);
+    max-height: min(100vh, 56.25vw);
+    background: var(--bg);
+    padding: 4.2% 5%;
+    display: none;
+    flex-direction: column;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .slide.active { display: flex; }
+
+  .brand { display: flex; align-items: center; gap: 12px; }
+  .brand .logo {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: var(--primary); color: #fff;
+    display: grid; place-items: center; font-size: 20px;
+  }
+  .brand b { font-size: 18px; letter-spacing: -0.01em; }
+  .brand span { color: var(--muted); font-size: 13px; }
+
+  .kicker {
+    color: var(--primary); font-weight: 800; font-size: clamp(12px, 1.4vw, 16px);
+    text-transform: uppercase; letter-spacing: 0.08em; margin-top: 3.5%;
+  }
+  h1 { font-size: clamp(28px, 4.6vw, 58px); font-weight: 800; letter-spacing: -0.02em; line-height: 1.06; margin-top: 10px; }
+  h2 { font-size: clamp(22px, 3.4vw, 42px); font-weight: 800; letter-spacing: -0.02em; margin-top: 8px; }
+  .sub { color: var(--muted); font-size: clamp(14px, 1.6vw, 20px); line-height: 1.5; margin-top: 14px; max-width: 62ch; }
+  .sub b { color: var(--ink); }
+
+  .statgrid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-top: auto; }
+  .stat {
+    background: var(--card); border: 1px solid var(--hairline); border-radius: 14px;
+    padding: 3.2% 6% 3.2% 8%;
+  }
+  .stat .n { font-size: clamp(18px, 2.6vw, 34px); font-weight: 800; font-variant-numeric: tabular-nums; }
+  .stat .n.good { color: var(--mint-ink); background: var(--mint); border-radius: 8px; padding: 0 8px; display: inline-block; }
+  .stat .l { color: var(--muted); font-size: clamp(10px, 1.05vw, 13px); margin-top: 6px; line-height: 1.3; }
+
+  .foot { display: flex; justify-content: space-between; color: var(--muted); font-size: 12px; margin-top: 3%; }
+
+  /* slide 2 — visit */
+  .photos { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 3%; flex: 1; min-height: 0; }
+  .shot {
+    position: relative; border-radius: 14px; overflow: hidden;
+    background: #f0efe9; border: 1px solid var(--hairline);
+    display: grid; place-items: center; text-align: center;
+  }
+  .shot .hint { color: var(--muted); font-size: clamp(10px, 1vw, 13px); padding: 12px; line-height: 1.5; }
+  .shot .hint code { font-family: ui-monospace, monospace; font-size: 0.92em; color: var(--ink); }
+  .shot img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .shot img.missing { display: none; }
+  .learn { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 12px; }
+  .learn .card {
+    background: var(--card); border: 1px solid var(--hairline); border-radius: 14px; padding: 14px 16px;
+  }
+  .learn .card b { display: block; font-size: clamp(12px, 1.3vw, 16px); }
+  .learn .card p { color: var(--muted); font-size: clamp(11px, 1.1vw, 14px); line-height: 1.45; margin-top: 4px; }
+  .learn .card .tag {
+    display: inline-block; margin-top: 8px; background: var(--mint); color: var(--mint-ink);
+    font-size: clamp(10px, 1vw, 12px); font-weight: 700; border-radius: 999px; padding: 2px 10px;
+  }
+
+  /* slide 3 — how it works */
+  .pipeline { display: flex; align-items: stretch; gap: 8px; margin-top: 3%; }
+  .step {
+    flex: 1; background: var(--card); border: 1px solid var(--hairline); border-radius: 14px;
+    padding: 12px 12px; text-align: center;
+  }
+  .step .icon { font-size: clamp(16px, 2vw, 26px); }
+  .step b { display: block; font-size: clamp(11px, 1.15vw, 14px); margin-top: 6px; }
+  .step p { color: var(--muted); font-size: clamp(9.5px, 0.95vw, 12px); line-height: 1.35; margin-top: 4px; }
+  .arrow { align-self: center; color: var(--muted); font-size: 18px; }
+  .cols { display: grid; grid-template-columns: 1.15fr 1fr; gap: 14px; margin-top: 14px; flex: 1; min-height: 0; }
+  .panel { background: var(--card); border: 1px solid var(--hairline); border-radius: 14px; padding: 16px 18px; }
+  .panel h3 { font-size: clamp(13px, 1.4vw, 17px); }
+  .panel ul { margin: 8px 0 0 18px; color: var(--muted); font-size: clamp(11px, 1.2vw, 15px); line-height: 1.55; }
+  .panel li b { color: var(--ink); }
+  .panel.mint { background: var(--mint); border-color: #a8dcc0; color: var(--mint-ink); }
+  .panel.mint h3, .panel.mint li b { color: var(--mint-ink); }
+  .panel.mint ul { color: #2c5a41; }
+
+  .nav {
+    position: fixed; bottom: 14px; right: 18px; z-index: 10;
+    display: flex; gap: 8px; align-items: center; color: #b6b6ad; font-size: 12px;
+  }
+  .nav button {
+    font: inherit; background: #ffffff18; color: #fff; border: 0; border-radius: 999px;
+    width: 34px; height: 34px; cursor: pointer;
+  }
+  @media print {
+    body { background: #fff; overflow: visible; }
+    .slide { position: static; display: flex; max-width: none; max-height: none; width: 100%; page-break-after: always; border-radius: 0; }
+    .nav { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Slide 1 — problem & product -->
+<section class="slide active">
+  <div class="brand"><span class="logo">♥</span><b>RxKitchen</b><span>· agentic clinical meal planning · built for Project Open Hand</span></div>
+  <p class="kicker">The problem</p>
+  <h1>A prescription on one side.<br />A food bank on the other.</h1>
+  <p class="sub">
+    Hospitals discharge clients with strict clinical diets — diabetes, cardiovascular, renal, allergies.
+    Medically-tailored-meal kitchens must match them against <b>unpredictable donations, finite stock, and
+    limited kitchen capacity</b>. Today a dietitian reconciles this by hand, for hours, per referral.
+    <br /><br />
+    <b>RxKitchen:</b> a multi-agent AI drafts the entire week — menus, batches, grocery kits — and the
+    Chief Nutrition Officer reviews and approves. <b>Agents propose. She approves. Nothing unsafe ships.</b>
+  </p>
+  <div class="statgrid">
+    <div class="stat"><span class="n good">0</span><div class="l">clinical safety issues — re-verified live in the browser</div></div>
+    <div class="stat"><span class="n">150</span><div class="l">clients planned, referral to doorstep</div></div>
+    <div class="stat"><span class="n">1,067</span><div class="l">meals scheduled this week</div></div>
+    <div class="stat"><span class="n">100%</span><div class="l">matched to fully compliant meals</div></div>
+    <div class="stat"><span class="n">77%</span><div class="l">of donations routed into recipes &amp; pantry</div></div>
+  </div>
+  <div class="foot"><span>Steven &amp; Nori · hackathon POC · July 2026</span><span>1 / 3</span></div>
+</section>
+
+<!-- Slide 2 — Project Open Hand visit -->
+<section class="slide">
+  <div class="brand"><span class="logo">♥</span><b>RxKitchen</b><span>· field research</span></div>
+  <p class="kicker">We went to the source</p>
+  <h2>Our visit to Project Open Hand</h2>
+  <div class="photos">
+    <figure class="shot"><div class="hint">Drop your photo at<br /><code>pitch/photos/visit-1.jpg</code></div><img src="photos/visit-1.jpg" alt="Project Open Hand visit" onerror="this.classList.add('missing')" /></figure>
+    <figure class="shot"><div class="hint">Drop your photo at<br /><code>pitch/photos/visit-2.jpg</code></div><img src="photos/visit-2.jpg" alt="Project Open Hand visit" onerror="this.classList.add('missing')" /></figure>
+    <figure class="shot"><div class="hint">Drop your photo at<br /><code>pitch/photos/visit-3.jpg</code></div><img src="photos/visit-3.jpg" alt="Project Open Hand visit" onerror="this.classList.add('missing')" /></figure>
+    <figure class="shot"><div class="hint">Drop your photo at<br /><code>pitch/photos/visit-4.jpg</code></div><img src="photos/visit-4.jpg" alt="Project Open Hand visit" onerror="this.classList.add('missing')" /></figure>
+  </div>
+  <div class="learn">
+    <div class="card"><b>Kitchens cook menus, not plates.</b><p>Bulk batches of a few recipes a day — never 150 bespoke meals.</p><span class="tag">→ 3–5 recipes/day menu planner</span></div>
+    <div class="card"><b>Donations are a lottery.</b><p>What arrives is unpredictable; using it well is the margin that funds meals.</p><span class="tag">→ triage gate + donation-to-recipe routing</span></div>
+    <div class="card"><b>A human signs off on safety.</b><p>The nutrition team is clinically accountable — automation can draft, not decide.</p><span class="tag">→ approve-to-send workflow, gated on 0 issues</span></div>
+  </div>
+  <div class="foot"><span>What we learned became the product's shape</span><span>2 / 3</span></div>
+</section>
+
+<!-- Slide 3 — how it works -->
+<section class="slide">
+  <div class="brand"><span class="logo">♥</span><b>RxKitchen</b><span>· how it works</span></div>
+  <p class="kicker">Referral to doorstep, in minutes</p>
+  <h2>Specialist agents, one safety hierarchy, a human decision</h2>
+  <div class="pipeline">
+    <div class="step"><div class="icon">🏥</div><b>Referral</b><p>HL7-style discharge from the hospital</p></div>
+    <div class="arrow">→</div>
+    <div class="step"><div class="icon">📋</div><b>Intake Agent</b><p>structures diets, allergies, hard limits</p></div>
+    <div class="arrow">→</div>
+    <div class="step"><div class="icon">🩺</div><b>Clinical Matching</b><p>hard checks exclude — never “score down”</p></div>
+    <div class="arrow">→</div>
+    <div class="step"><div class="icon">🍳</div><b>Kitchen Planning</b><p>daily menus + fresh batches from real demand</p></div>
+    <div class="arrow">→</div>
+    <div class="step"><div class="icon">📦</div><b>Donation Triage</b><p>food-safety gate routes arrivals to recipes</p></div>
+    <div class="arrow">→</div>
+    <div class="step"><div class="icon">✅</div><b>CNO approves</b><p>gated on zero issues → cook sheet to kitchen</p></div>
+  </div>
+  <div class="cols">
+    <div class="panel">
+      <h3>Honest by construction</h3>
+      <ul>
+        <li><b>Reasoning pre-computed offline</b> by Claude — zero live-inference risk on stage.</li>
+        <li><b>Safety verified live:</b> 4,850 constraint checks re-run in the browser; the “0” is computed, never asserted.</li>
+        <li><b>Grounding-audited streams:</b> agents can’t cite a meal, number, or batch that isn’t in the data.</li>
+        <li><b>The replay contract is the v2 API</b> — swap the replayer for live agents, keep the product.</li>
+      </ul>
+    </div>
+    <div class="panel mint">
+      <h3>What you saw in the demo</h3>
+      <ul>
+        <li>New referral → drafted, explained, approved.</li>
+        <li>“Why this meal?” — every check in plain words.</li>
+        <li>Stockout → agents re-plan; limits never relax.</li>
+        <li>Donation drop-off → triaged into a batch.</li>
+        <li>Next-week projection → concrete donation asks.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot"><span>Next: FHIR referrals · live agent runs behind the same contract · every MTM org</span><span>3 / 3</span></div>
+</section>
+
+<div class="nav">
+  <span id="counter">1 / 3</span>
+  <button id="prev" aria-label="Previous slide">←</button>
+  <button id="next" aria-label="Next slide">→</button>
+</div>
+
+<script>
+  const slides = [...document.querySelectorAll(".slide")];
+  let i = 0;
+  function show(n) {
+    i = (n + slides.length) % slides.length;
+    slides.forEach((s, k) => s.classList.toggle("active", k === i));
+    document.getElementById("counter").textContent = `${i + 1} / ${slides.length}`;
+  }
+  document.getElementById("prev").onclick = () => show(i - 1);
+  document.getElementById("next").onclick = () => show(i + 1);
+  addEventListener("keydown", (e) => {
+    if (e.key === "ArrowRight" || e.key === " " || e.key === "PageDown") show(i + 1);
+    if (e.key === "ArrowLeft" || e.key === "PageUp") show(i - 1);
+  });
+</script>
+</body>
+</html>
