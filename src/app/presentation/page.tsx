@@ -31,25 +31,35 @@ import {
 import { computeMetrics } from "@/lib/validators";
 
 function PhotoSlot({ index }: { index: number }) {
-  const [missing, setMissing] = useState(false);
+  // Photos are shown whole (object-contain, letterboxed) — never cropped.
+  const [status, setStatus] = useState<"loading" | "ok" | "missing">("loading");
   return (
-    <figure className="relative grid place-items-center overflow-hidden rounded-2xl border border-dashed border-[#dadad3] bg-[#f0efe9]">
-      {!missing && (
+    <figure
+      className={`relative grid place-items-center overflow-hidden rounded-2xl ${
+        status === "ok"
+          ? "border border-[#e5e5e0] bg-white"
+          : "border border-dashed border-[#dadad3] bg-[#f0efe9]"
+      }`}
+    >
+      {status !== "missing" && (
         // eslint-disable-next-line @next/next/no-img-element -- user-dropped file of unknown size
         <img
           src={`/pitch/visit-${index}.jpg`}
           alt={`Project Open Hand visit photo ${index}`}
-          onError={() => setMissing(true)}
-          className="absolute inset-0 h-full w-full object-cover"
+          onLoad={() => setStatus("ok")}
+          onError={() => setStatus("missing")}
+          className="absolute inset-0 h-full w-full object-contain"
         />
       )}
-      <figcaption className="p-4 text-center text-xs leading-relaxed text-[#62625b]">
-        Drop your photo at
-        <br />
-        <code className="font-mono text-[11px] text-[#211922]">
-          public/pitch/visit-{index}.jpg
-        </code>
-      </figcaption>
+      {status === "missing" && (
+        <figcaption className="p-4 text-center text-xs leading-relaxed text-[#62625b]">
+          Drop your photo at
+          <br />
+          <code className="font-mono text-[11px] text-[#211922]">
+            public/pitch/visit-{index}.jpg
+          </code>
+        </figcaption>
+      )}
     </figure>
   );
 }
@@ -79,7 +89,7 @@ const STEPS = [
 
 export default function PresentationPage() {
   const [slide, setSlide] = useState(0);
-  const total = 3;
+  const total = 4;
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -178,8 +188,89 @@ export default function PresentationPage() {
           </section>
         )}
 
-        {/* slide 2 — Project Open Hand visit */}
+        {/* slide 2 — problem definition: POH + the nutritionist */}
         {slide === 1 && (
+          <section className="flex flex-1 flex-col">
+            <Brand tagline="problem definition" />
+            <p className="mt-8 text-xs font-bold uppercase tracking-widest text-[#e60023]">
+              Who has this problem
+            </p>
+            <h1 className="mt-2 text-3xl font-extrabold tracking-tight sm:text-4xl">
+              We&apos;re solving it for Project Open Hand —
+              <br />
+              for nutritionists like Katie
+            </h1>
+            <div className="mt-6 grid flex-1 gap-3 lg:grid-cols-2">
+              <div className="rounded-2xl border border-[#dadad3] bg-white p-5">
+                <h2 className="text-sm font-bold">The problem, precisely</h2>
+                <ul className="mt-2 space-y-2.5 text-xs leading-relaxed text-[#62625b] sm:text-sm">
+                  <li>
+                    • <b className="text-[#211922]">Project Open Hand</b> (San
+                    Francisco) delivers medically tailored meals to clients
+                    discharged with diabetes, cardiovascular and renal
+                    conditions, and allergies.
+                  </li>
+                  <li>
+                    • Every referral must be reconciled against{" "}
+                    <b className="text-[#211922]">
+                      diet prescriptions, today&apos;s stock, donated
+                      ingredients, and kitchen capacity
+                    </b>{" "}
+                    — today that happens by hand, in spreadsheets, for hours
+                    per referral.
+                  </li>
+                  <li>
+                    • A missed allergen or sodium ceiling is a{" "}
+                    <b className="text-[#211922]">clinical incident</b>, not a
+                    typo — so everything bottlenecks on the nutrition team.
+                  </li>
+                  <li>
+                    • Scale breaks the manual process:{" "}
+                    <b className="text-[#211922]">
+                      150 clients × 7 meals × 5 hard constraints
+                    </b>{" "}
+                    is thousands of safety decisions every week.
+                  </li>
+                </ul>
+              </div>
+              <div className="rounded-2xl border border-[#a8dcc0] bg-[#c7f0da] p-5 text-[#103c25]">
+                <h2 className="text-sm font-bold">Who we&apos;re building for</h2>
+                <p className="mt-2 text-sm font-bold">
+                  Katie Jackson · Chief Nutrition Officer, Project Open Hand
+                </p>
+                <p className="text-xs">interviewed on-site · July 16, 2026</p>
+                <ul className="mt-3 space-y-2 text-xs leading-relaxed sm:text-sm">
+                  <li>
+                    • Clinically accountable — she signs off on every meal that
+                    ships.
+                  </li>
+                  <li>
+                    • Plans for the whole kitchen: weekly menus, batches, and
+                    donations — not one plate at a time.
+                  </li>
+                  <li>
+                    • Not technical — needs plain language and one-glance
+                    safety, never JSON or dashboards of raw data.
+                  </li>
+                  <li>
+                    • Her definition of success:{" "}
+                    <b>
+                      nothing unsafe ships, nobody goes unfed, donations
+                      don&apos;t go to waste.
+                    </b>
+                  </li>
+                </ul>
+                <p className="mt-3 border-t border-[#a8dcc0] pt-2.5 text-xs">
+                  Solving it deeply for POH first — the same shape fits every
+                  medically-tailored-meal org.
+                </p>
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* slide 3 — Project Open Hand visit */}
+        {slide === 2 && (
           <section className="flex flex-1 flex-col">
             <Brand tagline="field research" />
             <p className="mt-8 text-xs font-bold uppercase tracking-widest text-[#e60023]">
@@ -188,7 +279,7 @@ export default function PresentationPage() {
             <h1 className="mt-2 text-4xl font-extrabold tracking-tight">
               Our visit to Project Open Hand
             </h1>
-            <div className="mt-6 grid min-h-64 flex-1 grid-cols-2 gap-3 sm:grid-cols-4">
+            <div className="mt-6 grid h-[min(52vh,540px)] grid-cols-2 gap-3 sm:grid-cols-4">
               {[1, 2, 3, 4].map((i) => (
                 <PhotoSlot key={i} index={i} />
               ))}
@@ -211,8 +302,8 @@ export default function PresentationPage() {
           </section>
         )}
 
-        {/* slide 3 — how it works */}
-        {slide === 2 && (
+        {/* slide 4 — how it works */}
+        {slide === 3 && (
           <section className="flex flex-1 flex-col">
             <Brand tagline="how it works" />
             <p className="mt-8 text-xs font-bold uppercase tracking-widest text-[#e60023]">
