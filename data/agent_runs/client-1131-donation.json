@@ -1,0 +1,81 @@
+{
+  "client_id": 1131,
+  "scenario": "donation_sim",
+  "generator": "template",
+  "events": [
+    {
+      "seq": 0,
+      "t_offset_ms": 1733,
+      "agent": "orchestrator",
+      "type": "status",
+      "title": "Donation intake",
+      "detail": "New drop-off from SoMa Wholesale Foods: Brown Rice (25 lb bags) × 10 bag. Received 2026-07-20 08:20. Dispatching Donation Triage Agent.",
+      "data": {
+        "donation_id": "D011"
+      }
+    },
+    {
+      "seq": 1,
+      "t_offset_ms": 3856,
+      "agent": "donation",
+      "type": "thought",
+      "title": "Inspecting condition and contents",
+      "detail": "Condition reported 'good'. Declared allergens: none. Checking against the food-safety gate, open batch ingredient needs, and inventory gaps."
+    },
+    {
+      "seq": 2,
+      "t_offset_ms": 5211,
+      "agent": "donation",
+      "type": "check",
+      "title": "Food-safety gate",
+      "detail": "Condition 'good' passes the intake gate.",
+      "data": {
+        "donation_id": "D011",
+        "result": "pass"
+      }
+    },
+    {
+      "seq": 3,
+      "t_offset_ms": 6300,
+      "agent": "donation",
+      "type": "check",
+      "title": "Triaged: kitchen ingredient",
+      "detail": "condition good; matches an open ingredient need for scheduled batch B2 (Chicken Congee with Scallions, 100 servings on 2026-07-20).",
+      "data": {
+        "donation_id": "D011",
+        "result": "kitchen_ingredient"
+      }
+    },
+    {
+      "seq": 4,
+      "t_offset_ms": 8761,
+      "agent": "kitchen",
+      "type": "output",
+      "title": "Ingredient logged for batch B2",
+      "detail": "Brown Rice (25 lb bags) × 10 bag booked as ingredient for batch B2 (Chicken Congee with Scallions, 100 servings on 2026-07-20). No change to scheduled labor hours.",
+      "data": {
+        "batch_id": "B2"
+      }
+    },
+    {
+      "seq": 5,
+      "t_offset_ms": 11231,
+      "agent": "donation",
+      "type": "check",
+      "title": "Contrast: D006 rejected at the same gate",
+      "detail": "Earlier intake from Anonymous Drop-off (Assorted Canned Goods (past date)) was classified non-compliant: condition 'expired' fails the food-safety intake gate — only 'good' is accepted. The gate is a hard rule, not a score.",
+      "data": {
+        "donation_id": "D006",
+        "result": "non_compliant"
+      }
+    },
+    {
+      "seq": 6,
+      "t_offset_ms": 13419,
+      "agent": "orchestrator",
+      "type": "output",
+      "title": "Donation processed",
+      "detail": "D011 routed to batch:B2. Batch B2 supplies 11 serving(s) across this week's plans, including Linda Mendoza's Tue Chicken Congee with Scallions (client 1131). 0 hard-constraint violations introduced; donation utilization updated."
+    }
+  ]
+}

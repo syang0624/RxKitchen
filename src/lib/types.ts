@@ -164,6 +164,8 @@ export interface AgentEvent {
 export interface AgentRun {
   client_id: number;
   scenario: string;
+  /** Provenance: "template" (deterministic) or the Claude model id that authored the reasoning offline. */
+  generator?: string;
   events: AgentEvent[];
 }
 
@@ -173,5 +175,7 @@ export interface Scenario {
   client_id: number;
   run: string;
   depleted_meal_id?: string;
+  /** Donation-intake sim (FR12): the donation this scenario triages. */
+  donation_id?: string;
   description: string;
 }

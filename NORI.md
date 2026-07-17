@@ -23,15 +23,12 @@ and freezing a demo-safe dataset.
 
 ## Backlog (priority order)
 
-1. **Upgrade agent runs with Claude** (needs `ANTHROPIC_API_KEY` or `ant auth login` — currently the only blocker):
-   ```bash
-   npm run agents:generate -- --client 1042 --force              # hero first
-   npm run agents:generate -- --client 1042 --scenario stockout --force
-   npm run agents:generate -- --limit 20                         # then batches
-   ```
-   Hand-verify the hero run end-to-end (FR7) before batching. `--limit`
-   targets template runs and skips Claude-authored ones, so it's resumable.
-   After the hero upgrade, sit with Steven to re-time the 4-minute narrative.
+1. ~~**Upgrade agent runs with Claude**~~ **CANCELLED (decision 2026-07-16):**
+   the demo ships with the deterministic template runs in `data/agent_runs/`
+   as-is — no Claude API usage, no `ANTHROPIC_API_KEY` needed.
+   `scripts/generate-agent-runs.mjs` stays in the repo unused (it is the v2
+   path, PRD §11). All runs keep `generator: "template"`; Steven's backlog
+   item "absorb Claude-authored runs" is moot.
 2. **Donation-sim stream for FR12 (P2).** Steven's donation-intake simulator
    needs a second pre-generated stream: a new donation arrives → triage agent
    classifies it → routes to inventory or a batch. Add a

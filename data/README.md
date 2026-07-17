@@ -16,7 +16,8 @@ on any drift. `agent_runs/*.json` carry a `generator` field: `"template"` means
 the deterministic placeholder from `generate-data.mjs`; Claude-authored runs
 record the model id instead. `data:generate` never overwrites a Claude-authored
 run, so the two pipelines compose — regenerate the dataset freely, then upgrade
-runs with `agents:generate` (use `--scenario stockout` for re-plan streams).
+runs with `agents:generate` (use `--scenario stockout` for re-plan streams,
+`--scenario donation` for the FR12 donation-intake sim).
 
 ## Contents
 
@@ -32,7 +33,8 @@ runs with `agents:generate` (use `--scenario stockout` for re-plan streams).
 | `production_plan.json` | Kitchen batches (B1 adobo / B2 congee / B3 cod) fed by donations | 3 batches |
 | `agent_runs/client-<id>.json` | One replayable event stream per client (scale view, FR8); Client 1042's is the rich scripted hero stream | 150 runs |
 | `agent_runs/client-1042-stockout.json` | Stress-beat stream: stock depletion re-plan (FR10) | 6 events |
-| `scenarios/` | `happy_path` and `stockout_replan` scenario manifests | 2 |
+| `agent_runs/client-1131-donation.json` | Donation-intake sim stream: D011 arrives, is triaged, and routed to batch B2 (FR12) | 7 events |
+| `scenarios/` | `happy_path`, `stockout_replan`, and `donation_sim` scenario manifests | 3 |
 
 ## Dataset guarantees (verified by `scripts/validate-data.mjs`)
 
@@ -52,4 +54,15 @@ runs with `agents:generate` (use `--scenario stockout` for re-plan streams).
 - Diet-order → required meal tag: `diabetic → diabetic-friendly`, `cardiovascular → heart-healthy`,
   `renal → renal-friendly`, `low-sodium → heart-healthy`. Tags are derived from the nutrition
   numbers in the generator, so tags and numbers can never disagree.
+- Donation `triage_status`/`routed_to` are likewise derived from the shared rule
+  (`triageDonation` in `scripts/lib/clinical.mjs`): condition ≠ `good` →
+  `non_compliant`; listed in a batch's `ingredients_from` → `kitchen_ingredient`
+  routed to that batch; otherwise `usable_as_is` routed to inventory.
+- **Donation-sim (FR12) contract:** `scenarios/donation_sim.json` carries an extra
+  optional `donation_id` (schema-approved). Its run uses the standard `AgentRun`
+  event shape — no new fields: `data.donation_id`/`data.batch_id` reference the
+  sim donation (or the contrast rejection) and target batch;
+  `data.result ∈ {pass, fail}` for the food-safety gate and
+  `{kitchen_ingredient, usable_as_is, non_compliant}` for classifications. The
+  anchor `client_id` is the first client whose plan draws from the target batch.
 - Demo week is fixed at **2026-07-20** (Mon); deliveries on 2026-07-21.

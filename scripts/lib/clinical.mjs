@@ -35,6 +35,43 @@ export function hardCheck(client, meal) {
   return reasons;
 }
 
+/**
+ * Donation triage rule (PRD §5 — Donation Triage Agent). Deterministic:
+ * `triage_status` and `routed_to` in donations.json are DERIVED from this
+ * function (like diet tags from nutrition numbers), so data and rules can
+ * never disagree. `batches` is the production plan's batch list.
+ *
+ * Rules, in order:
+ *   1. condition !== "good"            → non_compliant (food-safety intake gate)
+ *   2. a scheduled batch lists it as an ingredient → kitchen_ingredient, routed to that batch
+ *   3. otherwise                        → usable_as_is, routed to grocery inventory
+ */
+export function triageDonation(donation, batches) {
+  if (donation.condition !== "good") {
+    return {
+      status: "non_compliant",
+      routed_to: null,
+      reasons: [`condition '${donation.condition}' fails the food-safety intake gate — only 'good' is accepted`],
+    };
+  }
+  const batch = batches.find((b) => b.ingredients_from.includes(donation.id));
+  if (batch) {
+    return {
+      status: "kitchen_ingredient",
+      routed_to: `batch:${batch.id}`,
+      reasons: [
+        `condition good`,
+        `matches an open ingredient need for scheduled batch ${batch.id} (${batch.meal_name}, ${batch.qty} servings on ${batch.date})`,
+      ],
+    };
+  }
+  return {
+    status: "usable_as_is",
+    routed_to: "inventory",
+    reasons: ["condition good", "ready to distribute without kitchen prep — shelved as grocery inventory"],
+  };
+}
+
 /** Soft-preference ranking among meals that already pass every hard check (PRD §5). */
 export function softScore(client, meal) {
   let score = 0;

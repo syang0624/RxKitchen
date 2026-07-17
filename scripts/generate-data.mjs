@@ -8,7 +8,7 @@
  */
 import { mkdirSync, writeFileSync, existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
-import { hardCheck, softScore } from "./lib/clinical.mjs";
+import { hardCheck, softScore, triageDonation } from "./lib/clinical.mjs";
 
 const OUT = join(process.cwd(), "data");
 const SEED = 42;
@@ -272,45 +272,41 @@ function buildInventory() {
 }
 
 // ---------- donations ----------
+// triage_status / routed_to are DERIVED from triageDonation() in lib/clinical.mjs
+// (like diet tags from nutrition numbers) so the data can never disagree with
+// the rules the agent-run pipeline reasons from.
+const RAW_DONATIONS = [
+  { id: "D001", donor: "Golden State Rice Cooperative", received_at: "2026-07-19T08:30:00Z", condition: "good",
+    items: [{ name: "Jasmine Rice (50 lb sacks)", qty: 12, unit: "sack", allergens: [] }] },
+  { id: "D002", donor: "Bay Area Produce Exchange", received_at: "2026-07-19T09:15:00Z", condition: "good",
+    items: [{ name: "Fresh Bok Choy (cases)", qty: 8, unit: "case", allergens: [] }, { name: "Carrots (25 lb bags)", qty: 6, unit: "bag", allergens: [] }] },
+  { id: "D003", donor: "Mission Community Market", received_at: "2026-07-19T10:00:00Z", condition: "good",
+    items: [{ name: "Canned Low-Sodium Beans (flats)", qty: 20, unit: "flat", allergens: [] }] },
+  { id: "D004", donor: "Sunrise Bakery", received_at: "2026-07-19T11:20:00Z", condition: "good",
+    items: [{ name: "Whole-Wheat Rolls (dozens)", qty: 15, unit: "dozen", allergens: ["gluten"] }] },
+  { id: "D005", donor: "Pacific Seafood Distributors", received_at: "2026-07-19T12:05:00Z", condition: "good",
+    items: [{ name: "Frozen Cod Fillets (10 lb boxes)", qty: 10, unit: "box", allergens: ["fish"] }] },
+  { id: "D006", donor: "Anonymous Drop-off", received_at: "2026-07-19T13:40:00Z", condition: "expired",
+    items: [{ name: "Assorted Canned Goods (past date)", qty: 4, unit: "case", allergens: [] }] },
+  { id: "D007", donor: "Valley Poultry Farms", received_at: "2026-07-19T14:10:00Z", condition: "good",
+    items: [{ name: "Chicken Thighs (40 lb cases)", qty: 9, unit: "case", allergens: [] }] },
+  { id: "D008", donor: "Richmond Grocery Outlet", received_at: "2026-07-19T15:00:00Z", condition: "good",
+    items: [{ name: "Instant Oatmeal (cases)", qty: 12, unit: "case", allergens: [] }] },
+  { id: "D009", donor: "Sunset Farmers Market", received_at: "2026-07-19T15:45:00Z", condition: "over_ripe",
+    items: [{ name: "Over-Ripe Bananas (cases)", qty: 7, unit: "case", allergens: [] }] },
+  { id: "D010", donor: "Corporate Cafeteria Surplus", received_at: "2026-07-19T16:30:00Z", condition: "unknown_provenance",
+    items: [{ name: "Prepared Sandwich Trays", qty: 6, unit: "tray", allergens: ["gluten", "dairy"] }] },
+  { id: "D011", donor: "SoMa Wholesale Foods", received_at: "2026-07-20T08:20:00Z", condition: "good",
+    items: [{ name: "Brown Rice (25 lb bags)", qty: 10, unit: "bag", allergens: [] }] },
+  { id: "D012", donor: "Peninsula Dairy Collective", received_at: "2026-07-20T09:10:00Z", condition: "good",
+    items: [{ name: "Plain Greek Yogurt (cases)", qty: 8, unit: "case", allergens: ["dairy"] }] },
+];
+
 function buildDonations() {
-  return [
-    { id: "D001", donor: "Golden State Rice Cooperative", received_at: "2026-07-19T08:30:00Z", condition: "good",
-      items: [{ name: "Jasmine Rice (50 lb sacks)", qty: 12, unit: "sack", allergens: [] }],
-      triage_status: "kitchen_ingredient", routed_to: "batch:B1" },
-    { id: "D002", donor: "Bay Area Produce Exchange", received_at: "2026-07-19T09:15:00Z", condition: "good",
-      items: [{ name: "Fresh Bok Choy (cases)", qty: 8, unit: "case", allergens: [] }, { name: "Carrots (25 lb bags)", qty: 6, unit: "bag", allergens: [] }],
-      triage_status: "kitchen_ingredient", routed_to: "batch:B2" },
-    { id: "D003", donor: "Mission Community Market", received_at: "2026-07-19T10:00:00Z", condition: "good",
-      items: [{ name: "Canned Low-Sodium Beans (flats)", qty: 20, unit: "flat", allergens: [] }],
-      triage_status: "usable_as_is", routed_to: "inventory" },
-    { id: "D004", donor: "Sunrise Bakery", received_at: "2026-07-19T11:20:00Z", condition: "good",
-      items: [{ name: "Whole-Wheat Rolls (dozens)", qty: 15, unit: "dozen", allergens: ["gluten"] }],
-      triage_status: "usable_as_is", routed_to: "inventory" },
-    { id: "D005", donor: "Pacific Seafood Distributors", received_at: "2026-07-19T12:05:00Z", condition: "good",
-      items: [{ name: "Frozen Cod Fillets (10 lb boxes)", qty: 10, unit: "box", allergens: ["fish"] }],
-      triage_status: "kitchen_ingredient", routed_to: "batch:B3" },
-    { id: "D006", donor: "Anonymous Drop-off", received_at: "2026-07-19T13:40:00Z", condition: "expired",
-      items: [{ name: "Assorted Canned Goods (past date)", qty: 4, unit: "case", allergens: [] }],
-      triage_status: "non_compliant", routed_to: null },
-    { id: "D007", donor: "Valley Poultry Farms", received_at: "2026-07-19T14:10:00Z", condition: "good",
-      items: [{ name: "Chicken Thighs (40 lb cases)", qty: 9, unit: "case", allergens: [] }],
-      triage_status: "kitchen_ingredient", routed_to: "batch:B1" },
-    { id: "D008", donor: "Richmond Grocery Outlet", received_at: "2026-07-19T15:00:00Z", condition: "good",
-      items: [{ name: "Instant Oatmeal (cases)", qty: 12, unit: "case", allergens: [] }],
-      triage_status: "usable_as_is", routed_to: "inventory" },
-    { id: "D009", donor: "Sunset Farmers Market", received_at: "2026-07-19T15:45:00Z", condition: "over_ripe",
-      items: [{ name: "Over-Ripe Bananas (cases)", qty: 7, unit: "case", allergens: [] }],
-      triage_status: "non_compliant", routed_to: null },
-    { id: "D010", donor: "Corporate Cafeteria Surplus", received_at: "2026-07-19T16:30:00Z", condition: "unknown_provenance",
-      items: [{ name: "Prepared Sandwich Trays", qty: 6, unit: "tray", allergens: ["gluten", "dairy"] }],
-      triage_status: "non_compliant", routed_to: null },
-    { id: "D011", donor: "SoMa Wholesale Foods", received_at: "2026-07-20T08:20:00Z", condition: "good",
-      items: [{ name: "Brown Rice (25 lb bags)", qty: 10, unit: "bag", allergens: [] }],
-      triage_status: "kitchen_ingredient", routed_to: "batch:B2" },
-    { id: "D012", donor: "Peninsula Dairy Collective", received_at: "2026-07-20T09:10:00Z", condition: "good",
-      items: [{ name: "Plain Greek Yogurt (cases)", qty: 8, unit: "case", allergens: ["dairy"] }],
-      triage_status: "usable_as_is", routed_to: "inventory" },
-  ];
+  return RAW_DONATIONS.map((d) => {
+    const triage = triageDonation(d, BATCHES);
+    return { ...d, triage_status: triage.status, routed_to: triage.routed_to };
+  });
 }
 
 // ---------- kitchen capacity & production plan ----------
@@ -519,6 +515,43 @@ function stockoutEvents(client, meals, allocation) {
 }
 
 /**
+ * Donation-intake sim stream (FR12, P2): a new donation arrives, the Donation
+ * Triage Agent classifies it with the shared rule, and routes it into a batch
+ * or inventory. Anchored to the first client whose plan draws from the target
+ * batch so the wrap-up can tie the donation to a real doorstep outcome.
+ * Template placeholder — the Claude pipeline upgrades it in place
+ * (generate-agent-runs.mjs --scenario donation).
+ */
+function donationSimEvents({ donation, triage, batch, contrast, contrastTriage, anchorClient, anchorItem, servingsFromBatch }) {
+  const localRand = mulberry32(anchorClient.id * 7919 + 101);
+  const jitter = (min, max) => min + Math.floor(localRand() * (max - min + 1));
+  let t = 0; let seq = 0;
+  const ev = (agent, type, title, detail, data = null) => {
+    t += jitter(900, 2600);
+    return { seq: seq++, t_offset_ms: t, agent, type, title, detail, ...(data ? { data } : {}) };
+  };
+  const itemsText = donation.items.map((i) => `${i.name} × ${i.qty} ${i.unit}`).join(", ");
+  const allergens = [...new Set(donation.items.flatMap((i) => i.allergens))];
+
+  const events = [
+    ev("orchestrator", "status", "Donation intake", `New drop-off from ${donation.donor}: ${itemsText}. Received ${donation.received_at.replace("T", " ").replace(":00Z", "")}. Dispatching Donation Triage Agent.`, { donation_id: donation.id }),
+    ev("donation", "thought", "Inspecting condition and contents", `Condition reported '${donation.condition}'. Declared allergens: ${allergens.length ? allergens.join(", ") : "none"}. Checking against the food-safety gate, open batch ingredient needs, and inventory gaps.`),
+    ev("donation", "check", "Food-safety gate", `Condition '${donation.condition}' ${donation.condition === "good" ? "passes the intake gate." : "fails the intake gate — only 'good' is accepted."}`, { donation_id: donation.id, result: donation.condition === "good" ? "pass" : "fail" }),
+    ev("donation", "check", `Triaged: ${triage.status === "kitchen_ingredient" ? "kitchen ingredient" : triage.status === "usable_as_is" ? "usable as-is" : "non-compliant"}`, `${triage.reasons.join("; ")}.`, { donation_id: donation.id, result: triage.status }),
+  ];
+  if (batch) {
+    events.push(ev("kitchen", "output", `Ingredient logged for batch ${batch.id}`, `${itemsText} booked as ingredient for batch ${batch.id} (${batch.meal_name}, ${batch.qty} servings on ${batch.date}). No change to scheduled labor hours.`, { batch_id: batch.id }));
+  } else if (triage.status === "usable_as_is") {
+    events.push(ev("donation", "output", "Shelved to grocery inventory", `${itemsText} added to grocery inventory for fallback kits and as-is distribution.`, { donation_id: donation.id }));
+  }
+  if (contrast) {
+    events.push(ev("donation", "check", `Contrast: ${contrast.id} rejected at the same gate`, `Earlier intake from ${contrast.donor} (${contrast.items.map((i) => i.name).join(", ")}) was classified non-compliant: ${contrastTriage.reasons.join("; ")}. The gate is a hard rule, not a score.`, { donation_id: contrast.id, result: "non_compliant" }));
+  }
+  events.push(ev("orchestrator", "output", "Donation processed", `${donation.id} routed to ${triage.routed_to ?? "rejection"}. ${batch ? `Batch ${batch.id} supplies ${servingsFromBatch} serving(s) across this week's plans, including ${anchorClient.name}'s ${anchorItem.day} ${anchorItem.meal_name} (client ${anchorClient.id}). ` : ""}0 hard-constraint violations introduced; donation utilization updated.`));
+  return events;
+}
+
+/**
  * Generic per-client event stream (Phase 4 batch-run: every referral gets a
  * replayable run, so the scale view can drill into any client). Deliberately
  * uses its own PRNG seeded by client id — pacing is stable per client and the
@@ -622,8 +655,27 @@ function main() {
     const route = delivery.batches.find((b) => b.clients.includes(c.id)) ?? null;
     writeRun(`agent_runs/client-${c.id}.json`, { client_id: c.id, scenario: "happy_path", generator: "template", events: templateEvents(c, meals, alloc, route, donations) });
   }
+  // Donation-intake sim (FR12): D011 arrives demo morning (2026-07-20) and the
+  // triage rule routes it into batch B2; the contrast donation shows the
+  // food-safety gate rejecting. Anchor = first client drawing from that batch.
+  const SIM_DONATION_ID = "D011";
+  const simDonation = donations.find((d) => d.id === SIM_DONATION_ID);
+  const simTriage = triageDonation(simDonation, BATCHES);
+  const simBatch = BATCHES.find((b) => b.ingredients_from.includes(SIM_DONATION_ID)) ?? null;
+  if (!simBatch) throw new Error(`donation sim: ${SIM_DONATION_ID} is not routed to any batch — pick a kitchen_ingredient donation`);
+  const servingsFromBatch = allocations.reduce((s, a) => s + a.items.filter((i) => i.from_batch === simBatch.id).reduce((x, i) => x + i.qty, 0), 0);
+  const anchorAlloc = allocations.find((a) => a.items.some((i) => i.from_batch === simBatch.id));
+  const anchorClient = clients.find((c) => c.id === anchorAlloc.client_id);
+  const anchorItem = anchorAlloc.items.find((i) => i.from_batch === simBatch.id);
+  const contrast = donations.find((d) => d.condition !== "good");
+  writeRun(`agent_runs/client-${anchorClient.id}-donation.json`, {
+    client_id: anchorClient.id, scenario: "donation_sim", generator: "template",
+    events: donationSimEvents({ donation: simDonation, triage: simTriage, batch: simBatch, contrast, contrastTriage: triageDonation(contrast, BATCHES), anchorClient, anchorItem, servingsFromBatch }),
+  });
+
   write("scenarios/happy_path.json", { id: "happy_path", title: "Referral to doorstep: Client 1042", client_id: 1042, run: "agent_runs/client-1042.json", description: "Hospital referral arrives; minutes later a complete, clinically-safe doorstep plan exists (PRD §4)." });
   write("scenarios/stockout_replan.json", { id: "stockout_replan", title: "Stress beat: stock depletion re-plan", client_id: 1042, run: "agent_runs/client-1042-stockout.json", depleted_meal_id: heroAlloc.items[0].meal_id, description: "A meal's stock is marked depleted; agents re-plan the allocation live (PRD §4, FR10)." });
+  write("scenarios/donation_sim.json", { id: "donation_sim", title: "Donation intake: a new arrival is triaged live", client_id: anchorClient.id, run: `agent_runs/client-${anchorClient.id}-donation.json`, donation_id: SIM_DONATION_ID, description: "A new donation is dropped off; the Donation Triage Agent classifies it against the food-safety gate and routes it into a scheduled kitchen batch (FR12, PRD §4)." });
 
   const matched = allocations.filter((a) => a.fallback_level <= 1 && a.items.length > 0).length;
   const kits = allocations.filter((a) => a.grocery_kit).length;

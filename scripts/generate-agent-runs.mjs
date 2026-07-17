@@ -17,6 +17,8 @@
  *   node scripts/generate-agent-runs.mjs --clients 1001,1005
  *   node scripts/generate-agent-runs.mjs --limit 10                # first 10 template runs
  *   node scripts/generate-agent-runs.mjs --client 1042 --scenario stockout --force
+ *   node scripts/generate-agent-runs.mjs --scenario donation --force            # FR12 sim (anchor client auto-derived)
+ *   node scripts/generate-agent-runs.mjs --scenario donation --donation D011 --force
  *   node scripts/generate-agent-runs.mjs --model claude-opus-4-8   # default
  *
  * Auth: ANTHROPIC_API_KEY, or an `ant auth login` profile (SDK resolves both).
@@ -26,7 +28,7 @@ import { join } from "node:path";
 import Anthropic from "@anthropic-ai/sdk";
 import Ajv from "ajv";
 import addFormats from "ajv-formats";
-import { hardCheck, softScore } from "./lib/clinical.mjs";
+import { hardCheck, softScore, triageDonation } from "./lib/clinical.mjs";
 
 const DATA = join(process.cwd(), "data");
 const load = (f) => JSON.parse(readFileSync(join(DATA, f), "utf8"));
@@ -40,8 +42,8 @@ const argVal = (name) => {
 const FORCE = args.includes("--force");
 const MODEL = argVal("model") ?? "claude-opus-4-8";
 const SCENARIO = argVal("scenario") ?? "happy";
-if (!["happy", "stockout"].includes(SCENARIO)) {
-  console.error(`unknown --scenario '${SCENARIO}' (expected: happy | stockout)`);
+if (!["happy", "stockout", "donation"].includes(SCENARIO)) {
+  console.error(`unknown --scenario '${SCENARIO}' (expected: happy | stockout | donation)`);
   process.exit(1);
 }
 
@@ -105,6 +107,51 @@ function stockoutFactsFor(client) {
       carbs_g: replacement.carbs_g, carb_range: client.carb_range_g,
       reheat_method: replacement.reheat_method,
       cuisine_preference_preserved: replacement.cuisine === client.cuisine_pref,
+    },
+  };
+}
+
+/** Donation-intake sim facts (FR12): the donation, its condition/allergens, and
+ * the routing decision recomputed with the shared triage rule. Anchored to a
+ * client whose plan draws from the target batch so the wrap-up lands on a real
+ * doorstep outcome. */
+const SIM_DONATION_ID = argVal("donation") ?? "D011";
+
+function donationBatchFor(donationId) {
+  return productionPlan.batches.find((b) => b.ingredients_from.includes(donationId)) ?? null;
+}
+
+/** First client (ascending id) allocated a serving from the batch this donation feeds. */
+function donationAnchorClientId() {
+  const batch = donationBatchFor(SIM_DONATION_ID);
+  if (!batch) throw new Error(`--scenario donation: ${SIM_DONATION_ID} is not routed to any batch — pick a kitchen_ingredient donation`);
+  const alloc = allocations.find((a) => a.items.some((i) => i.from_batch === batch.id));
+  if (!alloc) throw new Error(`--scenario donation: no client draws from batch ${batch.id}`);
+  return alloc.client_id;
+}
+
+function donationFactsFor(client) {
+  const donation = donations.find((d) => d.id === SIM_DONATION_ID);
+  if (!donation) throw new Error(`unknown donation ${SIM_DONATION_ID}`);
+  const triage = triageDonation(donation, productionPlan.batches);
+  const batch = donationBatchFor(donation.id);
+  const alloc = allocations.find((a) => a.client_id === client.id);
+  const anchorItem = alloc.items.find((i) => i.from_batch === batch?.id) ?? null;
+  const contrast = donations.find((d) => d.condition !== "good") ?? null;
+  return {
+    donation: { id: donation.id, donor: donation.donor, received_at: donation.received_at, condition: donation.condition, items: donation.items },
+    triage_decision: { status: triage.status, routed_to: triage.routed_to, reasons: triage.reasons },
+    target_batch: batch && {
+      id: batch.id, meal_id: batch.meal_id, meal_name: batch.meal_name, qty: batch.qty,
+      labor_hours: batch.labor_hours, date: batch.date,
+      servings_allocated_this_week: allocations.reduce((s, a) => s + a.items.filter((i) => i.from_batch === batch.id).reduce((x, i) => x + i.qty, 0), 0),
+    },
+    anchor_client: { id: client.id, name: client.name, zone: client.address_zone },
+    anchor_item: anchorItem && { meal_id: anchorItem.meal_id, name: anchorItem.meal_name, day: anchorItem.day },
+    contrast_rejected: contrast && {
+      id: contrast.id, donor: contrast.donor, condition: contrast.condition,
+      items: contrast.items.map((i) => i.name),
+      reasons: triageDonation(contrast, productionPlan.batches).reasons,
     },
   };
 }
@@ -187,6 +234,26 @@ function auditStockout(events, facts) {
   return errors;
 }
 
+function auditDonation(events, facts) {
+  const errors = [];
+  if (events.length < 5 || events.length > 12) errors.push(`${events.length} events; a donation-sim stream should have 6–10`);
+  const allowedDonations = new Set([facts.donation.id, facts.contrast_rejected?.id].filter(Boolean));
+  for (const [i, e] of events.entries()) {
+    const d = e.data ?? {};
+    if (d.donation_id && !allowedDonations.has(d.donation_id)) errors.push(`event ${i}: donation_id ${d.donation_id} is neither the sim donation nor the contrast example`);
+    if (d.batch_id && d.batch_id !== facts.target_batch?.id) errors.push(`event ${i}: batch_id ${d.batch_id} is not the target batch`);
+    if (d.meal_id && d.meal_id !== facts.target_batch?.meal_id) errors.push(`event ${i}: meal_id ${d.meal_id} is not the target batch's meal`);
+    if (d.route_id) errors.push(`event ${i}: donation-sim streams must not reference delivery routes`);
+    if (d.donation_id === facts.donation.id && ["fail", "non_compliant"].includes(d.result)) errors.push(`event ${i}: the sim donation passed triage (${facts.triage_decision.status}); it must not be marked ${d.result}`);
+    if (d.donation_id === facts.contrast_rejected?.id && ["pass", "kitchen_ingredient", "usable_as_is"].includes(d.result)) errors.push(`event ${i}: the contrast donation was rejected; it must not be marked ${d.result}`);
+  }
+  const agents = new Set(events.map((e) => e.agent));
+  for (const required of ["orchestrator", "donation"]) {
+    if (!agents.has(required)) errors.push(`no events from required agent '${required}'`);
+  }
+  return errors;
+}
+
 function audit(events, facts) {
   const errors = [];
   const matchedIds = new Set(facts.matched_items.map((i) => i.meal_id));
@@ -235,12 +302,20 @@ function pace(events, clientId) {
 const client = new Anthropic();
 
 async function generateRun(profile, scenario) {
-  const facts = scenario === "stockout" ? stockoutFactsFor(profile) : factsFor(profile);
-  const runAudit = scenario === "stockout" ? auditStockout : audit;
+  const facts =
+    scenario === "stockout" ? stockoutFactsFor(profile)
+    : scenario === "donation" ? donationFactsFor(profile)
+    : factsFor(profile);
+  const runAudit =
+    scenario === "stockout" ? auditStockout
+    : scenario === "donation" ? auditDonation
+    : audit;
   const brief =
     scenario === "stockout"
       ? `STOCKOUT RE-PLAN. The depleted meal below was just marked out of stock; author a SHORT re-plan stream (6–10 events, orchestrator + matching, optionally one kitchen demand-signal thought). Tell the swap story: stock alert → re-scoring under the unchanged constraint hierarchy → the replacement passing on its real numbers → allocation updated (note whether the cuisine preference was preserved or relaxed) → wrap-up with 0 clinical violations.\n\nFACTS:\n${JSON.stringify(facts, null, 2)}`
-      : `FACTS:\n${JSON.stringify(facts, null, 2)}`;
+      : scenario === "donation"
+        ? `DONATION-INTAKE SIM (no referral this time — a donation just arrived at the dock). Author a SHORT triage stream (6–10 events; orchestrator + donation, plus one kitchen event if the donation routes to a batch). Tell the intake story: arrival → the food-safety condition gate → allergen/content inspection → the triage classification on its real reasons → routing (batch ingredient or inventory shelf) → the contrast_rejected example failing the same gate (the gate is a rule, not a score) → wrap-up tying the batch to the anchor client's real allocated meal and "0 hard-constraint violations introduced". Use result values: pass/fail for the condition gate, kitchen_ingredient/usable_as_is/non_compliant for classifications.\n\nFACTS:\n${JSON.stringify(facts, null, 2)}`
+        : `FACTS:\n${JSON.stringify(facts, null, 2)}`;
   let feedback = null;
   for (let attempt = 1; attempt <= 2; attempt++) {
     const stream = client.messages.stream({
@@ -263,7 +338,7 @@ async function generateRun(profile, scenario) {
     const text = message.content.find((b) => b.type === "text")?.text ?? "";
     const { events } = JSON.parse(text);
     const errors = runAudit(events, facts);
-    if (errors.length === 0) return pace(events, profile.id + (scenario === "stockout" ? 1 : 0));
+    if (errors.length === 0) return pace(events, profile.id + (scenario === "stockout" ? 1 : scenario === "donation" ? 2 : 0));
     feedback = errors;
     console.warn(`  audit failed (attempt ${attempt}): ${errors.join("; ")}`);
   }
@@ -277,7 +352,9 @@ ajv.addSchema(JSON.parse(readFileSync(join(process.cwd(), "schemas", "defs.schem
 const validateRun = ajv.compile(JSON.parse(readFileSync(join(process.cwd(), "schemas", "agent_run.schema.json"), "utf8")));
 
 // ---------- main ----------
-const runFile = (id) => `client-${id}${SCENARIO === "stockout" ? "-stockout" : ""}.json`;
+const SCENARIO_SUFFIX = { happy: "", stockout: "-stockout", donation: "-donation" };
+const SCENARIO_NAME = { happy: "happy_path", stockout: "stockout_replan", donation: "donation_sim" };
+const runFile = (id) => `client-${id}${SCENARIO_SUFFIX[SCENARIO]}.json`;
 const isClaudeAuthored = (path) => {
   if (!existsSync(path)) return false;
   const existing = JSON.parse(readFileSync(path, "utf8"));
@@ -287,6 +364,8 @@ const isClaudeAuthored = (path) => {
 function targetClients() {
   const single = argVal("client");
   if (single) return [Number(single)];
+  // Donation sim: the anchor client is derived from the donation's target batch.
+  if (SCENARIO === "donation") return [donationAnchorClientId()];
   const list = argVal("clients");
   if (list) return list.split(",").map(Number);
   const limit = Number(argVal("limit") ?? 0);
@@ -308,7 +387,7 @@ for (const id of targetClients()) {
   }
   console.log(`client ${id} (${SCENARIO}): generating with ${MODEL}...`);
   const events = await generateRun(profile, SCENARIO);
-  const run = { client_id: id, scenario: SCENARIO === "stockout" ? "stockout_replan" : "happy_path", generator: MODEL, events };
+  const run = { client_id: id, scenario: SCENARIO_NAME[SCENARIO], generator: MODEL, events };
   if (!validateRun(run)) {
     console.error(validateRun.errors);
     throw new Error(`client ${id}: output violates agent_run.schema.json`);

@@ -11,6 +11,7 @@
     "client_id": { "$ref": "defs.schema.json#/definitions/clientId" },
     "run": { "type": "string", "pattern": "^agent_runs/.+\\.json$" },
     "depleted_meal_id": { "$ref": "defs.schema.json#/definitions/mealId" },
+    "donation_id": { "$ref": "defs.schema.json#/definitions/donationId" },
     "description": { "type": "string", "minLength": 1 }
   }
 }
