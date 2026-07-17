@@ -5,13 +5,19 @@
  * to cook one client's plate at a time; she hands them the week: every meal,
  * aggregated across all 150 clients, day by day. Computed live from the same
  * allocations the validators re-check, so the totals stay honest.
+ *
+ * Every row is a group: click it to substitute that recipe for everyone
+ * scheduled on that day (only where each client's safety checks pass) — the
+ * calendar updates in place.
  */
-import { useMemo } from "react";
+import { useState, useMemo } from "react";
 import Image from "next/image";
-import { CookingPot, Printer } from "lucide-react";
+import { CheckCircle2, CookingPot, Printer, Repeat } from "lucide-react";
 import type { Allocation } from "@/lib/types";
 import { mealById, productionPlan } from "@/lib/data";
 import { mealImageSrc } from "@/lib/mealImages";
+import { useOverrides } from "@/lib/overrides";
+import GroupSwapDrawer, { type GroupSwapResult } from "./GroupSwapDrawer";
 
 const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 const TODAY = "Mon"; // demo week is anchored to Monday, July 20, 2026
@@ -30,6 +36,10 @@ export default function WeeklyCookList({
 }: {
   effectiveAllocations: Allocation[];
 }) {
+  const overrides = useOverrides();
+  const [groupSwap, setGroupSwap] = useState<{ day: string; mealId: string } | null>(null);
+  const [notice, setNotice] = useState<string | null>(null);
+
   const week = useMemo(() => {
     const byDay = new Map<string, Map<string, number>>(
       DAYS.map((d) => [d, new Map()]),
@@ -72,6 +82,26 @@ export default function WeeklyCookList({
       : { kcal: 0, protein: 0, sodium: 0 };
     return { byDay, totalServings, kitClients, kitDays, recipes: recipeIds.size, avg };
   }, [effectiveAllocations]);
+
+  // Rows the CNO substituted in herself: "day:mealId" of every swap target.
+  const updatedRows = useMemo(
+    () =>
+      new Set(
+        Object.entries(overrides.swaps).map(
+          ([k, mealId]) => `${k.split(":")[1]}:${mealId}`,
+        ),
+      ),
+    [overrides.swaps],
+  );
+
+  const onApplied = ({ replaced, kept, mealName }: GroupSwapResult) => {
+    setNotice(
+      kept === 0
+        ? `Substituted ${mealName} for all ${replaced} clients — calendar updated.`
+        : `Substituted ${mealName} for ${replaced} clients — ${kept} kept the original because the substitute isn't safe for them.`,
+    );
+    window.setTimeout(() => setNotice(null), 7000);
+  };
 
   return (
     <div className="flex flex-col gap-3">
@@ -122,6 +152,14 @@ export default function WeeklyCookList({
         </span>
       </div>
 
+      {/* group-substitution confirmation */}
+      {notice && (
+        <div className="flex items-center gap-2 rounded-2xl border border-[#bfe6d0] bg-[#eafaf1] px-4 py-2.5 text-xs font-semibold text-[#103c25]">
+          <CheckCircle2 size={15} aria-hidden />
+          {notice}
+        </div>
+      )}
+
       {/* Monday → Sunday cook list */}
       <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 xl:grid-cols-7">
         {DAYS.map((day) => {
@@ -157,31 +195,47 @@ export default function WeeklyCookList({
               <ul className="min-h-0 flex-1 divide-y divide-[#f0f0ec] overflow-y-auto">
                 {rows.map(({ meal, servings }) => {
                   const photo = mealImageSrc(meal?.id);
+                  const updated = meal ? updatedRows.has(`${day}:${meal.id}`) : false;
                   return (
-                    <li
-                      key={meal?.id ?? "?"}
-                      className="flex items-center gap-1.5 px-3 py-1.5 text-[11px] leading-tight text-[#211922]"
-                      title={
-                        meal
-                          ? `${meal.name} — ${servings} servings (${meal.cuisine}) · ${meal.calories} kcal · ${meal.protein_g} g protein · ${meal.carbs_g} g carbs · ${meal.sodium_mg} mg sodium per serving`
-                          : undefined
-                      }
-                    >
-                      {photo && (
-                        <Image
-                          src={photo}
-                          alt=""
-                          width={28}
-                          height={28}
-                          className="size-7 shrink-0 rounded-md border border-[#e5e5e0] object-cover"
+                    <li key={meal?.id ?? "?"}>
+                      <button
+                        onClick={() =>
+                          meal && setGroupSwap({ day, mealId: meal.id })
+                        }
+                        title={
+                          meal
+                            ? `${meal.name} — ${servings} servings (${meal.cuisine}) · ${meal.calories} kcal · ${meal.protein_g} g protein · ${meal.carbs_g} g carbs · ${meal.sodium_mg} mg sodium per serving. Click to substitute for the whole group.`
+                            : undefined
+                        }
+                        className="group flex w-full items-center gap-1.5 px-3 py-1.5 text-left text-[11px] leading-tight text-[#211922] transition-colors hover:bg-[#fbfbf9]"
+                      >
+                        {photo && (
+                          <Image
+                            src={photo}
+                            alt=""
+                            width={28}
+                            height={28}
+                            className="size-7 shrink-0 rounded-md border border-[#e5e5e0] object-cover"
+                          />
+                        )}
+                        <span className="shrink-0 rounded-full bg-secondary px-1.5 font-mono text-[10px] font-bold">
+                          {servings}×
+                        </span>
+                        <span className="min-w-0 font-medium">
+                          {meal?.name ?? "?"}
+                          {updated && (
+                            <span
+                              className="ml-1 inline-block h-1.5 w-1.5 rounded-full bg-[#e6a300] align-middle"
+                              title="Substituted in by you"
+                            />
+                          )}
+                        </span>
+                        <Repeat
+                          size={11}
+                          aria-hidden
+                          className="ml-auto shrink-0 text-[#b6b6ad] opacity-0 transition-opacity group-hover:opacity-100"
                         />
-                      )}
-                      <span className="shrink-0 rounded-full bg-secondary px-1.5 font-mono text-[10px] font-bold">
-                        {servings}×
-                      </span>
-                      <span className="min-w-0 font-medium">
-                        {meal?.name ?? "?"}
-                      </span>
+                      </button>
                     </li>
                   );
                 })}
@@ -190,6 +244,18 @@ export default function WeeklyCookList({
           );
         })}
       </div>
+
+      {/* group substitution drawer */}
+      {groupSwap && (
+        <GroupSwapDrawer
+          day={groupSwap.day}
+          dayLabel={DAY_LABEL[groupSwap.day]}
+          mealId={groupSwap.mealId}
+          effectiveAllocations={effectiveAllocations}
+          onApplied={onApplied}
+          onClose={() => setGroupSwap(null)}
+        />
+      )}
     </div>
   );
 }

@@ -61,6 +61,28 @@ export function clearSwap(clientId: number, day: string) {
   persist({ ...s, swaps });
 }
 
+/** Group substitution: one persist + one notify for many clients. */
+export function setSwapsBulk(
+  entries: { clientId: number; day: string; mealId: string }[],
+) {
+  if (!entries.length) return;
+  const s = read();
+  const swaps = { ...s.swaps };
+  for (const e of entries) swaps[swapKey(e.clientId, e.day)] = e.mealId;
+  persist({ ...s, swaps });
+}
+
+/** Undo a group substitution: remove every swap on `day` that points at `mealId`. */
+export function clearSwapsWhere(day: string, mealId: string) {
+  const s = read();
+  const swaps = Object.fromEntries(
+    Object.entries(s.swaps).filter(
+      ([k, v]) => !(k.endsWith(`:${day}`) && v === mealId),
+    ),
+  );
+  persist({ ...s, swaps });
+}
+
 export function toggleHold(clientId: number) {
   const s = read();
   const holds = s.holds.includes(clientId)
