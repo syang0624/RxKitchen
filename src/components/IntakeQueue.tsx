@@ -81,24 +81,18 @@ export default function IntakeQueue({
                   {c.referring_hospital}{" "}
                   <span className="font-mono text-black/40">#{c.id}</span>
                 </div>
-                <div className="mt-1 flex flex-wrap gap-1">
-                  {c.diet_orders.map((d) => (
-                    <span
-                      key={d}
-                      className="brutal-flat bg-background px-1.5 py-px text-[10px] font-medium"
-                    >
-                      {d} diet
-                    </span>
-                  ))}
-                  {c.allergies.map((a) => (
-                    <span
-                      key={a}
-                      className="brutal-flat bg-red-400 px-1.5 py-px text-[10px] font-bold text-black"
-                    >
-                      ⚠ {a} allergy
-                    </span>
-                  ))}
-                </div>
+                {c.allergies.length > 0 && (
+                  <div className="mt-1 flex flex-wrap gap-1">
+                    {c.allergies.map((a) => (
+                      <span
+                        key={a}
+                        className="brutal-flat bg-red-400 px-1.5 py-px text-[10px] font-bold text-black"
+                      >
+                        ⚠ {a} allergy
+                      </span>
+                    ))}
+                  </div>
+                )}
               </button>
             </li>
           );

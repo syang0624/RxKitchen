@@ -58,6 +58,7 @@ function ReplayControls({ replay }: { replay: Replay }) {
     <div className="flex flex-wrap items-center gap-2 border-t-2 border-black bg-background px-3 py-2">
       <button
         onClick={replay.toggle}
+        title="Space = play/pause · ←/→ = scrub"
         className="brutal-btn bg-primary px-3 py-1 text-xs font-bold uppercase text-white"
       >
         {replay.playing ? "❚❚ Pause" : replay.done ? "↺ Replay" : "▶ Play"}
@@ -111,9 +112,11 @@ function ReplayControls({ replay }: { replay: Replay }) {
 export default function ActivityFeed({
   replay,
   scenarioTitle,
+  onHide,
 }: {
   replay: Replay;
   scenarioTitle: string;
+  onHide?: () => void;
 }) {
   const listRef = useRef<HTMLDivElement>(null);
   const count = replay.visibleEvents.length;
@@ -126,11 +129,22 @@ export default function ActivityFeed({
 
   return (
     <section className="brutal-card flex min-h-0 flex-col overflow-hidden bg-white">
-      <header className="flex items-center justify-between gap-2 border-b-2 border-black bg-background px-4 py-2.5">
+      <header className="flex items-center gap-2 border-b-2 border-black bg-background px-4 py-2.5">
         <h2 className="font-heading text-xs font-extrabold uppercase tracking-wide">
           Agent activity
         </h2>
-        <span className="truncate text-xs text-black/60">{scenarioTitle}</span>
+        <span className="min-w-0 flex-1 truncate text-right text-xs text-black/60">
+          {scenarioTitle}
+        </span>
+        {onHide && (
+          <button
+            onClick={onHide}
+            title="Hide the agent activity feed"
+            className="brutal-btn shrink-0 bg-white px-2 py-0.5 text-xs font-bold uppercase"
+          >
+            Hide ✕
+          </button>
+        )}
       </header>
       <div ref={listRef} className="min-h-0 flex-1 overflow-y-auto">
         {count === 0 ? (

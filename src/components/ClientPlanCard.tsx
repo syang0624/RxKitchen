@@ -85,15 +85,28 @@ function MealItem({
               </span>
             )}
           </p>
-          <div className="mt-2 flex flex-wrap items-center gap-1">
-            {verdict.checks.map((c) => (
-              <CheckPill key={c.rule} pass={c.pass} label={c.label} />
-            ))}
+          <div className="mt-2 flex flex-wrap items-center gap-1.5">
+            <CheckPill
+              pass={verdict.pass}
+              label={
+                verdict.pass
+                  ? `Safe — all ${verdict.checks.length} checks pass`
+                  : `${verdict.checks.filter((c) => !c.pass).length} check${
+                      verdict.checks.filter((c) => !c.pass).length > 1 ? "s" : ""
+                    } fail`
+              }
+            />
+            {verdict.checks
+              .filter((c) => !c.pass)
+              .map((c) => (
+                <CheckPill key={c.rule} pass={false} label={c.label} />
+              ))}
             <button
               onClick={onExplain}
+              title="Why this meal? See every safety check and what the agents said."
               className="brutal-btn ml-auto bg-white px-2 py-0.5 text-[10px] font-bold uppercase"
             >
-              Why this meal?
+              Why?
             </button>
           </div>
         </div>
@@ -164,13 +177,12 @@ export default function ClientPlanCard({
             <span className="font-bold text-black">
               {client.diet_orders.join(" + ") || "no restrictions"}
             </span>{" "}
-            · Sodium at most{" "}
-            <span className="font-bold text-black">{client.max_sodium_mg} mg</span>{" "}
-            per meal · Carbs{" "}
+            · limits per meal: sodium ≤{" "}
+            <span className="font-bold text-black">{client.max_sodium_mg} mg</span>,
+            carbs{" "}
             <span className="font-bold text-black">
               {client.carb_range_g[0]}–{client.carb_range_g[1]} g
-            </span>{" "}
-            per meal
+            </span>
           </p>
           <p className="mt-1.5 flex flex-wrap gap-1">
             {client.allergies.map((a) => (
@@ -207,23 +219,17 @@ export default function ClientPlanCard({
                 <span className="brutal-flat bg-white px-2 py-0.5 text-[11px] font-bold">
                   {FALLBACK_LABEL[allocation.fallback_level]}
                 </span>
-                {prefs.totalMeals > 0 && (
+                {prefs.totalMeals > 0 && prefs.cuisineMatches > 0 && (
                   <span className="brutal-flat bg-primary px-2 py-0.5 text-[11px] font-bold text-white">
-                    {prefs.cuisineMatches} of {prefs.totalMeals} meals match their
-                    favorite cuisine
+                    {prefs.cuisineMatches} of {prefs.totalMeals} meals match
+                    their favorite cuisine
                   </span>
                 )}
-                <span
-                  className={`brutal-flat px-2 py-0.5 text-[11px] font-bold ${
-                    prefs.dislikesAvoided
-                      ? "bg-secondary text-black"
-                      : "bg-red-500 text-white"
-                  }`}
-                >
-                  {prefs.dislikesAvoided
-                    ? "✓ avoids disliked foods"
-                    : `contains a disliked food: ${prefs.dislikeHits.join("; ")}`}
-                </span>
+                {!prefs.dislikesAvoided && (
+                  <span className="brutal-flat bg-red-500 px-2 py-0.5 text-[11px] font-bold text-white">
+                    contains a disliked food: {prefs.dislikeHits.join("; ")}
+                  </span>
+                )}
               </div>
             )}
 
@@ -251,10 +257,16 @@ export default function ClientPlanCard({
             {/* grocery-kit fallback (FR4) */}
             {showKit && allocation.grocery_kit && (
               <div className="brutal-box bg-rose-100 p-3">
-                <p className="text-sm font-bold">
+                <p className="flex flex-wrap items-center gap-2 text-sm font-bold">
                   🧺 Grocery kit — covers the other{" "}
                   {allocation.grocery_kit.covers_days} day
                   {allocation.grocery_kit.covers_days > 1 ? "s" : ""}
+                  {allocation.grocery_kit.items.every((ki) => {
+                    const g = groceryById.get(ki.grocery_id);
+                    return g ? checkGroceryForClient(g, client).pass : false;
+                  }) && (
+                    <CheckPill pass label="all items safe" />
+                  )}
                 </p>
                 <ul className="mt-2 space-y-1.5">
                   {allocation.grocery_kit.items.map((ki) => {
@@ -268,9 +280,11 @@ export default function ClientPlanCard({
                         <span className="font-medium">
                           {ki.name} × {ki.qty}
                         </span>
-                        {verdict?.checks.map((c) => (
-                          <CheckPill key={c.rule} pass={c.pass} label={c.label} />
-                        ))}
+                        {verdict?.checks
+                          .filter((c) => !c.pass)
+                          .map((c) => (
+                            <CheckPill key={c.rule} pass={false} label={c.label} />
+                          ))}
                       </li>
                     );
                   })}

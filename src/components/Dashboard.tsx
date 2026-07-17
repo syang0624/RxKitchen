@@ -39,6 +39,10 @@ export default function Dashboard() {
   const [scenarioId, setScenarioId] = useState<ScenarioId>("happy_path");
   const [heroProcessed, setHeroProcessed] = useState(false);
   const [tab, setTab] = useState<Tab>("kitchen");
+  // Progressive disclosure: the CNO sees the plan first; the agent feed and
+  // the operations panel are one click away.
+  const [feedOpen, setFeedOpen] = useState(true); // hero demo starts here
+  const [opsOpen, setOpsOpen] = useState(false);
 
   const isHero = selectedClientId === HERO_CLIENT_ID;
   const activeRun = scenarioId === "happy_path" ? heroRun : stockoutRun;
@@ -168,12 +172,21 @@ export default function Dashboard() {
     setSelectedClientId(id);
     if (id !== HERO_CLIENT_ID) return;
     // Re-selecting the hero before the run has completed keeps the pipeline story intact.
-    if (!heroProcessed) setScenarioId("happy_path");
+    if (!heroProcessed) {
+      setScenarioId("happy_path");
+      setFeedOpen(true);
+    }
   };
 
   const triggerStockout = () => {
     setSelectedClientId(HERO_CLIENT_ID);
     setScenarioId("stockout_replan");
+    setFeedOpen(true);
+  };
+
+  const watchFeed = () => {
+    setFeedOpen(true);
+    if (activeEvents.length > 0) replay.play();
   };
   const backToHappyPath = () => setScenarioId("happy_path");
 
@@ -184,9 +197,6 @@ export default function Dashboard() {
           🥗 NourishOS{" "}
           <span className="font-sans text-sm font-normal normal-case text-black/60">
             · meal plans for the week of July 20, 2026
-            <span className="ml-2 font-mono text-[11px] text-black/40">
-              space = play/pause · ←/→ = scrub
-            </span>
           </span>
         </h1>
         <div className="ml-auto flex items-center gap-2">
@@ -216,23 +226,48 @@ export default function Dashboard() {
 
       <MetricsBanner effectiveAllocations={effectiveAllocations} />
 
-      <main className="grid min-h-0 flex-1 grid-cols-[260px_minmax(360px,1fr)_minmax(360px,440px)] gap-3">
+      <main
+        className={`grid min-h-0 flex-1 gap-3 ${
+          feedOpen
+            ? "grid-cols-[260px_minmax(360px,1fr)_minmax(360px,440px)]"
+            : "grid-cols-[260px_200px_minmax(0,1fr)]"
+        }`}
+      >
         <IntakeQueue
           clients={clients}
           selectedId={selectedClientId}
           heroProcessed={heroProcessed}
           onSelect={selectClient}
         />
-        <ActivityFeed
-          replay={replay}
-          scenarioTitle={
-            isHero
-              ? scenario.title
-              : nonHeroRun
-                ? `How ${selectedClient?.name ?? "this client"}'s plan was built — press Play`
-                : "Loading this client's pipeline run…"
-          }
-        />
+        {feedOpen ? (
+          <ActivityFeed
+            replay={replay}
+            onHide={() => setFeedOpen(false)}
+            scenarioTitle={
+              isHero
+                ? scenario.title
+                : nonHeroRun
+                  ? `How ${selectedClient?.name ?? "this client"}'s plan was built — press Play`
+                  : "Loading this client's pipeline run…"
+            }
+          />
+        ) : (
+          <section className="brutal-card flex flex-col items-center justify-center gap-3 bg-white p-4 text-center">
+            <span className="text-3xl" aria-hidden>
+              🛰
+            </span>
+            <p className="text-xs text-black/60">
+              Every plan is built step by step by the agents — and you can
+              watch.
+            </p>
+            <button
+              onClick={watchFeed}
+              className="brutal-btn bg-primary px-3 py-1.5 text-xs font-bold uppercase text-white"
+            >
+              ▶ Watch how it was built
+            </button>
+          </section>
+        )}
         {selectedClient ? (
           <ClientPlanCard
             client={selectedClient}
@@ -248,8 +283,19 @@ export default function Dashboard() {
         )}
       </main>
 
-      <section className="brutal-card h-64 shrink-0 overflow-hidden bg-white">
-        <div className="flex gap-2 border-b-2 border-black bg-background px-3 py-2">
+      <section
+        className={`brutal-card shrink-0 overflow-hidden bg-white ${
+          opsOpen ? "h-64" : ""
+        }`}
+      >
+        <div
+          className={`flex items-center gap-2 bg-background px-3 py-2 ${
+            opsOpen ? "border-b-2 border-black" : ""
+          }`}
+        >
+          <span className="font-heading text-[10px] font-extrabold uppercase tracking-wide text-black/60">
+            Behind the scenes
+          </span>
           {(
             [
               ["kitchen", "🍳 Kitchen production"],
@@ -259,33 +305,48 @@ export default function Dashboard() {
           ).map(([id, label]) => (
             <button
               key={id}
-              onClick={() => setTab(id)}
+              onClick={() => {
+                setTab(id);
+                setOpsOpen(id !== tab || !opsOpen);
+              }}
               className={`brutal-btn px-3 py-1 text-xs font-bold uppercase ${
-                tab === id ? "bg-primary text-white" : "bg-white text-black"
+                opsOpen && tab === id
+                  ? "bg-primary text-white"
+                  : "bg-white text-black"
               }`}
             >
               {label}
             </button>
           ))}
-        </div>
-        <div className="h-[calc(100%-3.1rem)] overflow-y-auto">
-          {tab === "kitchen" && (
-            <KitchenPlan highlightBatchIds={highlightBatchIds} />
-          )}
-          {tab === "delivery" && (
-            <DeliveryPanel
-              selectedClientId={selectedClientId}
-              onSelectClient={selectClient}
-            />
-          )}
-          {tab === "scale" && (
-            <ScaleView
-              effectiveAllocations={effectiveAllocations}
-              selectedClientId={selectedClientId}
-              onSelectClient={selectClient}
-            />
+          {opsOpen && (
+            <button
+              onClick={() => setOpsOpen(false)}
+              className="brutal-btn ml-auto bg-white px-2 py-1 text-xs font-bold uppercase"
+            >
+              Hide ▾
+            </button>
           )}
         </div>
+        {opsOpen && (
+          <div className="h-[calc(100%-3.1rem)] overflow-y-auto">
+            {tab === "kitchen" && (
+              <KitchenPlan highlightBatchIds={highlightBatchIds} />
+            )}
+            {tab === "delivery" && (
+              <DeliveryPanel
+                selectedClientId={selectedClientId}
+                onSelectClient={selectClient}
+              />
+            )}
+            {tab === "scale" && (
+              <ScaleView
+                effectiveAllocations={effectiveAllocations}
+                selectedClientId={selectedClientId}
+                onSelectClient={selectClient}
+              />
+            )}
+          </div>
+        )}
       </section>
     </div>
   );
