@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * NourishOS synthetic dataset generator (PRD §6, §7).
+ * RxKitchen synthetic dataset generator (PRD §6, §7).
  * Deterministic: seeded PRNG, fixed dates — same output on every run.
  * Never hand-edit the generated JSON; change this script and regenerate (PRD §11).
  *

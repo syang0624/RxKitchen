@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "NourishOS — Agentic Clinical Meal Allocation",
+  title: "RxKitchen — Agentic Clinical Meal Allocation",
   description:
     "Deterministic replay dashboard: hospital referral → clinically-safe doorstep plan, re-verified live in the browser.",
 };

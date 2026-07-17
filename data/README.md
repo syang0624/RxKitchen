@@ -1,4 +1,4 @@
-# NourishOS Synthetic Dataset
+# RxKitchen Synthetic Dataset
 
 All data here is **generated — never hand-edit** (PRD §11). To change anything, edit
 `scripts/generate-data.mjs` and regenerate. The generator is seeded and fully

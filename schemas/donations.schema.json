@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://nourishos.dev/schemas/donations.schema.json",
+  "$id": "https://rxkitchen.dev/schemas/donations.schema.json",
   "title": "data/donations.json — Donation[]",
   "type": "array",
   "items": {

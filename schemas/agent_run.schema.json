@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://nourishos.dev/schemas/agent_run.schema.json",
+  "$id": "https://rxkitchen.dev/schemas/agent_run.schema.json",
   "title": "data/agent_runs/*.json — AgentRun (the replay-engine event contract; per PRD §11 this schema is also the v2 live API contract)",
   "type": "object",
   "additionalProperties": false,

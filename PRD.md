@@ -1,4 +1,4 @@
-# PRD: NourishOS — Agentic Clinical Meal Allocation for Project Open Hand
+# PRD: RxKitchen — Agentic Clinical Meal Allocation for Project Open Hand
 
 **Version:** 1.0 (Hackathon POC)
 **Team size:** 1–3 · **Timeline:** 24–48 hours
@@ -10,7 +10,7 @@
 
 Medically tailored meal (MTM) organizations like Project Open Hand sit at a brutal intersection: on one side, hospitals discharge patients with strict clinical dietary prescriptions (diabetes, cardiovascular, renal, allergies); on the other side, a food-bank-style supply chain with unpredictable donations, finite inventory, limited kitchen capacity, and delivery constraints. Today, dietitians manually reconcile these two worlds — matching each client's medical profile against what's actually on the shelf and what the kitchen can produce. This is slow, error-prone at scale, and means donations often go underused while clients wait or receive imperfect matches.
 
-NourishOS is a multi-agent AI system that fully automates this reconciliation: it ingests a hospital referral and autonomously produces (a) a per-client allocation of existing meals and groceries that satisfies every clinical constraint, and (b) a kitchen production plan for what must be prepared. The dietitian watches the agents work in real time on a live dashboard, and the demo tells one continuous story: **a referral arrives from a hospital, and minutes later a complete, clinically-safe doorstep plan exists.**
+RxKitchen is a multi-agent AI system that fully automates this reconciliation: it ingests a hospital referral and autonomously produces (a) a per-client allocation of existing meals and groceries that satisfies every clinical constraint, and (b) a kitchen production plan for what must be prepared. The dietitian watches the agents work in real time on a live dashboard, and the demo tells one continuous story: **a referral arrives from a hospital, and minutes later a complete, clinically-safe doorstep plan exists.**
 
 ## 2. Goals and Non-Goals
 

@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * NourishOS dashboard shell. Owns demo state: which referral is selected,
+ * RxKitchen dashboard shell. Owns demo state: which referral is selected,
  * which pre-generated scenario stream is loaded (happy path / stockout
  * re-plan), and how far the replay has revealed the hero plan (PRD §4, §6).
  */
@@ -214,7 +214,7 @@ export default function Dashboard() {
           </span>
           <div className="min-w-0">
             <h1 className="font-heading text-lg font-extrabold leading-tight text-black">
-              NourishOS
+              RxKitchen
             </h1>
             <p className="truncate text-xs text-[#62625b]">
               Meal plans · week of July 20, 2026

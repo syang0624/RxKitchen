@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://nourishos.dev/schemas/production_plan.schema.json",
+  "$id": "https://rxkitchen.dev/schemas/production_plan.schema.json",
   "title": "data/production_plan.json — ProductionPlan",
   "type": "object",
   "additionalProperties": false,

@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://nourishos.dev/schemas/defs.schema.json",
-  "title": "NourishOS shared definitions (frozen contract — PRD §7)",
+  "$id": "https://rxkitchen.dev/schemas/defs.schema.json",
+  "title": "RxKitchen shared definitions (frozen contract — PRD §7)",
   "definitions": {
     "allergen": {
       "type": "string",

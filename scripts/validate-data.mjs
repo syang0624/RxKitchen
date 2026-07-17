@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * NourishOS dataset validator (PRD §11 safety net).
+ * RxKitchen dataset validator (PRD §11 safety net).
  * Re-verifies every allocation against the hard constraint hierarchy (PRD §5)
  * independently of the generator. Exits non-zero on any clinical violation —
  * run at build time / in CI. The dashboard runs the same checks client-side.
@@ -117,7 +117,7 @@ const covered = allocations.filter((a) => a.items.length > 0 || a.grocery_kit).l
 const donationItems = donations.flatMap((d) => d.items.map(() => d.routed_to));
 const utilization = donationItems.filter(Boolean).length / donationItems.length;
 
-console.log("── NourishOS dataset validation ──");
+console.log("── RxKitchen dataset validation ──");
 console.log(`clients: ${clients.length} | meals: ${meals.length} | allocations: ${allocations.length}`);
 console.log(`clinical violations: ${violations.length}`);
 console.log(`matched to fully compliant meals: ${((matched / allocations.length) * 100).toFixed(1)}% (target ≥90%)`);

@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://nourishos.dev/schemas/allocations.schema.json",
+  "$id": "https://rxkitchen.dev/schemas/allocations.schema.json",
   "title": "data/allocations.json — Allocation[]",
   "type": "array",
   "items": {

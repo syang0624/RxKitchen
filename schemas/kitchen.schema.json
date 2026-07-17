@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://nourishos.dev/schemas/kitchen.schema.json",
+  "$id": "https://rxkitchen.dev/schemas/kitchen.schema.json",
   "title": "data/kitchen.json — KitchenCapacity[]",
   "type": "array",
   "items": {

@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://nourishos.dev/schemas/meals.schema.json",
+  "$id": "https://rxkitchen.dev/schemas/meals.schema.json",
   "title": "data/meals.json — Meal[]",
   "type": "array",
   "items": {

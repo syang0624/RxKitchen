@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * NourishOS agent-run generation pipeline (PRD §6).
+ * RxKitchen agent-run generation pipeline (PRD §6).
  *
  * Pre-generates per-referral agent event streams OFFLINE by calling the Claude
  * API — the reasoning text in the activity feed is authored here, before demo
@@ -157,7 +157,7 @@ function donationFactsFor(client) {
 }
 
 // ---------- prompts (system is stable across clients → prompt-cacheable) ----------
-const SYSTEM = `You are the offline generation pipeline for NourishOS, a multi-agent clinical meal-allocation system for Project Open Hand (a medically tailored meal nonprofit). You author the event stream that a dashboard will replay to show specialist agents collaborating on one hospital referral.
+const SYSTEM = `You are the offline generation pipeline for RxKitchen, a multi-agent clinical meal-allocation system for Project Open Hand (a medically tailored meal nonprofit). You author the event stream that a dashboard will replay to show specialist agents collaborating on one hospital referral.
 
 The agents, in pipeline order:
 - orchestrator: sequences the pipeline, owns the constraint hierarchy, opens and closes the run
