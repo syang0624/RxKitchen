@@ -5,7 +5,7 @@
  * which pre-generated scenario stream is loaded (happy path / stockout
  * re-plan), and how far the replay has revealed the hero plan (PRD §4, §6).
  */
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { Allocation } from "@/lib/types";
 import {
   HERO_CLIENT_ID,
@@ -20,6 +20,7 @@ import {
   stockoutScenario,
 } from "@/lib/data";
 import { useReplay } from "@/lib/replay";
+import { useAgentRun } from "@/lib/runs";
 import ActivityFeed from "./ActivityFeed";
 import ClientPlanCard from "./ClientPlanCard";
 import DeliveryPanel from "./DeliveryPanel";
@@ -44,9 +45,14 @@ export default function Dashboard() {
   const scenario =
     scenarioId === "happy_path" ? happyPathScenario : stockoutScenario;
 
-  // Only the hero referral has a pre-generated event stream; the other 149
-  // were processed in the offline batch run and open straight to their plan.
-  const replay = useReplay(isHero ? activeRun.events : EMPTY_EVENTS);
+  // The hero's streams ship in the main bundle for an instant demo start;
+  // every other client's batch-run stream is code-split and loaded on select
+  // (FR8: any of the 150 plans can be replayed).
+  const nonHeroRun = useAgentRun(isHero ? null : selectedClientId);
+  const activeEvents = isHero
+    ? activeRun.events
+    : (nonHeroRun?.events ?? EMPTY_EVENTS);
+  const replay = useReplay(activeEvents);
 
   // Render-time adjustment (no effect needed): the hero counts as processed
   // the moment its happy-path replay reaches the end.
@@ -135,6 +141,29 @@ export default function Dashboard() {
     [replay.visibleEvents],
   );
 
+  // Judge Q&A shortcuts (Phase 5): space = play/pause, ←/→ = scrub 5 s.
+  const { toggle, seek, time } = replay;
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      const target = e.target as HTMLElement | null;
+      if (target && ["INPUT", "TEXTAREA", "SELECT"].includes(target.tagName)) {
+        return;
+      }
+      if (e.key === " ") {
+        e.preventDefault();
+        toggle();
+      } else if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        seek(time - 5000);
+      } else if (e.key === "ArrowRight") {
+        e.preventDefault();
+        seek(time + 5000);
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [toggle, seek, time]);
+
   const selectClient = (id: number) => {
     setSelectedClientId(id);
     if (id !== HERO_CLIENT_ID) return;
@@ -149,21 +178,24 @@ export default function Dashboard() {
   const backToHappyPath = () => setScenarioId("happy_path");
 
   return (
-    <div className="flex h-dvh flex-col gap-3 bg-zinc-950 p-3 text-zinc-100">
+    <div className="flex h-dvh flex-col gap-3 bg-background p-3 text-black">
       <header className="flex flex-wrap items-center gap-3 px-1">
-        <h1 className="text-lg font-bold tracking-tight">
+        <h1 className="font-heading text-xl font-extrabold uppercase tracking-tight">
           🥗 NourishOS{" "}
-          <span className="text-sm font-normal text-zinc-500">
-            · agentic clinical meal allocation · week of 2026-07-20
+          <span className="font-sans text-sm font-normal normal-case text-black/60">
+            · meal plans for the week of July 20, 2026
+            <span className="ml-2 font-mono text-[11px] text-black/40">
+              space = play/pause · ←/→ = scrub
+            </span>
           </span>
         </h1>
         <div className="ml-auto flex items-center gap-2">
           {scenarioId === "stockout_replan" ? (
             <button
               onClick={backToHappyPath}
-              className="rounded-lg border border-zinc-700 px-3 py-1.5 text-xs font-medium text-zinc-300 hover:bg-zinc-800"
+              className="brutal-btn bg-white px-3 py-1.5 text-xs font-bold uppercase"
             >
-              ↺ Back to happy path
+              ↺ Back to the plan
             </button>
           ) : (
             <button
@@ -171,12 +203,12 @@ export default function Dashboard() {
               disabled={!heroProcessed}
               title={
                 heroProcessed
-                  ? "Deplete a meal's stock and watch the agents re-plan"
-                  : "Run the hero referral to completion first"
+                  ? "Mark a meal out of stock and watch the plan repair itself"
+                  : "Play Rosa's referral to the end first"
               }
-              className="rounded-lg border border-red-500/40 bg-red-500/10 px-3 py-1.5 text-xs font-medium text-red-300 transition enabled:hover:bg-red-500/20 disabled:cursor-not-allowed disabled:opacity-40"
+              className="brutal-btn bg-red-500 px-3 py-1.5 text-xs font-bold uppercase text-white"
             >
-              ⚡ Trigger stockout re-plan
+              ⚡ What if a meal runs out?
             </button>
           )}
         </div>
@@ -196,7 +228,9 @@ export default function Dashboard() {
           scenarioTitle={
             isHero
               ? scenario.title
-              : "Processed in offline batch run — select Client 1042 for the live pipeline replay"
+              : nonHeroRun
+                ? `How ${selectedClient?.name ?? "this client"}'s plan was built — press Play`
+                : "Loading this client's pipeline run…"
           }
         />
         {selectedClient ? (
@@ -204,17 +238,18 @@ export default function Dashboard() {
             client={selectedClient}
             allocation={selectedAllocation}
             route={selectedRoute}
+            runEvents={activeEvents}
             revealedMealIds={revealedMealIds}
             kitRevealed={kitRevealed}
             routeRevealed={routeRevealed}
           />
         ) : (
-          <div className="rounded-xl border border-zinc-800 bg-zinc-900/60" />
+          <div className="brutal-card bg-white" />
         )}
       </main>
 
-      <section className="h-64 shrink-0 rounded-xl border border-zinc-800 bg-zinc-900/60">
-        <div className="flex gap-1 border-b border-zinc-800 px-3 pt-2">
+      <section className="brutal-card h-64 shrink-0 overflow-hidden bg-white">
+        <div className="flex gap-2 border-b-2 border-black bg-background px-3 py-2">
           {(
             [
               ["kitchen", "🍳 Kitchen production"],
@@ -225,17 +260,15 @@ export default function Dashboard() {
             <button
               key={id}
               onClick={() => setTab(id)}
-              className={`rounded-t-lg px-3 py-1.5 text-xs font-medium transition ${
-                tab === id
-                  ? "bg-zinc-800 text-zinc-100"
-                  : "text-zinc-500 hover:text-zinc-300"
+              className={`brutal-btn px-3 py-1 text-xs font-bold uppercase ${
+                tab === id ? "bg-primary text-white" : "bg-white text-black"
               }`}
             >
               {label}
             </button>
           ))}
         </div>
-        <div className="h-[calc(100%-2.4rem)] overflow-y-auto">
+        <div className="h-[calc(100%-3.1rem)] overflow-y-auto">
           {tab === "kitchen" && (
             <KitchenPlan highlightBatchIds={highlightBatchIds} />
           )}

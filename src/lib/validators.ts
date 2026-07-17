@@ -50,7 +50,7 @@ export function checkMealForClient(meal: Meal, client: ClientProfile): MealVerdi
       client.allergies.length === 0
         ? "no allergies on file"
         : allergenHits.length === 0
-          ? `no ${client.allergies.join("/")}`
+          ? `safe: no ${client.allergies.join(" or ")}`
           : `contains ${allergenHits.join(", ")}`,
     detail:
       allergenHits.length === 0
@@ -62,7 +62,7 @@ export function checkMealForClient(meal: Meal, client: ClientProfile): MealVerdi
   checks.push({
     rule: "sodium",
     pass: sodiumPass,
-    label: `sodium ${meal.sodium_mg}/${client.max_sodium_mg} mg`,
+    label: `sodium ${meal.sodium_mg} of ${client.max_sodium_mg} mg`,
     detail: sodiumPass
       ? `${meal.sodium_mg} mg is within the ${client.max_sodium_mg} mg/meal ceiling.`
       : `VIOLATION: ${meal.sodium_mg} mg exceeds the ${client.max_sodium_mg} mg ceiling.`,
@@ -73,7 +73,7 @@ export function checkMealForClient(meal: Meal, client: ClientProfile): MealVerdi
   checks.push({
     rule: "carbs",
     pass: carbsPass,
-    label: `carbs ${meal.carbs_g} g (${carbLo}–${carbHi})`,
+    label: `carbs ${meal.carbs_g} g (target ${carbLo}–${carbHi})`,
     detail: carbsPass
       ? `${meal.carbs_g} g is inside the ${carbLo}–${carbHi} g/meal range.`
       : `VIOLATION: ${meal.carbs_g} g is outside ${carbLo}–${carbHi} g.`,
@@ -89,8 +89,8 @@ export function checkMealForClient(meal: Meal, client: ClientProfile): MealVerdi
       client.diet_orders.length === 0
         ? "no diet orders"
         : missingTags.length === 0
-          ? client.diet_orders.join(" + ")
-          : `missing ${missingTags.map((m) => m.tag).join(", ")}`,
+          ? `fits ${client.diet_orders.join(" + ")} diet`
+          : `doesn't fit ${missingTags.map((m) => m.order).join(", ")} diet`,
     detail:
       missingTags.length === 0
         ? `Meal tags satisfy diet orders: ${client.diet_orders.join(", ") || "none"}.`
@@ -106,7 +106,12 @@ export function checkMealForClient(meal: Meal, client: ClientProfile): MealVerdi
   checks.push({
     rule: "prep",
     pass: prepPass,
-    label: `prep: ${meal.reheat_method}`,
+    label:
+      meal.reheat_method === "none"
+        ? "ready to eat"
+        : prepPass
+          ? `${meal.reheat_method}-ready`
+          : `needs ${meal.reheat_method}`,
     detail: prepPass
       ? `Reheat method '${meal.reheat_method}' is within the client's cooking ability (${client.cooking_ability}).`
       : `VIOLATION: client is ${client.cooking_ability}-only but meal needs ${meal.reheat_method}.`,
@@ -129,7 +134,7 @@ export function checkGroceryForClient(
     label:
       hits.length === 0
         ? client.allergies.length
-          ? `no ${client.allergies.join("/")}`
+          ? `safe: no ${client.allergies.join(" or ")}`
           : "allergen-free"
         : `contains ${hits.join(", ")}`,
     detail:
@@ -147,7 +152,12 @@ export function checkGroceryForClient(
   checks.push({
     rule: "prep",
     pass: prepPass,
-    label: `prep: ${item.prep_complexity}`,
+    label:
+      item.prep_complexity === "none"
+        ? "ready to eat"
+        : prepPass
+          ? `${item.prep_complexity}-ready`
+          : `needs ${item.prep_complexity}`,
     detail: prepPass
       ? `Prep complexity '${item.prep_complexity}' fits cooking ability (${client.cooking_ability}).`
       : `VIOLATION: needs ${item.prep_complexity}, client is ${client.cooking_ability}.`,
