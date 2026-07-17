@@ -13,7 +13,6 @@ import {
   Pause,
   Play,
   RotateCcw,
-  SkipForward,
   X,
 } from "lucide-react";
 import { donationById, donationScenario, productionPlan } from "@/lib/data";
@@ -21,7 +20,6 @@ import type { AgentEvent } from "@/lib/types";
 import { useReplay } from "@/lib/replay";
 import { useDonationRun } from "@/lib/runs";
 import { EventRow } from "./ActivityFeed";
-import { formatClock } from "./ui";
 
 const EMPTY_EVENTS: AgentEvent[] = [];
 
@@ -199,17 +197,19 @@ export default function DonationSimulator({
                 <><Play size={17} aria-hidden="true" /> Resume</>
               )}
             </button>
-            <button
-              onClick={replay.skipToEnd}
-              title="Skip to end"
-              aria-label="Skip to end"
-              className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#e5e5e0] text-black transition-colors hover:bg-[#c8c8c1] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#435ee5]"
-            >
-              <SkipForward size={18} aria-hidden="true" />
-            </button>
-            <span className="ml-auto text-xs tabular-nums text-[#62625b]">
-              {formatClock(replay.time)} / {formatClock(replay.duration)}
-            </span>
+            {!replay.done && (
+              <button
+                onClick={replay.skipToEnd}
+                className="ml-auto text-xs font-semibold text-[#62625b] underline underline-offset-2 hover:text-black"
+              >
+                Show result
+              </button>
+            )}
+            {replay.done && (
+              <span className="ml-auto text-xs font-semibold text-[#0f7a41]">
+                ✓ Triage complete
+              </span>
+            )}
           </footer>
         )}
       </div>

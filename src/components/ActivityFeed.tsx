@@ -6,9 +6,9 @@
  * speed control, pause, and scrub for judge Q&A (PRD §6).
  */
 import { useEffect, useRef } from "react";
-import { Activity, EyeOff, Pause, Play, RotateCcw, SkipForward } from "lucide-react";
+import { Activity, EyeOff, Pause, Play, RotateCcw } from "lucide-react";
 import type { AgentEvent } from "@/lib/types";
-import { REPLAY_SPEEDS, type Replay } from "@/lib/replay";
+import type { Replay } from "@/lib/replay";
 import { AGENT_META, AgentBadge, formatClock } from "./ui";
 
 export function EventRow({ event }: { event: AgentEvent }) {
@@ -54,61 +54,59 @@ export function EventRow({ event }: { event: AgentEvent }) {
   );
 }
 
-function ReplayControls({ replay }: { replay: Replay }) {
+/**
+ * Process-style footer — deliberately not a media player. One primary action,
+ * a thin work-progress track, and a shortcut to the finished plan.
+ */
+function AgentControls({ replay }: { replay: Replay }) {
+  const pct =
+    replay.duration > 0 ? Math.min(100, (replay.time / replay.duration) * 100) : 0;
+  const steps = replay.visibleEvents.length;
   return (
-    <div className="flex flex-wrap items-center gap-2 border-t border-[#e5e5e0] bg-white px-3 py-2">
+    <div className="flex flex-wrap items-center gap-3 border-t border-[#e5e5e0] bg-white px-3 py-2">
       <button
         onClick={replay.toggle}
-        title="Space = run/pause · ←/→ = jump 5 s"
+        title="Space = run/pause"
         className="brutal-btn inline-flex items-center gap-2 bg-primary px-4 text-xs font-bold text-white"
       >
-        {replay.playing ? <Pause size={14} fill="currentColor" /> : replay.done ? <RotateCcw size={14} /> : <Play size={14} fill="currentColor" />}
+        {replay.playing ? (
+          <Pause size={14} fill="currentColor" />
+        ) : replay.done ? (
+          <RotateCcw size={14} />
+        ) : (
+          <Play size={14} fill="currentColor" />
+        )}
         {replay.playing ? "Pause" : replay.done ? "Run again" : "Run agents"}
       </button>
-      <button
-        onClick={replay.restart}
-        title="Restart"
-        aria-label="Restart the agents"
-        className="brutal-btn inline-flex size-10 items-center justify-center bg-[#f6f6f3] text-xs font-bold"
-      >
-        <RotateCcw size={15} aria-hidden />
-      </button>
-      <button
-        onClick={replay.skipToEnd}
-        title="Skip to end"
-        aria-label="Skip to end"
-        className="brutal-btn inline-flex size-10 items-center justify-center bg-[#f6f6f3] text-xs font-bold"
-      >
-        <SkipForward size={15} fill="currentColor" aria-hidden />
-      </button>
-      <input
-        type="range"
-        min={0}
-        max={Math.max(replay.duration, 1)}
-        step={100}
-        value={replay.time}
-        onChange={(e) => replay.seek(Number(e.target.value))}
-        className="min-w-24 flex-1 accent-primary"
-        aria-label="Move through the agents' work"
-      />
-      <span className="font-mono text-[11px] tabular-nums text-black/60">
-        {formatClock(replay.time)} / {formatClock(replay.duration)}
-      </span>
-      <div className="flex overflow-hidden rounded-full bg-[#f6f6f3] p-1">
-        {REPLAY_SPEEDS.map((s) => (
-          <button
-            key={s}
-            onClick={() => replay.setSpeed(s)}
-            className={`min-h-8 rounded-full px-2 text-[11px] font-bold transition ${
-              replay.speed === s
-                ? "bg-black text-white"
-                : "text-black hover:bg-[#e5e5e0]"
-            }`}
-          >
-            {s}×
-          </button>
-        ))}
-      </div>
+
+      {replay.idle ? (
+        <span className="text-xs text-[#62625b]">Agents standing by</span>
+      ) : (
+        <span className="flex min-w-0 flex-1 items-center gap-2.5">
+          <span className="h-1.5 min-w-16 flex-1 overflow-hidden rounded-full bg-[#f0f0ec]">
+            <span
+              className={`block h-full rounded-full transition-[width] duration-200 ${
+                replay.done ? "bg-[#0f7a41]" : "bg-primary"
+              }`}
+              style={{ width: `${pct}%` }}
+            />
+          </span>
+          <span className="shrink-0 whitespace-nowrap font-mono text-[11px] tabular-nums text-[#62625b]">
+            {replay.done
+              ? `done · ${steps} step${steps === 1 ? "" : "s"}`
+              : `${steps} step${steps === 1 ? "" : "s"}`}
+          </span>
+        </span>
+      )}
+
+      {!replay.done && !replay.idle && (
+        <button
+          onClick={replay.skipToEnd}
+          className="ml-auto shrink-0 text-xs font-semibold text-[#62625b] underline underline-offset-2 hover:text-black"
+        >
+          Show final plan
+        </button>
+      )}
     </div>
   );
 }
@@ -175,7 +173,7 @@ export default function ActivityFeed({
           </ul>
         )}
       </div>
-      <ReplayControls replay={replay} />
+      <AgentControls replay={replay} />
     </section>
   );
 }
