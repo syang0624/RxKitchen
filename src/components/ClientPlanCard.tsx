@@ -116,6 +116,8 @@ export default function ClientPlanCard({
   runEvents,
   revealedMealIds,
   kitRevealed,
+  approval = null,
+  weekApprovedAt = null,
 }: {
   client: ClientProfile;
   allocation: Allocation | undefined;
@@ -124,6 +126,10 @@ export default function ClientPlanCard({
   /** During a hero replay, only meals already matched in the feed; null = show all. */
   revealedMealIds: Set<string> | null;
   kitRevealed: boolean;
+  /** Individual review workflow (new referrals): draft until the CNO approves. */
+  approval?: { approvedAt: string | null; onApprove: () => void } | null;
+  /** When the weekly menu is approved, batch clients show as covered by it. */
+  weekApprovedAt?: string | null;
 }) {
   const [explainItem, setExplainItem] = useState<
     Allocation["items"][number] | null
@@ -156,6 +162,35 @@ export default function ClientPlanCard({
       subtitle={`#${client.id}`}
     >
       <div className="space-y-4 p-3">
+        {/* review & approval state (the CNO's decision, not the agents') */}
+        {approval ? (
+          approval.approvedAt ? (
+            <div className="flex flex-wrap items-center gap-2 rounded-2xl border border-[#bfe6d0] bg-[#eafaf1] px-3 py-2.5 text-xs font-semibold text-[#103c25]">
+              ✓ Approved by you · {approval.approvedAt}
+            </div>
+          ) : (
+            <div className="flex flex-wrap items-center gap-3 rounded-2xl border border-[#f2d4a4] bg-[#fdf3e2] px-3 py-2.5">
+              <p className="min-w-0 flex-1 text-xs leading-relaxed text-[#6b4c11]">
+                <span className="font-bold">Draft plan.</span> The agents built
+                this from her referral this morning — check the safety results
+                below, then approve.
+              </p>
+              <button
+                onClick={approval.onApprove}
+                className="inline-flex min-h-10 shrink-0 items-center gap-2 rounded-2xl bg-[#0f7a41] px-4 text-xs font-bold text-white transition-colors hover:bg-[#0c6335]"
+              >
+                Approve plan
+              </button>
+            </div>
+          )
+        ) : (
+          weekApprovedAt && (
+            <p className="px-1 text-[11px] text-[#62625b]">
+              Covered by this week&apos;s approved menu ({weekApprovedAt}).
+            </p>
+          )
+        )}
+
         {/* profile summary */}
         <div className="brutal-box bg-background p-3 text-xs leading-relaxed text-black/80">
           <p className="font-bold text-black">

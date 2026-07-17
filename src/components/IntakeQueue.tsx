@@ -14,13 +14,13 @@ import { SectionCard } from "./ui";
 export default function IntakeQueue({
   clients,
   selectedId,
-  heroProcessed,
+  heroApproved,
   onSelect,
 }: {
   clients: ClientProfile[];
   selectedId: number | null;
-  /** Whether the hero replay has been run to completion at least once. */
-  heroProcessed: boolean;
+  /** Whether the CNO has approved the new referral's draft plan. */
+  heroApproved: boolean;
   onSelect: (id: number) => void;
 }) {
   const [query, setQuery] = useState("");
@@ -63,7 +63,7 @@ export default function IntakeQueue({
       <ul className="divide-y divide-[#e5e5e0]">
         {filtered.map((c) => {
           const isHero = c.id === HERO_CLIENT_ID;
-          const isNew = isHero && !heroProcessed;
+          const isNew = isHero && !heroApproved;
           const selected = c.id === selectedId;
           return (
             <li key={c.id}>
@@ -78,11 +78,11 @@ export default function IntakeQueue({
                   {isNew ? (
                     <span className="inline-flex items-center gap-1 rounded-full bg-primary px-2 py-1 text-[10px] font-bold text-white">
                       <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-white" />
-                      New
+                      Needs review
                     </span>
                   ) : (
                     <span className="rounded-full bg-[#c7f0da] px-2 py-1 text-[10px] font-bold text-[#103c25]">
-                      Plan ready
+                      Approved
                     </span>
                   )}
                 </div>

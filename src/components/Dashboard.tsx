@@ -25,13 +25,19 @@ import {
   allocations,
   clientById,
   clients,
+  donations,
+  groceryById,
   happyPathScenario,
   heroRun,
+  mealById,
   stockoutRun,
   stockoutScenario,
 } from "@/lib/data";
 import { useReplay } from "@/lib/replay";
 import { useAgentRun } from "@/lib/runs";
+import { computeMetrics } from "@/lib/validators";
+import { approvalStamp, setWorkflow, useWorkflow } from "@/lib/workflow";
+import ActionInbox from "./ActionInbox";
 import ActivityFeed from "./ActivityFeed";
 import BatchRunTicker from "./BatchRunTicker";
 import ClientPlanCard from "./ClientPlanCard";
@@ -39,6 +45,7 @@ import DonationSimulator from "./DonationSimulator";
 import IntakeQueue from "./IntakeQueue";
 import KitchenPlan from "./KitchenPlan";
 import MetricsBanner from "./MetricsBanner";
+import KitchenPrintSheet from "./KitchenPrintSheet";
 import ScaleView from "./ScaleView";
 import SupplyProjection from "./SupplyProjection";
 import WeeklyCookList from "./WeeklyCookList";
@@ -61,6 +68,8 @@ export default function Dashboard() {
   const [donationSimOpen, setDonationSimOpen] = useState(false);
   // Land on the holistic picture: what the kitchen cooks for everyone.
   const [view, setView] = useState<View>("week");
+
+  const workflow = useWorkflow();
 
   const totalMeals = useMemo(
     () =>
@@ -131,6 +140,15 @@ export default function Dashboard() {
       };
     });
   }, [swapApplied, depletedMealId, replacementMealId]);
+
+  // Live safety re-verification gates the weekly approval (agents propose,
+  // the CNO approves — never on red).
+  const violations = useMemo(
+    () =>
+      computeMetrics(effectiveAllocations, clientById, mealById, groceryById, donations)
+        .clinicalViolations,
+    [effectiveAllocations],
+  );
 
   const selectedClient = clientById.get(selectedClientId);
   const selectedAllocation = useMemo(
@@ -214,7 +232,8 @@ export default function Dashboard() {
   const backToHappyPath = () => setScenarioId("happy_path");
 
   return (
-    <div className="flex min-h-dvh flex-col gap-3 bg-background p-3 text-foreground sm:p-4 xl:h-dvh xl:overflow-hidden">
+    <>
+    <div className="flex min-h-dvh flex-col gap-3 bg-background p-3 text-foreground print:hidden sm:p-4 xl:h-dvh xl:overflow-hidden">
       <header className="sticky top-0 z-30 -mx-3 -mt-3 flex min-h-16 flex-wrap items-center gap-3 border-b border-[#e5e5e0] bg-white/95 px-4 py-2 backdrop-blur sm:-mx-4 sm:-mt-4 sm:px-6">
         <div className="flex min-w-0 items-center gap-3">
           <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-primary text-white">
@@ -226,7 +245,7 @@ export default function Dashboard() {
             </h1>
             <p className="truncate text-xs text-[#62625b]">
               Planning {totalMeals.toLocaleString()} clinically-safe meals for{" "}
-              {clients.length} clients · week of July 20, 2026
+              {clients.length} clients · Today: Monday, July 20, 2026
             </p>
           </div>
         </div>
@@ -288,7 +307,13 @@ export default function Dashboard() {
       </div>
 
       {view === "week" && (
-        <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto pb-1">
+        <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto pb-1 [&>*]:shrink-0">
+          <ActionInbox
+            violations={violations}
+            totalServings={totalMeals}
+            onReviewHero={() => selectClient(HERO_CLIENT_ID)}
+            onOpenDonation={() => setDonationSimOpen(true)}
+          />
           <BatchRunTicker />
           <WeeklyCookList effectiveAllocations={effectiveAllocations} />
           <SupplyProjection effectiveAllocations={effectiveAllocations} />
@@ -306,7 +331,7 @@ export default function Dashboard() {
         <IntakeQueue
           clients={clients}
           selectedId={selectedClientId}
-          heroProcessed={heroProcessed}
+          heroApproved={Boolean(workflow.heroApprovedAt)}
           onSelect={selectClient}
         />
         {feedOpen ? (
@@ -346,6 +371,16 @@ export default function Dashboard() {
             runEvents={activeEvents}
             revealedMealIds={revealedMealIds}
             kitRevealed={kitRevealed}
+            approval={
+              isHero
+                ? {
+                    approvedAt: workflow.heroApprovedAt,
+                    onApprove: () =>
+                      setWorkflow({ heroApprovedAt: approvalStamp() }),
+                  }
+                : null
+            }
+            weekApprovedAt={workflow.weekApprovedAt}
           />
         ) : (
           <div className="brutal-card bg-white" />
@@ -417,8 +452,15 @@ export default function Dashboard() {
 
       {/* donation intake simulator (FR12) */}
       {donationSimOpen && (
-        <DonationSimulator onClose={() => setDonationSimOpen(false)} />
+        <DonationSimulator
+          onClose={() => setDonationSimOpen(false)}
+          onTriaged={() =>
+            setWorkflow({ donationTriagedAt: approvalStamp() })
+          }
+        />
       )}
     </div>
+    <KitchenPrintSheet effectiveAllocations={effectiveAllocations} />
+    </>
   );
 }

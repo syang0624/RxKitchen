@@ -87,6 +87,12 @@ Implementation notes for this codebase:
   across all 150 clients. The CNO plans cooking for everyone, not one plate
   at a time. Individual plans live behind the "Client plans" tab.
 
+- **Workflow layer (2026-07-16):** the CNO now *does* things, not just reads
+  them — an action inbox (review new referral / approve weekly menu / triage
+  donation), approval states persisted in localStorage (`src/lib/workflow.ts`),
+  menu approval gated on zero live-verified safety issues, and a print-only
+  kitchen production sheet (`KitchenPrintSheet`, browser print).
+
 ## Backlog (priority order)
 
 0. **Reskin to the design system above + non-technical usability pass.** Do

@@ -25,7 +25,14 @@ import { formatClock } from "./ui";
 
 const EMPTY_EVENTS: AgentEvent[] = [];
 
-export default function DonationSimulator({ onClose }: { onClose: () => void }) {
+export default function DonationSimulator({
+  onClose,
+  onTriaged,
+}: {
+  onClose: () => void;
+  /** Fires once when the triage stream completes — checks off the inbox item. */
+  onTriaged?: () => void;
+}) {
   // The sim stream is anchored to whichever client draws from the target batch
   // first — that moves when the allocator changes, so load it by scenario.
   const donationRun = useDonationRun(donationScenario.client_id);
@@ -46,6 +53,14 @@ export default function DonationSimulator({ onClose }: { onClose: () => void }) 
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [onClose]);
+
+  const triagedRef = useRef(false);
+  useEffect(() => {
+    if (replay.done && !triagedRef.current) {
+      triagedRef.current = true;
+      onTriaged?.();
+    }
+  }, [replay.done, onTriaged]);
 
   // Follow the stream while it plays.
   const listRef = useRef<HTMLDivElement>(null);

@@ -7,11 +7,12 @@
  * allocations the validators re-check, so the totals stay honest.
  */
 import { useMemo } from "react";
-import { CookingPot } from "lucide-react";
+import { CookingPot, Printer } from "lucide-react";
 import type { Allocation } from "@/lib/types";
 import { mealById, productionPlan } from "@/lib/data";
 
 const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+const TODAY = "Mon"; // demo week is anchored to Monday, July 20, 2026
 const DAY_LABEL: Record<string, string> = {
   Mon: "Monday",
   Tue: "Tuesday",
@@ -72,7 +73,15 @@ export default function WeeklyCookList({
             </>
           )}
         </span>
-        <span className="ml-auto flex flex-wrap gap-1.5">
+        <span className="ml-auto flex flex-wrap items-center gap-1.5">
+          <button
+            onClick={() => window.print()}
+            title="Print the kitchen production sheet for this week"
+            className="inline-flex min-h-9 items-center gap-1.5 rounded-2xl bg-[#f6f6f3] px-3 text-xs font-bold text-black transition-colors hover:bg-[#e5e5e0]"
+          >
+            <Printer size={14} aria-hidden />
+            Print kitchen sheet
+          </button>
           {productionPlan.batches.map((b) => (
             <span
               key={b.id}
@@ -102,8 +111,13 @@ export default function WeeklyCookList({
               className="flex h-[300px] flex-col overflow-hidden rounded-2xl border border-[#dadad3] bg-white"
             >
               <header className="flex items-baseline justify-between border-b border-[#e5e5e0] bg-[#fbfbf9] px-3 py-2">
-                <h3 className="text-xs font-semibold text-[#211922]">
+                <h3 className="flex items-center gap-1.5 text-xs font-semibold text-[#211922]">
                   {DAY_LABEL[day]}
+                  {day === TODAY && (
+                    <span className="rounded-full bg-[#e60023] px-1.5 py-px text-[9px] font-bold uppercase text-white">
+                      Today
+                    </span>
+                  )}
                 </h3>
                 <span
                   className="font-mono text-[10px] text-[#62625b]"

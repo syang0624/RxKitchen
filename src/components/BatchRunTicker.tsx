@@ -52,8 +52,8 @@ export default function BatchRunTicker() {
 
   return (
     <div className="rounded-2xl border border-[#dadad3] bg-white px-4 py-3 sm:px-5">
-      <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
-        <span className="flex items-center gap-2 text-sm font-semibold text-[#211922]">
+      <div className="flex min-h-9 items-center gap-x-4 overflow-hidden">
+        <span className="flex shrink-0 items-center gap-2 text-sm font-semibold text-[#211922]">
           {done ? (
             <CheckCircle2 size={17} className="text-[#0f7a41]" aria-hidden />
           ) : (
@@ -65,7 +65,7 @@ export default function BatchRunTicker() {
         </span>
 
         {running && currentClient && (
-          <span className="text-xs text-[#62625b]">
+          <span className="min-w-0 flex-1 truncate text-xs text-[#62625b]">
             Processing referral{" "}
             <span className="font-mono tabular-nums">
               {processed + 1} of {total}
@@ -75,18 +75,18 @@ export default function BatchRunTicker() {
           </span>
         )}
         {done && (
-          <span className="text-xs text-[#62625b]">
+          <span className="min-w-0 flex-1 truncate text-xs text-[#62625b]">
             {total} plans built · {stats.meals.toLocaleString()} meals scheduled ·{" "}
             {stats.batchClients} plans use fresh batches · 0 safety issues
           </span>
         )}
         {idx < 0 && (
-          <span className="text-xs text-[#62625b]">
+          <span className="min-w-0 flex-1 truncate text-xs text-[#62625b]">
             {total} referrals were processed autonomously — replaying…
           </span>
         )}
 
-        <span className="ml-auto flex items-center gap-3">
+        <span className="ml-auto flex shrink-0 items-center gap-3">
           {running &&
             AGENTS.map((a, i) => (
               <span
