@@ -10,8 +10,10 @@
  * `constraint_checks` are never trusted or rendered (PRD §6, §11).
  */
 import { useMemo, useState } from "react";
+import Image from "next/image";
 import type { AgentEvent, Allocation, ClientProfile } from "@/lib/types";
 import { groceryById, mealById } from "@/lib/data";
+import { mealImageSrc } from "@/lib/mealImages";
 import {
   checkGroceryForClient,
   checkMealForClient,
@@ -54,6 +56,7 @@ function MealItem({
   }
   const verdict = checkMealForClient(meal, client);
   const cuisineMatch = meal.cuisine === client.cuisine_pref;
+  const photo = mealImageSrc(meal.id);
   return (
     <li
       className={`brutal-box p-3 ${verdict.pass ? "bg-white" : "bg-red-100"}`}
@@ -62,6 +65,15 @@ function MealItem({
         <span className="brutal-flat mt-0.5 shrink-0 bg-black px-1.5 py-0.5 font-mono text-[11px] font-bold uppercase text-white">
           {item.day}
         </span>
+        {photo && (
+          <Image
+            src={photo}
+            alt={meal.name}
+            width={56}
+            height={56}
+            className="mt-0.5 size-14 shrink-0 rounded-xl border border-[#dadad3] object-cover"
+          />
+        )}
         <div className="min-w-0 flex-1">
           <div className="flex items-start justify-between gap-2">
             <p className="text-sm font-bold">{meal.name}</p>

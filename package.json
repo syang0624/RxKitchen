@@ -10,7 +10,8 @@
     "lint": "eslint",
     "data:generate": "node scripts/generate-data.mjs",
     "data:validate": "node scripts/validate-data.mjs",
-    "agents:generate": "node scripts/generate-agent-runs.mjs"
+    "agents:generate": "node scripts/generate-agent-runs.mjs",
+    "images:generate": "node scripts/generate-meal-images.mjs"
   },
   "dependencies": {
     "lucide-react": "^1.24.0",

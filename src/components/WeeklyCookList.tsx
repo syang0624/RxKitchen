@@ -7,9 +7,11 @@
  * allocations the validators re-check, so the totals stay honest.
  */
 import { useMemo } from "react";
+import Image from "next/image";
 import { CookingPot, Printer } from "lucide-react";
 import type { Allocation } from "@/lib/types";
 import { mealById, productionPlan } from "@/lib/data";
+import { mealImageSrc } from "@/lib/mealImages";
 
 const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 const TODAY = "Mon"; // demo week is anchored to Monday, July 20, 2026
@@ -127,24 +129,36 @@ export default function WeeklyCookList({
                 </span>
               </header>
               <ul className="min-h-0 flex-1 divide-y divide-[#f0f0ec] overflow-y-auto">
-                {rows.map(({ meal, servings }) => (
-                  <li
-                    key={meal?.id ?? "?"}
-                    className="flex items-start gap-1.5 px-3 py-1.5 text-[11px] leading-tight text-[#211922]"
-                    title={
-                      meal
-                        ? `${meal.name} — ${servings} servings (${meal.cuisine})`
-                        : undefined
-                    }
-                  >
-                    <span className="shrink-0 rounded-full bg-secondary px-1.5 font-mono text-[10px] font-bold">
-                      {servings}×
-                    </span>
-                    <span className="min-w-0 font-medium">
-                      {meal?.name ?? "?"}
-                    </span>
-                  </li>
-                ))}
+                {rows.map(({ meal, servings }) => {
+                  const photo = mealImageSrc(meal?.id);
+                  return (
+                    <li
+                      key={meal?.id ?? "?"}
+                      className="flex items-center gap-1.5 px-3 py-1.5 text-[11px] leading-tight text-[#211922]"
+                      title={
+                        meal
+                          ? `${meal.name} — ${servings} servings (${meal.cuisine})`
+                          : undefined
+                      }
+                    >
+                      {photo && (
+                        <Image
+                          src={photo}
+                          alt=""
+                          width={28}
+                          height={28}
+                          className="size-7 shrink-0 rounded-md border border-[#e5e5e0] object-cover"
+                        />
+                      )}
+                      <span className="shrink-0 rounded-full bg-secondary px-1.5 font-mono text-[10px] font-bold">
+                        {servings}×
+                      </span>
+                      <span className="min-w-0 font-medium">
+                        {meal?.name ?? "?"}
+                      </span>
+                    </li>
+                  );
+                })}
               </ul>
             </section>
           );

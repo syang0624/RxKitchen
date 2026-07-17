@@ -9,9 +9,11 @@
  * the run, and which alternatives were ruled out and why.
  */
 import { useEffect, useMemo } from "react";
+import Image from "next/image";
 import { Check, Heart, ShieldCheck, X, XCircle } from "lucide-react";
 import type { AgentEvent, Allocation, ClientProfile } from "@/lib/types";
 import { meals as allMeals, mealById } from "@/lib/data";
+import { mealImageSrc } from "@/lib/mealImages";
 import { checkMealForClient } from "@/lib/validators";
 import { AGENT_META, AgentBadge } from "./ui";
 
@@ -61,6 +63,7 @@ export default function ExplainDrawer({
   }, [client, item.meal_id]);
 
   if (!meal) return null;
+  const photo = mealImageSrc(meal.id);
 
   return (
     <div
@@ -99,7 +102,17 @@ export default function ExplainDrawer({
 
         <div className="min-h-0 flex-1 space-y-6 overflow-y-auto px-5 py-5 sm:px-8 sm:py-6">
           {/* the meal */}
-          <section className="rounded-2xl bg-[#f6f6f3] p-4 sm:p-5">
+          <section className="overflow-hidden rounded-2xl bg-[#f6f6f3]">
+            {photo && (
+              <Image
+                src={photo}
+                alt={meal.name}
+                width={1024}
+                height={1024}
+                className="h-44 w-full object-cover"
+              />
+            )}
+            <div className="p-4 sm:p-5">
             <p className="flex flex-wrap items-center gap-2 text-lg font-semibold text-black">
               <span className="rounded-full bg-[#262622] px-3 py-1 text-xs font-bold text-white">
                 {item.day}
@@ -116,6 +129,7 @@ export default function ExplainDrawer({
                 </span>
               )}
             </p>
+            </div>
           </section>
 
           {/* safety checks, spelled out */}
