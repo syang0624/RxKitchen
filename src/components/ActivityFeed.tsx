@@ -10,7 +10,7 @@ import type { AgentEvent } from "@/lib/types";
 import { REPLAY_SPEEDS, type Replay } from "@/lib/replay";
 import { AGENT_META, AgentBadge, formatClock } from "./ui";
 
-function EventRow({ event }: { event: AgentEvent }) {
+export function EventRow({ event }: { event: AgentEvent }) {
   const meta = AGENT_META[event.agent];
   const result = event.data?.result;
   const isFail = result === "fail";

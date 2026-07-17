@@ -23,6 +23,7 @@ import { useReplay } from "@/lib/replay";
 import { useAgentRun } from "@/lib/runs";
 import ActivityFeed from "./ActivityFeed";
 import ClientPlanCard from "./ClientPlanCard";
+import DonationSimulator from "./DonationSimulator";
 import DeliveryPanel from "./DeliveryPanel";
 import IntakeQueue from "./IntakeQueue";
 import KitchenPlan from "./KitchenPlan";
@@ -43,6 +44,7 @@ export default function Dashboard() {
   // the operations panel are one click away.
   const [feedOpen, setFeedOpen] = useState(true); // hero demo starts here
   const [opsOpen, setOpsOpen] = useState(false);
+  const [donationSimOpen, setDonationSimOpen] = useState(false);
 
   const isHero = selectedClientId === HERO_CLIENT_ID;
   const activeRun = scenarioId === "happy_path" ? heroRun : stockoutRun;
@@ -149,6 +151,7 @@ export default function Dashboard() {
   const { toggle, seek, time } = replay;
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
+      if (donationSimOpen) return; // simulator owns the keyboard while open
       const target = e.target as HTMLElement | null;
       if (target && ["INPUT", "TEXTAREA", "SELECT"].includes(target.tagName)) {
         return;
@@ -166,7 +169,7 @@ export default function Dashboard() {
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [toggle, seek, time]);
+  }, [toggle, seek, time, donationSimOpen]);
 
   const selectClient = (id: number) => {
     setSelectedClientId(id);
@@ -200,6 +203,13 @@ export default function Dashboard() {
           </span>
         </h1>
         <div className="ml-auto flex items-center gap-2">
+          <button
+            onClick={() => setDonationSimOpen(true)}
+            title="Drop off a new donation and watch the triage agent classify it"
+            className="brutal-btn bg-teal-300 px-3 py-1.5 text-xs font-bold uppercase text-black"
+          >
+            📦 A new donation arrives
+          </button>
           {scenarioId === "stockout_replan" ? (
             <button
               onClick={backToHappyPath}
@@ -348,6 +358,11 @@ export default function Dashboard() {
           </div>
         )}
       </section>
+
+      {/* donation intake simulator (FR12) */}
+      {donationSimOpen && (
+        <DonationSimulator onClose={() => setDonationSimOpen(false)} />
+      )}
     </div>
   );
 }
