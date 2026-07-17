@@ -5,7 +5,7 @@
  * which pre-generated scenario stream is loaded (happy path / stockout
  * re-plan), and how far the replay has revealed the hero plan (PRD §4, §6).
  */
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { Allocation } from "@/lib/types";
 import {
   HERO_CLIENT_ID,
@@ -141,6 +141,29 @@ export default function Dashboard() {
     [replay.visibleEvents],
   );
 
+  // Judge Q&A shortcuts (Phase 5): space = play/pause, ←/→ = scrub 5 s.
+  const { toggle, seek, time } = replay;
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      const target = e.target as HTMLElement | null;
+      if (target && ["INPUT", "TEXTAREA", "SELECT"].includes(target.tagName)) {
+        return;
+      }
+      if (e.key === " ") {
+        e.preventDefault();
+        toggle();
+      } else if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        seek(time - 5000);
+      } else if (e.key === "ArrowRight") {
+        e.preventDefault();
+        seek(time + 5000);
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [toggle, seek, time]);
+
   const selectClient = (id: number) => {
     setSelectedClientId(id);
     if (id !== HERO_CLIENT_ID) return;
@@ -161,6 +184,9 @@ export default function Dashboard() {
           🥗 NourishOS{" "}
           <span className="font-sans text-sm font-normal normal-case text-black/60">
             · meal plans for the week of July 20, 2026
+            <span className="ml-2 font-mono text-[11px] text-black/40">
+              space = play/pause · ←/→ = scrub
+            </span>
           </span>
         </h1>
         <div className="ml-auto flex items-center gap-2">
