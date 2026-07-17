@@ -59,16 +59,16 @@ function ReplayControls({ replay }: { replay: Replay }) {
     <div className="flex flex-wrap items-center gap-2 border-t border-[#e5e5e0] bg-white px-3 py-2">
       <button
         onClick={replay.toggle}
-        title="Space = play/pause · ←/→ = scrub"
+        title="Space = run/pause · ←/→ = jump 5 s"
         className="brutal-btn inline-flex items-center gap-2 bg-primary px-4 text-xs font-bold text-white"
       >
         {replay.playing ? <Pause size={14} fill="currentColor" /> : replay.done ? <RotateCcw size={14} /> : <Play size={14} fill="currentColor" />}
-        {replay.playing ? "Pause" : replay.done ? "Replay" : "Play"}
+        {replay.playing ? "Pause" : replay.done ? "Run again" : "Run agents"}
       </button>
       <button
         onClick={replay.restart}
         title="Restart"
-        aria-label="Restart replay"
+        aria-label="Restart the agents"
         className="brutal-btn inline-flex size-10 items-center justify-center bg-[#f6f6f3] text-xs font-bold"
       >
         <RotateCcw size={15} aria-hidden />
@@ -89,7 +89,7 @@ function ReplayControls({ replay }: { replay: Replay }) {
         value={replay.time}
         onChange={(e) => replay.seek(Number(e.target.value))}
         className="min-w-24 flex-1 accent-primary"
-        aria-label="Scrub replay timeline"
+        aria-label="Move through the agents' work"
       />
       <span className="font-mono text-[11px] tabular-nums text-black/60">
         {formatClock(replay.time)} / {formatClock(replay.duration)}
@@ -157,7 +157,7 @@ export default function ActivityFeed({
             <span className="flex size-12 items-center justify-center rounded-full bg-[#f6f6f3] text-[#62625b]"><Activity size={22} aria-hidden /></span>
             <p className="text-sm text-black/60">
               {replay.idle
-                ? "Press Play to watch the agents build this plan."
+                ? "Run the agents to process this referral."
                 : "Waiting for the first agent event…"}
             </p>
           </div>

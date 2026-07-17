@@ -194,9 +194,9 @@ export default function DonationSimulator({
               {replay.playing ? (
                 <><Pause size={17} aria-hidden="true" /> Pause</>
               ) : replay.done ? (
-                <><RotateCcw size={17} aria-hidden="true" /> Replay</>
+                <><RotateCcw size={17} aria-hidden="true" /> Run again</>
               ) : (
-                <><Play size={17} aria-hidden="true" /> Play</>
+                <><Play size={17} aria-hidden="true" /> Resume</>
               )}
             </button>
             <button

@@ -82,7 +82,7 @@ export default function BatchRunTicker() {
         )}
         {idx < 0 && (
           <span className="min-w-0 flex-1 truncate text-xs text-[#62625b]">
-            {total} referrals were processed autonomously — replaying…
+            {total} referrals queued for autonomous processing — starting…
           </span>
         )}
 
@@ -103,8 +103,8 @@ export default function BatchRunTicker() {
           {done && (
             <button
               onClick={() => setIdx(0)}
-              title="Replay the batch run"
-              aria-label="Replay the batch run"
+              title="Run the batch again"
+              aria-label="Run the batch again"
               className="flex h-9 w-9 items-center justify-center rounded-full bg-[#f6f6f3] text-black transition-colors hover:bg-[#e5e5e0]"
             >
               <RotateCcw size={15} aria-hidden />

@@ -276,7 +276,7 @@ export default function Dashboard() {
               title={
                 heroProcessed
                   ? "Mark a meal out of stock and watch the plan repair itself"
-                  : "Play Rosa's referral to the end first"
+                  : "Run Rosa's referral through the agents first"
               }
               className="brutal-btn inline-flex items-center gap-2 bg-primary px-4 text-xs font-bold text-white"
             >
@@ -345,7 +345,7 @@ export default function Dashboard() {
               isHero
                 ? scenario.title
                 : nonHeroRun
-                  ? `How ${selectedClient?.name ?? "this client"}'s plan was built — press Play`
+                  ? `How ${selectedClient?.name ?? "this client"}'s plan was built — run the agents`
                   : "Loading this client's pipeline run…"
             }
           />
@@ -363,7 +363,7 @@ export default function Dashboard() {
               className="brutal-btn inline-flex items-center gap-2 bg-primary px-4 text-xs font-bold text-white"
             >
               <Play size={15} fill="currentColor" aria-hidden />
-              Watch the build
+              See the agents work
             </button>
           </section>
         )}
