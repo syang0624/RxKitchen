@@ -77,6 +77,16 @@ Implementation notes for this codebase:
 - Reference: Poolsuite (https://poolsuite.net) — creative category. Stay pure
   to this system.
 
+## Product decisions (2026-07-16, from the CNO persona review)
+
+- **Delivery feature removed** (was FR9/P1 — also the PRD's first cut line).
+  `DeliveryPanel` and the per-client route section are gone; the delivery
+  data files remain in `data/` untouched.
+- **Holistic first**: the landing view is now `WeeklyCookList` — the week's
+  aggregated cook list (servings per meal, Mon–Sun, plus fresh batches)
+  across all 150 clients. The CNO plans cooking for everyone, not one plate
+  at a time. Individual plans live behind the "Client plans" tab.
+
 ## Backlog (priority order)
 
 0. **Reskin to the design system above + non-technical usability pass.** Do

@@ -14,8 +14,8 @@ import {
   PackagePlus,
   Play,
   RotateCcw,
-  Route,
   TriangleAlert,
+  Users,
   X,
 } from "lucide-react";
 import type { Allocation } from "@/lib/types";
@@ -25,7 +25,6 @@ import {
   allocations,
   clientById,
   clients,
-  delivery,
   happyPathScenario,
   heroRun,
   stockoutRun,
@@ -36,14 +35,15 @@ import { useAgentRun } from "@/lib/runs";
 import ActivityFeed from "./ActivityFeed";
 import ClientPlanCard from "./ClientPlanCard";
 import DonationSimulator from "./DonationSimulator";
-import DeliveryPanel from "./DeliveryPanel";
 import IntakeQueue from "./IntakeQueue";
 import KitchenPlan from "./KitchenPlan";
 import MetricsBanner from "./MetricsBanner";
 import ScaleView from "./ScaleView";
+import WeeklyCookList from "./WeeklyCookList";
 
 type ScenarioId = "happy_path" | "stockout_replan";
-type Tab = "kitchen" | "delivery" | "scale";
+type Tab = "kitchen" | "scale";
+type View = "week" | "clients";
 
 const EMPTY_EVENTS: never[] = [];
 
@@ -57,6 +57,17 @@ export default function Dashboard() {
   const [feedOpen, setFeedOpen] = useState(true); // hero demo starts here
   const [opsOpen, setOpsOpen] = useState(false);
   const [donationSimOpen, setDonationSimOpen] = useState(false);
+  // Land on the holistic picture: what the kitchen cooks for everyone.
+  const [view, setView] = useState<View>("week");
+
+  const totalMeals = useMemo(
+    () =>
+      allocations.reduce(
+        (sum, a) => sum + a.items.reduce((n, it) => n + it.qty, 0),
+        0,
+      ),
+    [],
+  );
 
   const isHero = selectedClientId === HERO_CLIENT_ID;
   const activeRun = scenarioId === "happy_path" ? heroRun : stockoutRun;
@@ -126,11 +137,6 @@ export default function Dashboard() {
       allocationByClientId.get(selectedClientId),
     [effectiveAllocations, selectedClientId],
   );
-  const selectedRoute = useMemo(
-    () => delivery.batches.find((r) => r.clients.includes(selectedClientId)),
-    [selectedClientId],
-  );
-
   // --- progressive reveal during the hero's first replay (PRD §4 step 3) ---
   const revealGated = isHero && scenarioId === "happy_path" && !heroProcessed;
   const revealedMealIds = useMemo(() => {
@@ -147,8 +153,6 @@ export default function Dashboard() {
     replay.visibleEvents.some(
       (e) => e.agent === "fallback" && e.type === "output",
     );
-  const routeRevealed =
-    !revealGated || replay.visibleEvents.some((e) => Boolean(e.data?.route_id));
   const highlightBatchIds = useMemo(
     () =>
       new Set(
@@ -185,6 +189,7 @@ export default function Dashboard() {
 
   const selectClient = (id: number) => {
     setSelectedClientId(id);
+    setView("clients");
     if (id !== HERO_CLIENT_ID) return;
     // Re-selecting the hero before the run has completed keeps the pipeline story intact.
     if (!heroProcessed) {
@@ -197,6 +202,7 @@ export default function Dashboard() {
     setSelectedClientId(HERO_CLIENT_ID);
     setScenarioId("stockout_replan");
     setFeedOpen(true);
+    setView("clients");
   };
 
   const watchFeed = () => {
@@ -217,7 +223,8 @@ export default function Dashboard() {
               RxKitchen
             </h1>
             <p className="truncate text-xs text-[#62625b]">
-              Meal plans · week of July 20, 2026
+              Planning {totalMeals.toLocaleString()} clinically-safe meals for{" "}
+              {clients.length} clients · week of July 20, 2026
             </p>
           </div>
         </div>
@@ -258,6 +265,31 @@ export default function Dashboard() {
 
       <MetricsBanner effectiveAllocations={effectiveAllocations} />
 
+      <div className="flex flex-wrap items-center gap-2">
+        {(
+          [
+            ["week", "This week's cooking", ChefHat],
+            ["clients", "Client plans", Users],
+          ] as [View, string, typeof ChefHat][]
+        ).map(([id, label, Icon]) => (
+          <button
+            key={id}
+            onClick={() => setView(id)}
+            className={`brutal-btn inline-flex items-center gap-2 px-4 text-xs font-bold ${
+              view === id ? "bg-black text-white" : "bg-white text-black"
+            }`}
+          >
+            <Icon size={15} aria-hidden />
+            {label}
+          </button>
+        ))}
+      </div>
+
+      {view === "week" && (
+        <WeeklyCookList effectiveAllocations={effectiveAllocations} />
+      )}
+
+      {view === "clients" && (
       <main
         className={`dashboard-grid grid min-h-0 flex-1 grid-cols-1 gap-3 md:grid-cols-2 ${
           feedOpen
@@ -305,16 +337,15 @@ export default function Dashboard() {
           <ClientPlanCard
             client={selectedClient}
             allocation={selectedAllocation}
-            route={selectedRoute}
             runEvents={activeEvents}
             revealedMealIds={revealedMealIds}
             kitRevealed={kitRevealed}
-            routeRevealed={routeRevealed}
           />
         ) : (
           <div className="brutal-card bg-white" />
         )}
       </main>
+      )}
 
       <section
         className={`brutal-card shrink-0 overflow-hidden bg-white ${
@@ -332,7 +363,6 @@ export default function Dashboard() {
           {(
             [
               ["kitchen", "Kitchen", ChefHat],
-              ["delivery", "Routes", Route],
               ["scale", "All clients", BarChart3],
             ] as [Tab, string, typeof ChefHat][]
           ).map(([id, label, Icon]) => (
@@ -367,12 +397,6 @@ export default function Dashboard() {
           <div className="h-[calc(100%-3.1rem)] overflow-y-auto">
             {tab === "kitchen" && (
               <KitchenPlan highlightBatchIds={highlightBatchIds} />
-            )}
-            {tab === "delivery" && (
-              <DeliveryPanel
-                selectedClientId={selectedClientId}
-                onSelectClient={selectClient}
-              />
             )}
             {tab === "scale" && (
               <ScaleView

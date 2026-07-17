@@ -10,12 +10,7 @@
  * `constraint_checks` are never trusted or rendered (PRD §6, §11).
  */
 import { useMemo, useState } from "react";
-import type {
-  AgentEvent,
-  Allocation,
-  ClientProfile,
-  DeliveryRoute,
-} from "@/lib/types";
+import type { AgentEvent, Allocation, ClientProfile } from "@/lib/types";
 import { groceryById, mealById } from "@/lib/data";
 import {
   checkGroceryForClient,
@@ -118,21 +113,17 @@ function MealItem({
 export default function ClientPlanCard({
   client,
   allocation,
-  route,
   runEvents,
   revealedMealIds,
   kitRevealed,
-  routeRevealed,
 }: {
   client: ClientProfile;
   allocation: Allocation | undefined;
-  route: DeliveryRoute | undefined;
   /** This client's pipeline events, for the "why this meal?" drawer (FR11). */
   runEvents: AgentEvent[];
   /** During a hero replay, only meals already matched in the feed; null = show all. */
   revealedMealIds: Set<string> | null;
   kitRevealed: boolean;
-  routeRevealed: boolean;
 }) {
   const [explainItem, setExplainItem] = useState<
     Allocation["items"][number] | null
@@ -158,7 +149,6 @@ export default function ClientPlanCard({
 
   const pendingCount = allocation ? allocation.items.length - items.length : 0;
   const showKit = Boolean(allocation?.grocery_kit) && kitRevealed;
-  const showRoute = Boolean(route) && routeRevealed;
 
   return (
     <SectionCard
@@ -297,28 +287,6 @@ export default function ClientPlanCard({
                     <li key={i}>{step}</li>
                   ))}
                 </ol>
-              </div>
-            )}
-
-            {/* delivery slot */}
-            {showRoute && route && (
-              <div className="brutal-box bg-blue-100 p-3 text-xs">
-                <p className="text-sm font-bold">🚚 Delivery</p>
-                <p className="mt-1">
-                  Arrives <span className="font-bold">{route.delivery_date}</span>{" "}
-                  between <span className="font-bold">{route.window}</span> ·{" "}
-                  {route.zone} · route{" "}
-                  <span className="font-mono">{route.route_id}</span>{" "}
-                  {route.cold_chain_ok ? (
-                    <span className="brutal-flat ml-1 bg-secondary px-1.5 py-px font-bold text-black">
-                      kept cold ✓
-                    </span>
-                  ) : (
-                    <span className="brutal-flat ml-1 bg-red-500 px-1.5 py-px font-bold text-white">
-                      cold chain problem ✕
-                    </span>
-                  )}
-                </p>
               </div>
             )}
           </>
