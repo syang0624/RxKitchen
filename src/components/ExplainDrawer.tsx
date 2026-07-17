@@ -120,15 +120,34 @@ export default function ExplainDrawer({
               {meal.name}
             </p>
             <p className="mt-3 text-sm leading-relaxed text-[#62625b]">
-              {meal.cuisine} · made with {meal.key_ingredients.join(", ")} ·{" "}
-              <span className="font-medium text-[#33332e]">{meal.sodium_mg} mg</span> sodium ·{" "}
-              <span className="font-medium text-[#33332e]">{meal.carbs_g} g</span> carbs
+              {meal.cuisine} · made with {meal.key_ingredients.join(", ")}
               {item.from_batch && (
                 <span className="mt-3 block w-fit rounded-full bg-white px-3 py-1 text-xs font-semibold text-[#33332e]">
                   Fresh from today&apos;s kitchen batch
                 </span>
               )}
             </p>
+            {/* nutrition per serving */}
+            <div className="mt-4 grid grid-cols-3 gap-px overflow-hidden rounded-xl border border-[#e5e5e0] bg-[#e5e5e0] sm:grid-cols-6">
+              {[
+                [meal.calories, "kcal", "calories"],
+                [meal.protein_g, "g", "protein"],
+                [meal.carbs_g, "g", "carbs"],
+                [meal.fat_g, "g", "fat"],
+                [meal.fiber_g, "g", "fiber"],
+                [meal.sodium_mg, "mg", "sodium"],
+              ].map(([value, unit, label]) => (
+                <div key={String(label)} className="bg-white px-2 py-2 text-center">
+                  <p className="font-mono text-sm font-bold tabular-nums text-[#211922]">
+                    {value}
+                    <span className="ml-0.5 text-[10px] font-medium text-[#62625b]">
+                      {unit}
+                    </span>
+                  </p>
+                  <p className="text-[10px] text-[#62625b]">{label}</p>
+                </div>
+              ))}
+            </div>
             </div>
           </section>
 

@@ -5,6 +5,10 @@
     "cuisine": "Filipino",
     "sodium_mg": 426,
     "carbs_g": 52,
+    "calories": 466,
+    "protein_g": 33,
+    "fat_g": 14,
+    "fiber_g": 6,
     "allergens": [
       "soy"
     ],
@@ -30,6 +34,10 @@
     "cuisine": "Filipino",
     "sodium_mg": 460,
     "carbs_g": 55,
+    "calories": 528,
+    "protein_g": 32,
+    "fat_g": 20,
+    "fiber_g": 8,
     "allergens": [],
     "key_ingredients": [
       "pork",
@@ -52,6 +60,10 @@
     "cuisine": "Filipino",
     "sodium_mg": 412,
     "carbs_g": 48,
+    "calories": 414,
+    "protein_g": 33,
+    "fat_g": 10,
+    "fiber_g": 8,
     "allergens": [],
     "key_ingredients": [
       "chicken",
@@ -75,6 +87,10 @@
     "cuisine": "Filipino",
     "sodium_mg": 465,
     "carbs_g": 57,
+    "calories": 493,
+    "protein_g": 28,
+    "fat_g": 17,
+    "fiber_g": 8,
     "allergens": [],
     "key_ingredients": [
       "chicken",
@@ -96,6 +112,10 @@
     "cuisine": "Filipino",
     "sodium_mg": 531,
     "carbs_g": 63,
+    "calories": 470,
+    "protein_g": 32,
+    "fat_g": 10,
+    "fiber_g": 9,
     "allergens": [
       "soy"
     ],
@@ -119,6 +139,10 @@
     "cuisine": "Filipino",
     "sodium_mg": 401,
     "carbs_g": 51,
+    "calories": 425,
+    "protein_g": 17,
+    "fat_g": 17,
+    "fiber_g": 5,
     "allergens": [],
     "key_ingredients": [
       "squash",
@@ -143,6 +167,10 @@
     "cuisine": "Filipino",
     "sodium_mg": 396,
     "carbs_g": 47,
+    "calories": 436,
+    "protein_g": 26,
+    "fat_g": 16,
+    "fiber_g": 8,
     "allergens": [
       "fish"
     ],
@@ -167,6 +195,10 @@
     "cuisine": "Filipino",
     "sodium_mg": 542,
     "carbs_g": 43,
+    "calories": 389,
+    "protein_g": 34,
+    "fat_g": 9,
+    "fiber_g": 5,
     "allergens": [],
     "key_ingredients": [
       "beef",
@@ -188,6 +220,10 @@
     "cuisine": "Filipino",
     "sodium_mg": 499,
     "carbs_g": 55,
+    "calories": 427,
+    "protein_g": 27,
+    "fat_g": 11,
+    "fiber_g": 9,
     "allergens": [],
     "key_ingredients": [
       "chicken",
@@ -210,6 +246,10 @@
     "cuisine": "Filipino",
     "sodium_mg": 432,
     "carbs_g": 41,
+    "calories": 339,
+    "protein_g": 10,
+    "fat_g": 15,
+    "fiber_g": 5,
     "allergens": [
       "peanut",
       "gluten",
@@ -235,6 +275,10 @@
     "cuisine": "Chinese",
     "sodium_mg": 364,
     "carbs_g": 49,
+    "calories": 503,
+    "protein_g": 34,
+    "fat_g": 19,
+    "fiber_g": 9,
     "allergens": [],
     "key_ingredients": [
       "chicken",
@@ -257,6 +301,10 @@
     "cuisine": "Chinese",
     "sodium_mg": 435,
     "carbs_g": 50,
+    "calories": 435,
+    "protein_g": 25,
+    "fat_g": 15,
+    "fiber_g": 5,
     "allergens": [
       "fish"
     ],
@@ -280,6 +328,10 @@
     "cuisine": "Chinese",
     "sodium_mg": 497,
     "carbs_g": 44,
+    "calories": 343,
+    "protein_g": 17,
+    "fat_g": 11,
+    "fiber_g": 6,
     "allergens": [
       "soy"
     ],
@@ -305,6 +357,10 @@
     "cuisine": "Chinese",
     "sodium_mg": 571,
     "carbs_g": 51,
+    "calories": 487,
+    "protein_g": 28,
+    "fat_g": 19,
+    "fiber_g": 7,
     "allergens": [
       "soy"
     ],
@@ -327,6 +383,10 @@
     "cuisine": "Chinese",
     "sodium_mg": 607,
     "carbs_g": 52,
+    "calories": 430,
+    "protein_g": 33,
+    "fat_g": 10,
+    "fiber_g": 6,
     "allergens": [
       "soy"
     ],
@@ -349,6 +409,10 @@
     "cuisine": "Chinese",
     "sodium_mg": 516,
     "carbs_g": 46,
+    "calories": 471,
+    "protein_g": 29,
+    "fat_g": 19,
+    "fiber_g": 4,
     "allergens": [
       "tree_nut",
       "soy"
@@ -374,6 +438,10 @@
     "cuisine": "Chinese",
     "sodium_mg": 617,
     "carbs_g": 61,
+    "calories": 526,
+    "protein_g": 30,
+    "fat_g": 18,
+    "fiber_g": 7,
     "allergens": [
       "shellfish",
       "gluten",
@@ -395,6 +463,10 @@
     "cuisine": "Chinese",
     "sodium_mg": 457,
     "carbs_g": 49,
+    "calories": 397,
+    "protein_g": 21,
+    "fat_g": 13,
+    "fiber_g": 6,
     "allergens": [
       "soy"
     ],
@@ -420,6 +492,10 @@
     "cuisine": "Chinese",
     "sodium_mg": 521,
     "carbs_g": 62,
+    "calories": 484,
+    "protein_g": 23,
+    "fat_g": 16,
+    "fiber_g": 6,
     "allergens": [
       "egg",
       "soy"
@@ -445,6 +521,10 @@
     "cuisine": "Chinese",
     "sodium_mg": 354,
     "carbs_g": 45,
+    "calories": 450,
+    "protein_g": 27,
+    "fat_g": 18,
+    "fiber_g": 9,
     "allergens": [],
     "key_ingredients": [
       "winter melon",
@@ -467,6 +547,10 @@
     "cuisine": "Vietnamese",
     "sodium_mg": 530,
     "carbs_g": 56,
+    "calories": 505,
+    "protein_g": 32,
+    "fat_g": 17,
+    "fiber_g": 3,
     "allergens": [],
     "key_ingredients": [
       "chicken",
@@ -488,6 +572,10 @@
     "cuisine": "Vietnamese",
     "sodium_mg": 458,
     "carbs_g": 50,
+    "calories": 466,
+    "protein_g": 26,
+    "fat_g": 18,
+    "fiber_g": 4,
     "allergens": [],
     "key_ingredients": [
       "chicken",
@@ -509,6 +597,10 @@
     "cuisine": "Vietnamese",
     "sodium_mg": 520,
     "carbs_g": 59,
+    "calories": 430,
+    "protein_g": 26,
+    "fat_g": 10,
+    "fiber_g": 8,
     "allergens": [
       "peanut"
     ],
@@ -533,6 +625,10 @@
     "cuisine": "Vietnamese",
     "sodium_mg": 498,
     "carbs_g": 54,
+    "calories": 462,
+    "protein_g": 30,
+    "fat_g": 14,
+    "fiber_g": 6,
     "allergens": [],
     "key_ingredients": [
       "chicken",
@@ -554,6 +650,10 @@
     "cuisine": "Vietnamese",
     "sodium_mg": 467,
     "carbs_g": 49,
+    "calories": 447,
+    "protein_g": 29,
+    "fat_g": 15,
+    "fiber_g": 4,
     "allergens": [
       "fish"
     ],
@@ -578,6 +678,10 @@
     "cuisine": "Vietnamese",
     "sodium_mg": 420,
     "carbs_g": 41,
+    "calories": 369,
+    "protein_g": 31,
+    "fat_g": 9,
+    "fiber_g": 4,
     "allergens": [
       "peanut"
     ],
@@ -603,6 +707,10 @@
     "cuisine": "Vietnamese",
     "sodium_mg": 543,
     "carbs_g": 52,
+    "calories": 423,
+    "protein_g": 29,
+    "fat_g": 11,
+    "fiber_g": 8,
     "allergens": [],
     "key_ingredients": [
       "chicken",
@@ -624,6 +732,10 @@
     "cuisine": "Vietnamese",
     "sodium_mg": 439,
     "carbs_g": 54,
+    "calories": 437,
+    "protein_g": 17,
+    "fat_g": 17,
+    "fiber_g": 5,
     "allergens": [
       "soy"
     ],
@@ -649,6 +761,10 @@
     "cuisine": "Vietnamese",
     "sodium_mg": 598,
     "carbs_g": 57,
+    "calories": 472,
+    "protein_g": 25,
+    "fat_g": 16,
+    "fiber_g": 4,
     "allergens": [],
     "key_ingredients": [
       "beef",
@@ -669,6 +785,10 @@
     "cuisine": "Vietnamese",
     "sodium_mg": 423,
     "carbs_g": 46,
+    "calories": 403,
+    "protein_g": 12,
+    "fat_g": 19,
+    "fiber_g": 8,
     "allergens": [],
     "key_ingredients": [
       "rice flour",
@@ -692,6 +812,10 @@
     "cuisine": "Mexican",
     "sodium_mg": 450,
     "carbs_g": 57,
+    "calories": 520,
+    "protein_g": 28,
+    "fat_g": 20,
+    "fiber_g": 4,
     "allergens": [],
     "key_ingredients": [
       "chicken",
@@ -714,6 +838,10 @@
     "cuisine": "Mexican",
     "sodium_mg": 465,
     "carbs_g": 56,
+    "calories": 424,
+    "protein_g": 23,
+    "fat_g": 12,
+    "fiber_g": 5,
     "allergens": [],
     "key_ingredients": [
       "black beans",
@@ -737,6 +865,10 @@
     "cuisine": "Mexican",
     "sodium_mg": 551,
     "carbs_g": 47,
+    "calories": 432,
+    "protein_g": 16,
+    "fat_g": 20,
+    "fiber_g": 7,
     "allergens": [
       "dairy"
     ],
@@ -760,6 +892,10 @@
     "cuisine": "Mexican",
     "sodium_mg": 507,
     "carbs_g": 50,
+    "calories": 508,
+    "protein_g": 32,
+    "fat_g": 20,
+    "fiber_g": 9,
     "allergens": [],
     "key_ingredients": [
       "pork",
@@ -781,6 +917,10 @@
     "cuisine": "Mexican",
     "sodium_mg": 483,
     "carbs_g": 50,
+    "calories": 481,
+    "protein_g": 32,
+    "fat_g": 17,
+    "fiber_g": 8,
     "allergens": [
       "fish"
     ],
@@ -804,6 +944,10 @@
     "cuisine": "Mexican",
     "sodium_mg": 569,
     "carbs_g": 43,
+    "calories": 398,
+    "protein_g": 34,
+    "fat_g": 10,
+    "fiber_g": 3,
     "allergens": [],
     "key_ingredients": [
       "chicken",
@@ -824,6 +968,10 @@
     "cuisine": "Mexican",
     "sodium_mg": 454,
     "carbs_g": 48,
+    "calories": 482,
+    "protein_g": 32,
+    "fat_g": 18,
+    "fiber_g": 9,
     "allergens": [],
     "key_ingredients": [
       "chicken",
@@ -846,6 +994,10 @@
     "cuisine": "Mexican",
     "sodium_mg": 374,
     "carbs_g": 43,
+    "calories": 421,
+    "protein_g": 33,
+    "fat_g": 13,
+    "fiber_g": 6,
     "allergens": [],
     "key_ingredients": [
       "chicken",
@@ -869,6 +1021,10 @@
     "cuisine": "Mexican",
     "sodium_mg": 440,
     "carbs_g": 48,
+    "calories": 408,
+    "protein_g": 27,
+    "fat_g": 12,
+    "fiber_g": 5,
     "allergens": [],
     "key_ingredients": [
       "turkey",
@@ -891,6 +1047,10 @@
     "cuisine": "Mexican",
     "sodium_mg": 604,
     "carbs_g": 64,
+    "calories": 443,
+    "protein_g": 22,
+    "fat_g": 11,
+    "fiber_g": 7,
     "allergens": [
       "dairy",
       "gluten"
@@ -913,6 +1073,10 @@
     "cuisine": "American",
     "sodium_mg": 430,
     "carbs_g": 43,
+    "calories": 393,
+    "protein_g": 26,
+    "fat_g": 13,
+    "fiber_g": 9,
     "allergens": [
       "dairy"
     ],
@@ -937,6 +1101,10 @@
     "cuisine": "American",
     "sodium_mg": 469,
     "carbs_g": 39,
+    "calories": 396,
+    "protein_g": 24,
+    "fat_g": 16,
+    "fiber_g": 9,
     "allergens": [
       "egg"
     ],
@@ -960,6 +1128,10 @@
     "cuisine": "American",
     "sodium_mg": 395,
     "carbs_g": 40,
+    "calories": 371,
+    "protein_g": 28,
+    "fat_g": 11,
+    "fiber_g": 6,
     "allergens": [
       "fish"
     ],
@@ -984,6 +1156,10 @@
     "cuisine": "American",
     "sodium_mg": 333,
     "carbs_g": 39,
+    "calories": 414,
+    "protein_g": 33,
+    "fat_g": 14,
+    "fiber_g": 8,
     "allergens": [],
     "key_ingredients": [
       "chicken",
@@ -1007,6 +1183,10 @@
     "cuisine": "American",
     "sodium_mg": 559,
     "carbs_g": 51,
+    "calories": 511,
+    "protein_g": 34,
+    "fat_g": 19,
+    "fiber_g": 5,
     "allergens": [
       "gluten"
     ],
@@ -1028,6 +1208,10 @@
     "cuisine": "American",
     "sodium_mg": 544,
     "carbs_g": 44,
+    "calories": 443,
+    "protein_g": 24,
+    "fat_g": 19,
+    "fiber_g": 7,
     "allergens": [],
     "key_ingredients": [
       "beef",
@@ -1050,6 +1234,10 @@
     "cuisine": "American",
     "sodium_mg": 659,
     "carbs_g": 50,
+    "calories": 447,
+    "protein_g": 28,
+    "fat_g": 15,
+    "fiber_g": 3,
     "allergens": [
       "gluten",
       "dairy"
@@ -1073,6 +1261,10 @@
     "cuisine": "American",
     "sodium_mg": 480,
     "carbs_g": 50,
+    "calories": 430,
+    "protein_g": 17,
+    "fat_g": 18,
+    "fiber_g": 6,
     "allergens": [],
     "key_ingredients": [
       "kidney beans",
@@ -1096,6 +1288,10 @@
     "cuisine": "American",
     "sodium_mg": 575,
     "carbs_g": 55,
+    "calories": 459,
+    "protein_g": 26,
+    "fat_g": 15,
+    "fiber_g": 5,
     "allergens": [],
     "key_ingredients": [
       "chicken",
@@ -1116,6 +1312,10 @@
     "cuisine": "American",
     "sodium_mg": 300,
     "carbs_g": 55,
+    "calories": 437,
+    "protein_g": 16,
+    "fat_g": 17,
+    "fiber_g": 6,
     "allergens": [
       "dairy"
     ],
@@ -1141,6 +1341,10 @@
     "cuisine": "Mediterranean",
     "sodium_mg": 529,
     "carbs_g": 53,
+    "calories": 528,
+    "protein_g": 34,
+    "fat_g": 20,
+    "fiber_g": 5,
     "allergens": [],
     "key_ingredients": [
       "chicken",
@@ -1163,6 +1367,10 @@
     "cuisine": "Mediterranean",
     "sodium_mg": 486,
     "carbs_g": 57,
+    "calories": 382,
+    "protein_g": 16,
+    "fat_g": 10,
+    "fiber_g": 7,
     "allergens": [
       "sesame",
       "gluten"
@@ -1187,6 +1395,10 @@
     "cuisine": "Mediterranean",
     "sodium_mg": 481,
     "carbs_g": 49,
+    "calories": 409,
+    "protein_g": 24,
+    "fat_g": 13,
+    "fiber_g": 3,
     "allergens": [
       "gluten"
     ],
@@ -1210,6 +1422,10 @@
     "cuisine": "Mediterranean",
     "sodium_mg": 410,
     "carbs_g": 47,
+    "calories": 376,
+    "protein_g": 20,
+    "fat_g": 12,
+    "fiber_g": 7,
     "allergens": [],
     "key_ingredients": [
       "lentils",
@@ -1234,6 +1450,10 @@
     "cuisine": "Mediterranean",
     "sodium_mg": 351,
     "carbs_g": 41,
+    "calories": 432,
+    "protein_g": 31,
+    "fat_g": 16,
+    "fiber_g": 8,
     "allergens": [
       "fish",
       "gluten"
@@ -1258,6 +1478,10 @@
     "cuisine": "Mediterranean",
     "sodium_mg": 548,
     "carbs_g": 43,
+    "calories": 338,
+    "protein_g": 19,
+    "fat_g": 10,
+    "fiber_g": 8,
     "allergens": [
       "dairy"
     ],
@@ -1282,6 +1506,10 @@
     "cuisine": "Mediterranean",
     "sodium_mg": 378,
     "carbs_g": 40,
+    "calories": 372,
+    "protein_g": 26,
+    "fat_g": 12,
+    "fiber_g": 4,
     "allergens": [
       "gluten"
     ],
@@ -1306,6 +1534,10 @@
     "cuisine": "Mediterranean",
     "sodium_mg": 417,
     "carbs_g": 48,
+    "calories": 427,
+    "protein_g": 16,
+    "fat_g": 19,
+    "fiber_g": 6,
     "allergens": [],
     "key_ingredients": [
       "bell pepper",
@@ -1330,6 +1562,10 @@
     "cuisine": "Mediterranean",
     "sodium_mg": 508,
     "carbs_g": 46,
+    "calories": 404,
+    "protein_g": 19,
+    "fat_g": 16,
+    "fiber_g": 8,
     "allergens": [
       "egg",
       "gluten"
@@ -1354,6 +1590,10 @@
     "cuisine": "Mediterranean",
     "sodium_mg": 451,
     "carbs_g": 52,
+    "calories": 468,
+    "protein_g": 20,
+    "fat_g": 20,
+    "fiber_g": 5,
     "allergens": [
       "sesame",
       "gluten"
@@ -1378,6 +1618,10 @@
     "cuisine": "Indian",
     "sodium_mg": 515,
     "carbs_g": 54,
+    "calories": 447,
+    "protein_g": 33,
+    "fat_g": 11,
+    "fiber_g": 3,
     "allergens": [
       "dairy"
     ],
@@ -1401,6 +1645,10 @@
     "cuisine": "Indian",
     "sodium_mg": 430,
     "carbs_g": 56,
+    "calories": 437,
+    "protein_g": 24,
+    "fat_g": 13,
+    "fiber_g": 4,
     "allergens": [],
     "key_ingredients": [
       "lentils",
@@ -1424,6 +1672,10 @@
     "cuisine": "Indian",
     "sodium_mg": 469,
     "carbs_g": 56,
+    "calories": 400,
+    "protein_g": 17,
+    "fat_g": 12,
+    "fiber_g": 9,
     "allergens": [],
     "key_ingredients": [
       "chickpeas",
@@ -1447,6 +1699,10 @@
     "cuisine": "Indian",
     "sodium_mg": 519,
     "carbs_g": 53,
+    "calories": 488,
+    "protein_g": 24,
+    "fat_g": 20,
+    "fiber_g": 9,
     "allergens": [
       "dairy",
       "tree_nut"
@@ -1473,6 +1729,10 @@
     "cuisine": "Indian",
     "sodium_mg": 476,
     "carbs_g": 49,
+    "calories": 427,
+    "protein_g": 24,
+    "fat_g": 15,
+    "fiber_g": 3,
     "allergens": [
       "dairy"
     ],
@@ -1496,6 +1756,10 @@
     "cuisine": "Indian",
     "sodium_mg": 483,
     "carbs_g": 45,
+    "calories": 353,
+    "protein_g": 23,
+    "fat_g": 9,
+    "fiber_g": 6,
     "allergens": [
       "dairy"
     ],
@@ -1520,6 +1784,10 @@
     "cuisine": "Indian",
     "sodium_mg": 504,
     "carbs_g": 59,
+    "calories": 392,
+    "protein_g": 12,
+    "fat_g": 12,
+    "fiber_g": 7,
     "allergens": [],
     "key_ingredients": [
       "basmati rice",
@@ -1542,6 +1810,10 @@
     "cuisine": "Indian",
     "sodium_mg": 450,
     "carbs_g": 59,
+    "calories": 484,
+    "protein_g": 17,
+    "fat_g": 20,
+    "fiber_g": 8,
     "allergens": [],
     "key_ingredients": [
       "kidney beans",
@@ -1564,6 +1836,10 @@
     "cuisine": "Indian",
     "sodium_mg": 532,
     "carbs_g": 50,
+    "calories": 459,
+    "protein_g": 31,
+    "fat_g": 15,
+    "fiber_g": 3,
     "allergens": [],
     "key_ingredients": [
       "chicken",
@@ -1586,6 +1862,10 @@
     "cuisine": "Indian",
     "sodium_mg": 373,
     "carbs_g": 52,
+    "calories": 443,
+    "protein_g": 16,
+    "fat_g": 19,
+    "fiber_g": 7,
     "allergens": [],
     "key_ingredients": [
       "lentils",
@@ -1609,6 +1889,10 @@
     "cuisine": "Italian",
     "sodium_mg": 494,
     "carbs_g": 63,
+    "calories": 447,
+    "protein_g": 24,
+    "fat_g": 11,
+    "fiber_g": 6,
     "allergens": [
       "gluten"
     ],
@@ -1631,6 +1915,10 @@
     "cuisine": "Italian",
     "sodium_mg": 530,
     "carbs_g": 56,
+    "calories": 434,
+    "protein_g": 30,
+    "fat_g": 10,
+    "fiber_g": 7,
     "allergens": [
       "gluten"
     ],
@@ -1653,6 +1941,10 @@
     "cuisine": "Italian",
     "sodium_mg": 462,
     "carbs_g": 55,
+    "calories": 391,
+    "protein_g": 18,
+    "fat_g": 11,
+    "fiber_g": 6,
     "allergens": [
       "gluten"
     ],
@@ -1676,6 +1968,10 @@
     "cuisine": "Italian",
     "sodium_mg": 621,
     "carbs_g": 67,
+    "calories": 447,
+    "protein_g": 11,
+    "fat_g": 15,
+    "fiber_g": 8,
     "allergens": [
       "gluten",
       "dairy"
@@ -1698,6 +1994,10 @@
     "cuisine": "Italian",
     "sodium_mg": 474,
     "carbs_g": 47,
+    "calories": 452,
+    "protein_g": 30,
+    "fat_g": 16,
+    "fiber_g": 4,
     "allergens": [],
     "key_ingredients": [
       "chicken",
@@ -1720,6 +2020,10 @@
     "cuisine": "Italian",
     "sodium_mg": 595,
     "carbs_g": 48,
+    "calories": 390,
+    "protein_g": 18,
+    "fat_g": 14,
+    "fiber_g": 4,
     "allergens": [
       "dairy",
       "gluten"
@@ -1743,6 +2047,10 @@
     "cuisine": "Italian",
     "sodium_mg": 513,
     "carbs_g": 65,
+    "calories": 432,
+    "protein_g": 16,
+    "fat_g": 12,
+    "fiber_g": 9,
     "allergens": [
       "dairy"
     ],
@@ -1766,6 +2074,10 @@
     "cuisine": "Italian",
     "sodium_mg": 548,
     "carbs_g": 62,
+    "calories": 418,
+    "protein_g": 11,
+    "fat_g": 14,
+    "fiber_g": 5,
     "allergens": [
       "gluten",
       "tree_nut",
@@ -1790,6 +2102,10 @@
     "cuisine": "Italian",
     "sodium_mg": 413,
     "carbs_g": 53,
+    "calories": 434,
+    "protein_g": 24,
+    "fat_g": 14,
+    "fiber_g": 4,
     "allergens": [],
     "key_ingredients": [
       "cannellini beans",
@@ -1813,6 +2129,10 @@
     "cuisine": "Italian",
     "sodium_mg": 445,
     "carbs_g": 52,
+    "calories": 425,
+    "protein_g": 25,
+    "fat_g": 13,
+    "fiber_g": 8,
     "allergens": [
       "dairy"
     ],

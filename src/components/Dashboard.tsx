@@ -158,7 +158,10 @@ export default function Dashboard() {
     [effectiveAllocations, selectedClientId],
   );
   // --- progressive reveal during the hero's first replay (PRD §4 step 3) ---
-  const revealGated = isHero && scenarioId === "happy_path" && !heroProcessed;
+  // Progressive reveal only while the replay is actually running — a CNO
+  // reviewing the draft must see the full plan without pressing Play.
+  const revealGated =
+    isHero && scenarioId === "happy_path" && !heroProcessed && !replay.idle;
   const revealedMealIds = useMemo(() => {
     if (!revealGated) return null;
     return new Set(

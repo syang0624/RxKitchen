@@ -155,9 +155,22 @@ function buildMeals() {
       if (sodium_mg <= 430) diet_tags.push("renal-friendly");
       if (!allergens.includes("gluten")) diet_tags.push("gluten-free");
       if (!ingredients.some((i) => MEAT.some((m) => i.includes(m)))) diet_tags.push("vegetarian");
+      // Full nutrition, from a per-meal PRNG (leaves the global stream — and
+      // thus the rest of the dataset — untouched). Calories are derived from
+      // the macros (4/4/9), so the label always adds up; the validator checks.
+      const nRand = mulberry32(9000 + n);
+      const nri = (min, max) => min + Math.floor(nRand() * (max - min + 1));
+      const hasMeat = ingredients.some((i) => MEAT.some((m) => i.includes(m)));
+      const hasVegProtein = ingredients.some((i) =>
+        /tofu|beans|lentils|chickpeas|paneer|egg|yogurt|cashews|hummus/.test(i));
+      const protein_g = hasMeat ? nri(24, 34) : hasVegProtein ? nri(16, 24) : nri(10, 16);
+      const fat_g = nri(9, 20);
+      const fiber_g = nri(3, 9);
+      const calories = carbs_g * 4 + protein_g * 4 + fat_g * 9;
       meals.push({
         id: `M${String(n++).padStart(3, "0")}`,
         name, cuisine, sodium_mg, carbs_g,
+        calories, protein_g, fat_g, fiber_g,
         allergens, key_ingredients: ingredients, diet_tags,
         stock_qty: ri(40, 140),
         source: weighted([["kitchen", 0.7], ["donated", 0.15], ["purchased", 0.15]]),

@@ -85,7 +85,11 @@ function MealItem({
           </div>
           <p className="mt-0.5 text-[11px] text-black/60">
             {meal.cuisine}
-            {item.qty > 1 ? ` · ${item.qty} servings` : ""}
+            {item.qty > 1 ? ` · ${item.qty} servings` : ""} ·{" "}
+            <span className="font-mono tabular-nums">
+              {meal.calories} kcal · {meal.protein_g} g protein ·{" "}
+              {meal.carbs_g} g carbs · {meal.sodium_mg} mg sodium
+            </span>
             {item.from_batch && (
               <span className="brutal-flat ml-1 bg-amber-300 px-1.5 py-px font-bold text-black">
                 fresh from today&apos;s kitchen batch

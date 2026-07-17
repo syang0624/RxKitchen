@@ -101,6 +101,14 @@ for (const alloc of allocations) {
   }
 }
 
+// --- nutrition label consistency: calories must equal the macros (4/4/9) ---
+for (const meal of meals) {
+  const expected = meal.carbs_g * 4 + meal.protein_g * 4 + meal.fat_g * 9;
+  if (meal.calories !== expected) {
+    flag(null, meal.id, "nutrition", `${meal.name}: label says ${meal.calories} kcal but macros add to ${expected}`);
+  }
+}
+
 // --- menu discipline: the kitchen cooks at most 5 distinct recipes per day ---
 const DAY_NAMES = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 for (const day of DAY_NAMES) {

@@ -90,6 +90,10 @@ export default function KitchenPrintSheet({
                       <td className="py-0.5 pl-2 text-neutral-600">
                         {meal?.cuisine}
                       </td>
+                      <td className="py-0.5 pl-2 text-right text-xs tabular-nums text-neutral-600">
+                        {meal?.calories} kcal · {meal?.protein_g} g protein ·{" "}
+                        {meal?.carbs_g} g carbs · {meal?.sodium_mg} mg sodium
+                      </td>
                     </tr>
                   ))}
                 </tbody>

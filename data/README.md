@@ -42,6 +42,9 @@ runs with `agents:generate` (use `--scenario stockout` for re-plan streams,
   sodium ceiling, carb range, diet-order tags, and cooking ability.
 - **100%** of clients matched to fully compliant meals (fallback level 0/1);
   grocery kits cover any remaining gap days — **100% coverage**.
+- **Nutrition labels add up:** every meal carries full per-serving nutrition
+  (calories, protein, fat, fiber, carbs, sodium) with calories derived from
+  the macros (4/4/9); the validator rejects any label that doesn't sum.
 - **Menu discipline:** the kitchen cooks **3–5 distinct recipes per day**
   (planned by greedy set-cover over every client's eligible meals, seeded with
   the hero's scripted week and the story batches). Production batches are

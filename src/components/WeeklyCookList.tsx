@@ -50,7 +50,27 @@ export default function WeeklyCookList({
       }
     }
     const recipeIds = new Set([...byDay.values()].flatMap((m) => [...m.keys()]));
-    return { byDay, totalServings, kitClients, kitDays, recipes: recipeIds.size };
+    // Serving-weighted nutrition averages across the whole week.
+    let kcal = 0;
+    let protein = 0;
+    let sodium = 0;
+    for (const dayMap of byDay.values()) {
+      for (const [id, servings] of dayMap) {
+        const meal = mealById.get(id);
+        if (!meal) continue;
+        kcal += meal.calories * servings;
+        protein += meal.protein_g * servings;
+        sodium += meal.sodium_mg * servings;
+      }
+    }
+    const avg = totalServings
+      ? {
+          kcal: Math.round(kcal / totalServings),
+          protein: Math.round(protein / totalServings),
+          sodium: Math.round(sodium / totalServings),
+        }
+      : { kcal: 0, protein: 0, sodium: 0 };
+    return { byDay, totalServings, kitClients, kitDays, recipes: recipeIds.size, avg };
   }, [effectiveAllocations]);
 
   return (
@@ -73,7 +93,13 @@ export default function WeeklyCookList({
               · plus {week.kitClients} grocery kit
               {week.kitClients > 1 ? "s" : ""} covering {week.kitDays} days
             </>
-          )}
+          )}{" "}
+          · averages{" "}
+          <span className="font-mono tabular-nums text-[#211922]">
+            {week.avg.kcal} kcal · {week.avg.protein} g protein ·{" "}
+            {week.avg.sodium} mg sodium
+          </span>{" "}
+          per serving
         </span>
         <span className="ml-auto flex flex-wrap items-center gap-1.5">
           <button
@@ -137,7 +163,7 @@ export default function WeeklyCookList({
                       className="flex items-center gap-1.5 px-3 py-1.5 text-[11px] leading-tight text-[#211922]"
                       title={
                         meal
-                          ? `${meal.name} — ${servings} servings (${meal.cuisine})`
+                          ? `${meal.name} — ${servings} servings (${meal.cuisine}) · ${meal.calories} kcal · ${meal.protein_g} g protein · ${meal.carbs_g} g carbs · ${meal.sodium_mg} mg sodium per serving`
                           : undefined
                       }
                     >

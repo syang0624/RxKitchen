@@ -27,6 +27,10 @@ export interface Meal {
   cuisine: string;
   sodium_mg: number;
   carbs_g: number;
+  calories: number;
+  protein_g: number;
+  fat_g: number;
+  fiber_g: number;
   allergens: string[];
   key_ingredients: string[];
   diet_tags: string[];
