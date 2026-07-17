@@ -13,18 +13,18 @@ import { validateAllocation } from "@/lib/validators";
 type CellStatus = "violation" | "full" | "batch" | "kit" | "none";
 
 const STATUS_STYLE: Record<CellStatus, string> = {
-  violation: "bg-red-500/80 text-zinc-950",
-  full: "bg-emerald-500/70 text-zinc-950",
-  batch: "bg-teal-500/60 text-zinc-950",
-  kit: "bg-rose-400/70 text-zinc-950",
-  none: "bg-zinc-800 text-zinc-400",
+  violation: "bg-red-500 text-white",
+  full: "bg-secondary text-black",
+  batch: "bg-teal-300 text-black",
+  kit: "bg-rose-300 text-black",
+  none: "bg-white text-black/50",
 };
 
 const LEGEND: { status: CellStatus; label: string }[] = [
-  { status: "full", label: "existing meals (level 0)" },
-  { status: "batch", label: "incl. kitchen batch (level 1)" },
-  { status: "kit", label: "grocery kit (level 2)" },
-  { status: "violation", label: "clinical violation" },
+  { status: "full", label: "meals from stock" },
+  { status: "batch", label: "includes kitchen batch" },
+  { status: "kit", label: "includes grocery kit" },
+  { status: "violation", label: "safety issue" },
 ];
 
 export default function ScaleView({
@@ -74,27 +74,33 @@ export default function ScaleView({
         {LEGEND.map(({ status, label }) => (
           <span
             key={status}
-            className="flex items-center gap-1.5 text-[11px] text-zinc-400"
+            className="flex items-center gap-1.5 text-[11px] font-medium"
           >
-            <span className={`h-3 w-3 rounded-sm ${STATUS_STYLE[status]}`} />
+            <span className={`brutal-flat h-3.5 w-3.5 ${STATUS_STYLE[status]}`} />
             {label} · {counts[status]}
           </span>
         ))}
-        <span className="ml-auto text-[11px] text-zinc-500">
-          {cells.length} clients · every cell re-validated client-side
+        <span className="ml-auto text-[11px] text-black/60">
+          {cells.length} clients · every square re-checked live for safety
         </span>
       </div>
-      <div className="grid grid-cols-[repeat(auto-fill,minmax(44px,1fr))] gap-1">
+      <div className="grid grid-cols-[repeat(auto-fill,minmax(44px,1fr))] gap-1.5">
         {cells.map(({ alloc, client, status }) => (
           <button
             key={alloc.client_id}
             onClick={() => onSelectClient(alloc.client_id)}
             title={`${client?.name ?? "?"} — ${
-              status === "violation" ? "VIOLATION" : `fallback level ${alloc.fallback_level}`
+              status === "violation"
+                ? "SAFETY ISSUE"
+                : (LEGEND.find((l) => l.status === status)?.label ?? status)
             }`}
-            className={`rounded px-1 py-1.5 font-mono text-[10px] tabular-nums transition hover:ring-2 hover:ring-zinc-400 ${
+            className={`brutal-flat px-1 py-1.5 font-mono text-[10px] tabular-nums transition hover:-translate-y-0.5 ${
               STATUS_STYLE[status]
-            } ${alloc.client_id === selectedClientId ? "ring-2 ring-white" : ""}`}
+            } ${
+              alloc.client_id === selectedClientId
+                ? "shadow-[2px_2px_0_0_#000] ring-1 ring-black"
+                : ""
+            }`}
           >
             {alloc.client_id}
           </button>

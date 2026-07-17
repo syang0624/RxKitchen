@@ -149,21 +149,21 @@ export default function Dashboard() {
   const backToHappyPath = () => setScenarioId("happy_path");
 
   return (
-    <div className="flex h-dvh flex-col gap-3 bg-zinc-950 p-3 text-zinc-100">
+    <div className="flex h-dvh flex-col gap-3 bg-background p-3 text-black">
       <header className="flex flex-wrap items-center gap-3 px-1">
-        <h1 className="text-lg font-bold tracking-tight">
+        <h1 className="font-heading text-xl font-extrabold uppercase tracking-tight">
           🥗 NourishOS{" "}
-          <span className="text-sm font-normal text-zinc-500">
-            · agentic clinical meal allocation · week of 2026-07-20
+          <span className="font-sans text-sm font-normal normal-case text-black/60">
+            · meal plans for the week of July 20, 2026
           </span>
         </h1>
         <div className="ml-auto flex items-center gap-2">
           {scenarioId === "stockout_replan" ? (
             <button
               onClick={backToHappyPath}
-              className="rounded-lg border border-zinc-700 px-3 py-1.5 text-xs font-medium text-zinc-300 hover:bg-zinc-800"
+              className="brutal-btn bg-white px-3 py-1.5 text-xs font-bold uppercase"
             >
-              ↺ Back to happy path
+              ↺ Back to the plan
             </button>
           ) : (
             <button
@@ -171,12 +171,12 @@ export default function Dashboard() {
               disabled={!heroProcessed}
               title={
                 heroProcessed
-                  ? "Deplete a meal's stock and watch the agents re-plan"
-                  : "Run the hero referral to completion first"
+                  ? "Mark a meal out of stock and watch the plan repair itself"
+                  : "Play Rosa's referral to the end first"
               }
-              className="rounded-lg border border-red-500/40 bg-red-500/10 px-3 py-1.5 text-xs font-medium text-red-300 transition enabled:hover:bg-red-500/20 disabled:cursor-not-allowed disabled:opacity-40"
+              className="brutal-btn bg-red-500 px-3 py-1.5 text-xs font-bold uppercase text-white"
             >
-              ⚡ Trigger stockout re-plan
+              ⚡ What if a meal runs out?
             </button>
           )}
         </div>
@@ -196,7 +196,7 @@ export default function Dashboard() {
           scenarioTitle={
             isHero
               ? scenario.title
-              : "Processed in offline batch run — select Client 1042 for the live pipeline replay"
+              : "Plan ready — built in the overnight batch run. Select Rosa Dela Cruz to watch the agents work live."
           }
         />
         {selectedClient ? (
@@ -209,12 +209,12 @@ export default function Dashboard() {
             routeRevealed={routeRevealed}
           />
         ) : (
-          <div className="rounded-xl border border-zinc-800 bg-zinc-900/60" />
+          <div className="brutal-card bg-white" />
         )}
       </main>
 
-      <section className="h-64 shrink-0 rounded-xl border border-zinc-800 bg-zinc-900/60">
-        <div className="flex gap-1 border-b border-zinc-800 px-3 pt-2">
+      <section className="brutal-card h-64 shrink-0 overflow-hidden bg-white">
+        <div className="flex gap-2 border-b-2 border-black bg-background px-3 py-2">
           {(
             [
               ["kitchen", "🍳 Kitchen production"],
@@ -225,17 +225,15 @@ export default function Dashboard() {
             <button
               key={id}
               onClick={() => setTab(id)}
-              className={`rounded-t-lg px-3 py-1.5 text-xs font-medium transition ${
-                tab === id
-                  ? "bg-zinc-800 text-zinc-100"
-                  : "text-zinc-500 hover:text-zinc-300"
+              className={`brutal-btn px-3 py-1 text-xs font-bold uppercase ${
+                tab === id ? "bg-primary text-white" : "bg-white text-black"
               }`}
             >
               {label}
             </button>
           ))}
         </div>
-        <div className="h-[calc(100%-2.4rem)] overflow-y-auto">
+        <div className="h-[calc(100%-3.1rem)] overflow-y-auto">
           {tab === "kitchen" && (
             <KitchenPlan highlightBatchIds={highlightBatchIds} />
           )}

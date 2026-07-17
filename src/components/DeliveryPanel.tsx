@@ -29,14 +29,13 @@ export default function DeliveryPanel({
       {[...routesByZone.entries()].map(([zone, routes]) => {
         const zoneInfo = delivery.zones.find((z) => z.zone === zone);
         return (
-          <div
-            key={zone}
-            className="rounded-lg border border-zinc-800 bg-zinc-950/50 p-3"
-          >
+          <div key={zone} className="brutal-box bg-white p-3">
             <div className="flex items-baseline justify-between">
-              <p className="text-sm font-medium text-zinc-100">{zone}</p>
-              <span className="text-[11px] text-zinc-500">
-                {zoneInfo?.depot_distance_mi} mi · cold-chain limit{" "}
+              <p className="font-heading text-xs font-extrabold uppercase tracking-wide">
+                {zone}
+              </p>
+              <span className="text-[11px] text-black/60">
+                {zoneInfo?.depot_distance_mi} mi away · keep cold for max{" "}
                 {zoneInfo?.cold_chain_limit_hours} h
               </span>
             </div>
@@ -48,22 +47,22 @@ export default function DeliveryPanel({
                 return (
                   <div
                     key={r.route_id}
-                    className={`rounded-md border p-2 ${
-                      containsSelected
-                        ? "border-blue-500/50 bg-blue-500/10"
-                        : "border-zinc-800"
+                    className={`brutal-flat p-2 ${
+                      containsSelected ? "bg-blue-100" : "bg-background"
                     }`}
                   >
                     <div className="flex flex-wrap items-center justify-between gap-1 text-xs">
-                      <span className="font-mono text-zinc-300">
-                        {r.route_id}
-                      </span>
-                      <span className="text-zinc-500">
+                      <span className="font-mono font-bold">{r.route_id}</span>
+                      <span className="text-black/60">
                         {r.delivery_date} · {r.window} ·{" "}
                         {r.cold_chain_ok ? (
-                          <span className="text-emerald-300">cold chain ✓</span>
+                          <span className="font-bold text-black">
+                            kept cold ✓
+                          </span>
                         ) : (
-                          <span className="text-red-300">cold chain ✕</span>
+                          <span className="font-bold text-red-600">
+                            cold chain problem ✕
+                          </span>
                         )}
                       </span>
                     </div>
@@ -73,10 +72,10 @@ export default function DeliveryPanel({
                           key={cid}
                           onClick={() => onSelectClient(cid)}
                           title={clientById.get(cid)?.name ?? String(cid)}
-                          className={`rounded px-1.5 py-px font-mono text-[10px] transition ${
+                          className={`brutal-flat px-1.5 py-px font-mono text-[10px] transition ${
                             cid === selectedClientId
-                              ? "bg-blue-400 text-zinc-950"
-                              : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700"
+                              ? "bg-primary font-bold text-white"
+                              : "bg-white text-black hover:bg-secondary"
                           }`}
                         >
                           {cid}

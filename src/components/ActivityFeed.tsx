@@ -16,33 +16,37 @@ function EventRow({ event }: { event: AgentEvent }) {
   const isFail = result === "fail";
   const isPass = result === "pass";
   return (
-    <li className={`border-l-2 px-3 py-2 ${meta.border.replace("border-", "border-l-")}`}>
+    <li className={`border-l-4 px-3 py-2 ${meta.edge}`}>
       <div className="flex flex-wrap items-center gap-2">
-        <span className="font-mono text-[10px] tabular-nums text-zinc-600">
+        <span className="font-mono text-[10px] tabular-nums text-black/50">
           {formatClock(event.t_offset_ms)}
         </span>
         <AgentBadge agent={event.agent} />
         {event.type === "thought" && (
-          <span className="text-[10px] italic text-zinc-500">thinking…</span>
+          <span className="text-[10px] italic text-black/50">thinking…</span>
         )}
         {isPass && (
-          <span className="rounded bg-emerald-500/15 px-1.5 py-px text-[10px] font-semibold text-emerald-300">
-            PASS
+          <span className="brutal-flat bg-secondary px-1.5 py-px text-[10px] font-bold text-black">
+            SAFE ✓
           </span>
         )}
         {isFail && (
-          <span className="rounded bg-red-500/15 px-1.5 py-px text-[10px] font-semibold text-red-300">
-            EXCLUDED
+          <span className="brutal-flat bg-red-500 px-1.5 py-px text-[10px] font-bold text-white">
+            EXCLUDED ✕
           </span>
         )}
         {event.type === "output" && (
-          <span className="rounded bg-zinc-700/60 px-1.5 py-px text-[10px] font-semibold text-zinc-300">
-            OUTPUT
+          <span className="brutal-flat bg-primary px-1.5 py-px text-[10px] font-bold text-white">
+            DONE
           </span>
         )}
       </div>
-      <p className="mt-1 text-sm font-medium text-zinc-200">{event.title}</p>
-      <p className={`mt-0.5 text-xs leading-relaxed ${event.type === "thought" ? "italic text-zinc-500" : "text-zinc-400"}`}>
+      <p className="mt-1 text-sm font-bold">{event.title}</p>
+      <p
+        className={`mt-0.5 text-xs leading-relaxed ${
+          event.type === "thought" ? "italic text-black/50" : "text-black/70"
+        }`}
+      >
         {event.detail}
       </p>
     </li>
@@ -51,24 +55,24 @@ function EventRow({ event }: { event: AgentEvent }) {
 
 function ReplayControls({ replay }: { replay: Replay }) {
   return (
-    <div className="flex flex-wrap items-center gap-2 border-t border-zinc-800 px-3 py-2">
+    <div className="flex flex-wrap items-center gap-2 border-t-2 border-black bg-background px-3 py-2">
       <button
         onClick={replay.toggle}
-        className="rounded-lg bg-zinc-100 px-3 py-1 text-xs font-semibold text-zinc-900 transition hover:bg-white"
+        className="brutal-btn bg-primary px-3 py-1 text-xs font-bold uppercase text-white"
       >
         {replay.playing ? "❚❚ Pause" : replay.done ? "↺ Replay" : "▶ Play"}
       </button>
       <button
         onClick={replay.restart}
         title="Restart"
-        className="rounded-lg border border-zinc-700 px-2 py-1 text-xs text-zinc-300 hover:bg-zinc-800"
+        className="brutal-btn bg-white px-2 py-1 text-xs font-bold"
       >
         ⟲
       </button>
       <button
         onClick={replay.skipToEnd}
         title="Skip to end"
-        className="rounded-lg border border-zinc-700 px-2 py-1 text-xs text-zinc-300 hover:bg-zinc-800"
+        className="brutal-btn bg-white px-2 py-1 text-xs font-bold"
       >
         ⇥
       </button>
@@ -79,21 +83,21 @@ function ReplayControls({ replay }: { replay: Replay }) {
         step={100}
         value={replay.time}
         onChange={(e) => replay.seek(Number(e.target.value))}
-        className="min-w-24 flex-1 accent-emerald-400"
+        className="min-w-24 flex-1 accent-primary"
         aria-label="Scrub replay timeline"
       />
-      <span className="font-mono text-[11px] tabular-nums text-zinc-500">
+      <span className="font-mono text-[11px] tabular-nums text-black/60">
         {formatClock(replay.time)} / {formatClock(replay.duration)}
       </span>
-      <div className="flex overflow-hidden rounded-lg border border-zinc-700">
+      <div className="brutal-flat flex overflow-hidden bg-white">
         {REPLAY_SPEEDS.map((s) => (
           <button
             key={s}
             onClick={() => replay.setSpeed(s)}
-            className={`px-2 py-1 text-[11px] font-medium transition ${
+            className={`px-2 py-1 text-[11px] font-bold transition ${
               replay.speed === s
-                ? "bg-zinc-100 text-zinc-900"
-                : "text-zinc-400 hover:bg-zinc-800"
+                ? "bg-black text-white"
+                : "text-black hover:bg-secondary"
             }`}
           >
             {s}×
@@ -121,31 +125,31 @@ export default function ActivityFeed({
   }, [count, replay.playing]);
 
   return (
-    <section className="flex min-h-0 flex-col rounded-xl border border-zinc-800 bg-zinc-900/60">
-      <header className="flex items-center justify-between gap-2 border-b border-zinc-800 px-4 py-2.5">
-        <h2 className="text-sm font-semibold tracking-wide text-zinc-200">
+    <section className="brutal-card flex min-h-0 flex-col overflow-hidden bg-white">
+      <header className="flex items-center justify-between gap-2 border-b-2 border-black bg-background px-4 py-2.5">
+        <h2 className="font-heading text-xs font-extrabold uppercase tracking-wide">
           Agent activity
         </h2>
-        <span className="truncate text-xs text-zinc-500">{scenarioTitle}</span>
+        <span className="truncate text-xs text-black/60">{scenarioTitle}</span>
       </header>
       <div ref={listRef} className="min-h-0 flex-1 overflow-y-auto">
         {count === 0 ? (
           <div className="flex h-full flex-col items-center justify-center gap-2 p-8 text-center">
             <span className="text-2xl">🛰</span>
-            <p className="text-sm text-zinc-400">
+            <p className="text-sm text-black/60">
               {replay.idle
-                ? "Press Play to replay the pipeline for this referral."
+                ? "Press Play to watch the agents build this plan."
                 : "Waiting for the first agent event…"}
             </p>
           </div>
         ) : (
-          <ul className="divide-y divide-zinc-800/60 py-1">
+          <ul className="divide-y-2 divide-black/10 py-1">
             {replay.visibleEvents.map((e) => (
               <EventRow key={e.seq} event={e} />
             ))}
             {replay.playing && (
-              <li className="flex items-center gap-2 px-4 py-3 text-xs text-zinc-500">
-                <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-400" />
+              <li className="flex items-center gap-2 px-4 py-3 text-xs text-black/60">
+                <span className="h-2 w-2 animate-pulse rounded-full border border-black bg-secondary" />
                 agents working…
               </li>
             )}

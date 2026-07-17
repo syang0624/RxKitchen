@@ -3,8 +3,10 @@
 /**
  * Client plan card (FR3) + grocery-kit fallback view (FR4).
  *
- * Every check indicator on this card is recomputed live by the client-side
- * validators from raw meal/client data — the generator's own
+ * Written for a non-technical Chief Nutrition Officer: the weekly schedule
+ * leads (meals sorted Mon–Sun), every safety check is spelled out in words,
+ * and IDs are secondary details. Every check indicator is recomputed live by
+ * the client-side validators from raw meal/client data — the generator's own
  * `constraint_checks` are never trusted or rendered (PRD §6, §11).
  */
 import { useMemo } from "react";
@@ -18,9 +20,18 @@ import {
 import { CheckPill, SectionCard } from "./ui";
 
 const FALLBACK_LABEL: Record<number, string> = {
-  0: "Level 0 · existing meals",
-  1: "Level 1 · includes fresh kitchen batch",
-  2: "Level 2 · grocery kit",
+  0: "All meals from current stock",
+  1: "Includes a fresh kitchen batch",
+  2: "Includes a grocery kit",
+};
+
+const DAY_ORDER = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+
+const COOKING_LABEL: Record<ClientProfile["cooking_ability"], string> = {
+  none: "no cooking — ready-to-eat only",
+  microwave: "microwave only",
+  stovetop: "stovetop",
+  full: "full kitchen",
 };
 
 function MealItem({
@@ -33,8 +44,8 @@ function MealItem({
   const meal = mealById.get(item.meal_id);
   if (!meal) {
     return (
-      <li className="rounded-lg border border-red-500/40 bg-red-500/10 p-3 text-xs text-red-300">
-        Unknown meal {item.meal_id} — data integrity failure, report to data owner.
+      <li className="brutal-box bg-red-500 p-3 text-xs font-bold text-white">
+        Unknown meal {item.meal_id} — data problem, tell the data owner.
       </li>
     );
   }
@@ -42,34 +53,36 @@ function MealItem({
   const cuisineMatch = meal.cuisine === client.cuisine_pref;
   return (
     <li
-      className={`rounded-lg border p-3 ${
-        verdict.pass
-          ? "border-zinc-800 bg-zinc-950/50"
-          : "border-red-500/50 bg-red-500/10"
-      }`}
+      className={`brutal-box p-3 ${verdict.pass ? "bg-white" : "bg-red-100"}`}
     >
-      <div className="flex items-start justify-between gap-2">
-        <div>
-          <p className="text-sm font-medium text-zinc-100">{meal.name}</p>
-          <p className="mt-0.5 text-[11px] text-zinc-500">
-            {item.day} · qty {item.qty} · {meal.cuisine}
+      <div className="flex items-start gap-2.5">
+        <span className="brutal-flat mt-0.5 shrink-0 bg-black px-1.5 py-0.5 font-mono text-[11px] font-bold uppercase text-white">
+          {item.day}
+        </span>
+        <div className="min-w-0 flex-1">
+          <div className="flex items-start justify-between gap-2">
+            <p className="text-sm font-bold">{meal.name}</p>
+            {cuisineMatch && (
+              <span className="brutal-flat shrink-0 bg-primary px-2 py-0.5 text-[10px] font-bold text-white">
+                ♥ {client.cuisine_pref} favorite
+              </span>
+            )}
+          </div>
+          <p className="mt-0.5 text-[11px] text-black/60">
+            {meal.cuisine}
+            {item.qty > 1 ? ` · ${item.qty} servings` : ""}
             {item.from_batch && (
-              <span className="ml-1 rounded bg-amber-500/15 px-1.5 py-px font-medium text-amber-300">
-                fresh from batch {item.from_batch}
+              <span className="brutal-flat ml-1 bg-amber-300 px-1.5 py-px font-bold text-black">
+                fresh from today&apos;s kitchen batch
               </span>
             )}
           </p>
+          <div className="mt-2 flex flex-wrap gap-1">
+            {verdict.checks.map((c) => (
+              <CheckPill key={c.rule} pass={c.pass} label={c.label} />
+            ))}
+          </div>
         </div>
-        {cuisineMatch && (
-          <span className="shrink-0 rounded-full bg-violet-500/15 px-2 py-0.5 text-[10px] font-medium text-violet-300">
-            ♥ {client.cuisine_pref}
-          </span>
-        )}
-      </div>
-      <div className="mt-2 flex flex-wrap gap-1">
-        {verdict.checks.map((c) => (
-          <CheckPill key={c.rule} pass={c.pass} label={c.label} />
-        ))}
       </div>
     </li>
   );
@@ -92,9 +105,16 @@ export default function ClientPlanCard({
   routeRevealed: boolean;
 }) {
   const items = useMemo(() => {
-    if (!allocation) return [];
-    if (!revealedMealIds) return allocation.items;
-    return allocation.items.filter((i) => revealedMealIds.has(i.meal_id));
+    const revealed =
+      !allocation
+        ? []
+        : !revealedMealIds
+          ? allocation.items
+          : allocation.items.filter((i) => revealedMealIds.has(i.meal_id));
+    // Weekly-schedule framing: always present the plan Monday → Sunday.
+    return [...revealed].sort(
+      (a, b) => DAY_ORDER.indexOf(a.day) - DAY_ORDER.indexOf(b.day),
+    );
   }, [allocation, revealedMealIds]);
 
   const prefs = useMemo(
@@ -109,73 +129,85 @@ export default function ClientPlanCard({
 
   return (
     <SectionCard
-      title={`Client plan · ${client.name}`}
+      title={`Weekly plan · ${client.name}`}
       subtitle={`#${client.id}`}
     >
       <div className="space-y-4 p-3">
         {/* profile summary */}
-        <div className="rounded-lg border border-zinc-800 bg-zinc-950/50 p-3 text-xs leading-relaxed text-zinc-400">
-          <p>
-            <span className="text-zinc-200">{client.referring_hospital}</span>{" "}
-            · {client.address_zone} · {client.meals_per_week} meals/week
+        <div className="brutal-box bg-background p-3 text-xs leading-relaxed text-black/80">
+          <p className="font-bold text-black">
+            {client.referring_hospital} · {client.address_zone} ·{" "}
+            {client.meals_per_week} meals per week
           </p>
           <p className="mt-1">
-            Diet: <span className="text-zinc-300">{client.diet_orders.join(" + ") || "none"}</span>{" "}
-            · Sodium ≤ <span className="text-zinc-300">{client.max_sodium_mg} mg</span>{" "}
-            · Carbs <span className="text-zinc-300">{client.carb_range_g[0]}–{client.carb_range_g[1]} g</span>
+            Diet:{" "}
+            <span className="font-bold text-black">
+              {client.diet_orders.join(" + ") || "no restrictions"}
+            </span>{" "}
+            · Sodium at most{" "}
+            <span className="font-bold text-black">{client.max_sodium_mg} mg</span>{" "}
+            per meal · Carbs{" "}
+            <span className="font-bold text-black">
+              {client.carb_range_g[0]}–{client.carb_range_g[1]} g
+            </span>{" "}
+            per meal
           </p>
-          <p className="mt-1 flex flex-wrap gap-1">
+          <p className="mt-1.5 flex flex-wrap gap-1">
             {client.allergies.map((a) => (
-              <span key={a} className="rounded bg-red-500/10 px-1.5 py-px text-red-300">
-                ⚠ allergy: {a}
+              <span
+                key={a}
+                className="brutal-flat bg-red-400 px-1.5 py-px font-bold text-black"
+              >
+                ⚠ {a} allergy
               </span>
             ))}
-            <span className="rounded bg-zinc-800 px-1.5 py-px">
-              prefers {client.cuisine_pref}
+            <span className="brutal-flat bg-white px-1.5 py-px">
+              prefers {client.cuisine_pref} food
             </span>
             {client.dislikes.map((d) => (
-              <span key={d} className="rounded bg-zinc-800 px-1.5 py-px">
+              <span key={d} className="brutal-flat bg-white px-1.5 py-px">
                 dislikes {d}
               </span>
             ))}
-            <span className="rounded bg-zinc-800 px-1.5 py-px">
-              cooking: {client.cooking_ability}
+            <span className="brutal-flat bg-white px-1.5 py-px">
+              {COOKING_LABEL[client.cooking_ability]}
             </span>
           </p>
         </div>
 
         {!allocation ? (
-          <p className="px-1 text-sm text-zinc-500">
-            No allocation yet — run the pipeline from the intake queue.
+          <p className="px-1 text-sm text-black/60">
+            No plan yet — pick this referral in the intake queue to start.
           </p>
         ) : (
           <>
             {/* preference badges (FR3) */}
             {prefs && !revealedMealIds && (
               <div className="flex flex-wrap gap-1.5 px-1">
-                <span className="rounded-full bg-zinc-800 px-2 py-0.5 text-[11px] text-zinc-300">
+                <span className="brutal-flat bg-white px-2 py-0.5 text-[11px] font-bold">
                   {FALLBACK_LABEL[allocation.fallback_level]}
                 </span>
                 {prefs.totalMeals > 0 && (
-                  <span className="rounded-full bg-violet-500/15 px-2 py-0.5 text-[11px] text-violet-300">
-                    {prefs.cuisineMatches}/{prefs.totalMeals} cuisine matches
+                  <span className="brutal-flat bg-primary px-2 py-0.5 text-[11px] font-bold text-white">
+                    {prefs.cuisineMatches} of {prefs.totalMeals} meals match her
+                    favorite cuisine
                   </span>
                 )}
                 <span
-                  className={`rounded-full px-2 py-0.5 text-[11px] ${
+                  className={`brutal-flat px-2 py-0.5 text-[11px] font-bold ${
                     prefs.dislikesAvoided
-                      ? "bg-emerald-500/10 text-emerald-300"
-                      : "bg-red-500/15 text-red-300"
+                      ? "bg-secondary text-black"
+                      : "bg-red-500 text-white"
                   }`}
                 >
                   {prefs.dislikesAvoided
-                    ? "✓ dislikes avoided"
-                    : `dislike hit: ${prefs.dislikeHits.join("; ")}`}
+                    ? "✓ avoids disliked foods"
+                    : `contains a disliked food: ${prefs.dislikeHits.join("; ")}`}
                 </span>
               </div>
             )}
 
-            {/* matched meals */}
+            {/* the weekly meal schedule (Mon–Sun) */}
             {items.length > 0 && (
               <ul className="space-y-2">
                 {items.map((item) => (
@@ -188,19 +220,20 @@ export default function ClientPlanCard({
               </ul>
             )}
             {pendingCount > 0 && (
-              <p className="flex items-center gap-2 px-1 text-xs text-zinc-500">
-                <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400" />
-                matching in progress — {pendingCount} slot
-                {pendingCount > 1 ? "s" : ""} remaining…
+              <p className="flex items-center gap-2 px-1 text-xs text-black/60">
+                <span className="h-1.5 w-1.5 animate-pulse rounded-full border border-black bg-secondary" />
+                matching in progress — {pendingCount} day
+                {pendingCount > 1 ? "s" : ""} still to fill…
               </p>
             )}
 
             {/* grocery-kit fallback (FR4) */}
             {showKit && allocation.grocery_kit && (
-              <div className="rounded-lg border border-rose-500/25 bg-rose-500/5 p-3">
-                <p className="text-sm font-medium text-rose-200">
-                  🧺 Grocery kit · covers {allocation.grocery_kit.covers_days}{" "}
-                  day{allocation.grocery_kit.covers_days > 1 ? "s" : ""}
+              <div className="brutal-box bg-rose-100 p-3">
+                <p className="text-sm font-bold">
+                  🧺 Grocery kit — covers the other{" "}
+                  {allocation.grocery_kit.covers_days} day
+                  {allocation.grocery_kit.covers_days > 1 ? "s" : ""}
                 </p>
                 <ul className="mt-2 space-y-1.5">
                   {allocation.grocery_kit.items.map((ki) => {
@@ -209,9 +242,9 @@ export default function ClientPlanCard({
                     return (
                       <li
                         key={ki.grocery_id}
-                        className="flex flex-wrap items-center gap-1.5 text-xs text-zinc-300"
+                        className="flex flex-wrap items-center gap-1.5 text-xs"
                       >
-                        <span>
+                        <span className="font-medium">
                           {ki.name} × {ki.qty}
                         </span>
                         {verdict?.checks.map((c) => (
@@ -221,10 +254,10 @@ export default function ClientPlanCard({
                     );
                   })}
                 </ul>
-                <p className="mt-3 text-[11px] font-semibold uppercase tracking-wider text-zinc-500">
-                  Prep instructions ({client.cooking_ability}-safe)
+                <p className="mt-3 font-heading text-[10px] font-extrabold uppercase tracking-wide">
+                  How to prepare ({COOKING_LABEL[client.cooking_ability]})
                 </p>
-                <ol className="mt-1 list-decimal space-y-1 pl-5 text-xs leading-relaxed text-zinc-400">
+                <ol className="mt-1 list-decimal space-y-1 pl-5 text-xs leading-relaxed text-black/80">
                   {allocation.grocery_kit.prep_instructions.map((step, i) => (
                     <li key={i}>{step}</li>
                   ))}
@@ -234,15 +267,21 @@ export default function ClientPlanCard({
 
             {/* delivery slot */}
             {showRoute && route && (
-              <div className="rounded-lg border border-blue-500/25 bg-blue-500/5 p-3 text-xs text-zinc-300">
-                <p className="text-sm font-medium text-blue-200">🚚 Delivery</p>
+              <div className="brutal-box bg-blue-100 p-3 text-xs">
+                <p className="text-sm font-bold">🚚 Delivery</p>
                 <p className="mt-1">
-                  Route <span className="font-mono">{route.route_id}</span> ·{" "}
-                  {route.zone} · {route.delivery_date} · window {route.window}{" "}
+                  Arrives <span className="font-bold">{route.delivery_date}</span>{" "}
+                  between <span className="font-bold">{route.window}</span> ·{" "}
+                  {route.zone} · route{" "}
+                  <span className="font-mono">{route.route_id}</span>{" "}
                   {route.cold_chain_ok ? (
-                    <span className="text-emerald-300">· cold chain ✓</span>
+                    <span className="brutal-flat ml-1 bg-secondary px-1.5 py-px font-bold text-black">
+                      kept cold ✓
+                    </span>
                   ) : (
-                    <span className="text-red-300">· cold chain ✕</span>
+                    <span className="brutal-flat ml-1 bg-red-500 px-1.5 py-px font-bold text-white">
+                      cold chain problem ✕
+                    </span>
                   )}
                 </p>
               </div>

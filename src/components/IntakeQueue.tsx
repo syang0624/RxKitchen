@@ -43,15 +43,15 @@ export default function IntakeQueue({
 
   return (
     <SectionCard title="Intake queue" subtitle={`${clients.length} referrals`}>
-      <div className="sticky top-0 border-b border-zinc-800 bg-zinc-900/95 p-2 backdrop-blur">
+      <div className="sticky top-0 border-b-2 border-black bg-white p-2">
         <input
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search name, ID, hospital…"
-          className="w-full rounded-lg border border-zinc-700 bg-zinc-950 px-2.5 py-1.5 text-xs text-zinc-200 placeholder-zinc-600 outline-none focus:border-zinc-500"
+          placeholder="Search by name or hospital…"
+          className="brutal-flat w-full bg-background px-2.5 py-1.5 text-xs text-black placeholder-black/40 outline-none focus:bg-white"
         />
       </div>
-      <ul className="divide-y divide-zinc-800/70">
+      <ul className="divide-y-2 divide-black/10">
         {filtered.map((c) => {
           const isHero = c.id === HERO_CLIENT_ID;
           const isNew = isHero && !heroProcessed;
@@ -60,43 +60,42 @@ export default function IntakeQueue({
             <li key={c.id}>
               <button
                 onClick={() => onSelect(c.id)}
-                className={`w-full px-3 py-2 text-left transition-colors hover:bg-zinc-800/50 ${
-                  selected ? "bg-zinc-800/80" : ""
+                className={`w-full px-3 py-2 text-left transition-colors hover:bg-secondary/30 ${
+                  selected ? "bg-secondary/50" : ""
                 }`}
               >
                 <div className="flex items-center justify-between gap-2">
-                  <span className="truncate text-sm font-medium text-zinc-200">
-                    {c.name}
-                  </span>
+                  <span className="truncate text-sm font-bold">{c.name}</span>
                   {isNew ? (
-                    <span className="flex items-center gap-1 rounded-full bg-sky-500/15 px-2 py-0.5 text-[10px] font-semibold text-sky-300">
-                      <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-sky-400" />
-                      NEW
+                    <span className="brutal-flat flex items-center gap-1 bg-primary px-2 py-0.5 text-[10px] font-bold uppercase text-white">
+                      <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-white" />
+                      New
                     </span>
                   ) : (
-                    <span className="rounded-full bg-emerald-500/10 px-2 py-0.5 text-[10px] font-medium text-emerald-400">
-                      processed
+                    <span className="brutal-flat bg-secondary px-2 py-0.5 text-[10px] font-bold uppercase text-black">
+                      Plan ready
                     </span>
                   )}
                 </div>
-                <div className="mt-0.5 truncate text-[11px] text-zinc-500">
-                  #{c.id} · {c.referring_hospital}
+                <div className="mt-0.5 truncate text-[11px] text-black/60">
+                  {c.referring_hospital}{" "}
+                  <span className="font-mono text-black/40">#{c.id}</span>
                 </div>
                 <div className="mt-1 flex flex-wrap gap-1">
                   {c.diet_orders.map((d) => (
                     <span
                       key={d}
-                      className="rounded bg-zinc-800 px-1.5 py-px text-[10px] text-zinc-400"
+                      className="brutal-flat bg-background px-1.5 py-px text-[10px] font-medium"
                     >
-                      {d}
+                      {d} diet
                     </span>
                   ))}
                   {c.allergies.map((a) => (
                     <span
                       key={a}
-                      className="rounded bg-red-500/10 px-1.5 py-px text-[10px] text-red-300"
+                      className="brutal-flat bg-red-400 px-1.5 py-px text-[10px] font-bold text-black"
                     >
-                      ⚠ {a}
+                      ⚠ {a} allergy
                     </span>
                   ))}
                 </div>
