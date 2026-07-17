@@ -12,6 +12,20 @@ experience, and the 4-minute demo narrative (PRD §4). The shell Nori built in
 round 1 covers FR1–FR10 — your job is to finish the P1/P2 features, absorb the
 richer Claude-authored runs as Nori lands them, and harden the demo.
 
+**Primary user (refined from PRD §3):** the **Chief Nutrition Officer — not
+technical at all** — who uses this to plan meal schedules. Every screen must
+work for someone who has never seen a JSON file or a terminal:
+
+- Plain language everywhere: "Safe — no allergens" beats `allergen: pass`;
+  "Sodium 480 of 600 mg" beats `480/600mg ✓`. No IDs as primary labels (say
+  "Rosa Dela Cruz", show `#1042` as secondary detail).
+- Big, obvious, forgiving controls — one clear primary action per screen,
+  generous hit targets, no hover-only affordances, nothing destructive.
+- The weekly meal schedule is her mental model: lead with days-of-the-week
+  views (Mon–Sun plan per client), not data tables.
+- She must always be able to answer "is this safe, and why?" in one glance —
+  constraint results stay front and center, spelled out in words.
+
 ## What already exists (don't rebuild)
 
 - `src/components/Dashboard.tsx` — shell with intake queue, scenario switching (happy path / stockout swap), kitchen/delivery/scale tabs
@@ -20,8 +34,56 @@ richer Claude-authored runs as Nori lands them, and harden the demo.
 - `src/lib/types.ts` — TS mirror of the frozen contract in `schemas/`
 - All FR1–FR7 views plus scale view (FR8), delivery panel (FR9), stockout trigger (FR10)
 
+## Design system (mandatory): NEOBRUTALISM, Poolsuite-inspired
+
+Act as an expert UI/UX designer. Build every component against this exact
+design system — do not mix in other aesthetics, and do not keep the current
+dark zinc theme.
+
+**Design vibe:** NEOBRUTALISM. High-contrast **2px hard black borders on ALL
+containers and buttons**. **No soft shadows** — hard offset shadows only
+(`4px 4px 0px 0px #000000`). Clashing neon colors on cream backgrounds. Bold,
+slightly weird typography. Ignore standard subtle spacing guidelines.
+
+| Token | Value |
+| --- | --- |
+| Background | `#FFFDF5` (cream) |
+| Primary | `#8B5CF6` (violet) |
+| Secondary | `#A3E635` (lime) |
+| Text | `#000000` |
+| Mode | Light |
+| Border radius | `4px` |
+| Border style | `2px solid #000000` |
+| Shadow | `4px 4px 0px 0px #000000` |
+
+**Typography:** headings in **"Lexend Mega"** — uppercase, bold; body in
+**"Public Sans"**; monospaced for details/numbers (sodium values, IDs,
+timestamps). Both fonts are on Google Fonts — load via `next/font/google`
+(`Lexend_Mega`, `Public_Sans`) in `src/app/layout.tsx`.
+
+Implementation notes for this codebase:
+
+- Define tokens once in `src/app/globals.css` (Tailwind v4 `@theme`):
+  `--color-background: #FFFDF5; --color-primary: #8B5CF6;
+  --color-secondary: #A3E635;` plus a shared `.brutal` utility
+  (`border: 2px solid #000; border-radius: 4px; box-shadow: 4px 4px 0 0 #000`).
+- Retheme `src/components/ui.tsx` first — every card/button/badge inherits
+  from there. Interactive elements: translate down-right + shadow collapse on
+  press (`active:translate-x-[4px] active:translate-y-[4px] active:shadow-none`)
+  is the canonical neobrutalist press state.
+- Keep semantics loud but on-palette: pass/safe states lean on the lime
+  secondary, attention states on the violet primary; failures stay
+  unmistakable (black on a hot accent), never a muted gray.
+- Reference: Poolsuite (https://poolsuite.net) — creative category. Stay pure
+  to this system.
+
 ## Backlog (priority order)
 
+0. **Reskin to the design system above + non-technical usability pass.** Do
+   this before (or together with) new features so everything lands styled:
+   fonts in `layout.tsx`, tokens in `globals.css`, `ui.tsx` primitives, then
+   sweep every component. While sweeping, apply the CNO persona rules — plain
+   language, day-of-week meal schedule framing, no raw IDs/jargon.
 1. **Per-client replay (finish FR8).** `data/agent_runs/` now has a run for
    *every* client, but `src/lib/data.ts` statically imports only the hero +
    stockout streams, and `Dashboard.tsx` hardcodes `EMPTY_EVENTS` for non-hero
