@@ -51,7 +51,7 @@ export default function WeeklyCookList({
   }, [effectiveAllocations]);
 
   return (
-    <div className="flex min-h-0 flex-1 flex-col gap-3">
+    <div className="flex flex-col gap-3">
       {/* the week at a glance */}
       <div className="flex flex-wrap items-center gap-x-4 gap-y-2 rounded-2xl border border-[#dadad3] bg-white px-4 py-3 text-sm sm:px-5">
         <span className="flex items-center gap-2 font-semibold text-[#211922]">
@@ -86,7 +86,7 @@ export default function WeeklyCookList({
       </div>
 
       {/* Monday → Sunday cook list */}
-      <div className="grid min-h-0 flex-1 grid-cols-2 gap-2 sm:grid-cols-4 xl:grid-cols-7">
+      <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 xl:grid-cols-7">
         {DAYS.map((day) => {
           const dayMap = week.byDay.get(day)!;
           const rows = [...dayMap.entries()]
@@ -99,7 +99,7 @@ export default function WeeklyCookList({
           return (
             <section
               key={day}
-              className="flex min-h-0 max-h-[60vh] flex-col overflow-hidden rounded-2xl border border-[#dadad3] bg-white xl:max-h-none"
+              className="flex h-[300px] flex-col overflow-hidden rounded-2xl border border-[#dadad3] bg-white"
             >
               <header className="flex items-baseline justify-between border-b border-[#e5e5e0] bg-[#fbfbf9] px-3 py-2">
                 <h3 className="text-xs font-semibold text-[#211922]">

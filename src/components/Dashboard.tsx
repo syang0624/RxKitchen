@@ -40,6 +40,7 @@ import IntakeQueue from "./IntakeQueue";
 import KitchenPlan from "./KitchenPlan";
 import MetricsBanner from "./MetricsBanner";
 import ScaleView from "./ScaleView";
+import SupplyProjection from "./SupplyProjection";
 import WeeklyCookList from "./WeeklyCookList";
 
 type ScenarioId = "happy_path" | "stockout_replan";
@@ -287,10 +288,11 @@ export default function Dashboard() {
       </div>
 
       {view === "week" && (
-        <>
+        <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto pb-1">
           <BatchRunTicker />
           <WeeklyCookList effectiveAllocations={effectiveAllocations} />
-        </>
+          <SupplyProjection effectiveAllocations={effectiveAllocations} />
+        </div>
       )}
 
       {view === "clients" && (
