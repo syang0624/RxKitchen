@@ -14,7 +14,7 @@ const KEY = "rxkitchen.admin.v1";
 export interface AdminOverrides {
   /** "clientId:day" → replacement meal_id chosen by the CNO. */
   swaps: Record<string, string>;
-  /** Clients whose deliveries are on hold this week. */
+  /** Clients whose meals are on hold this week. */
   holds: number[];
 }
 

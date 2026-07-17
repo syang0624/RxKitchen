@@ -1,7 +1,7 @@
 {
   "id": "happy_path",
-  "title": "Referral to doorstep: Client 1042",
+  "title": "Referral to pickup: Client 1042",
   "client_id": 1042,
   "run": "agent_runs/client-1042.json",
-  "description": "Hospital referral arrives; minutes later a complete, clinically-safe doorstep plan exists (PRD §4)."
+  "description": "Hospital referral arrives; minutes later a complete, clinically-safe weekly plan exists (PRD §4)."
 }

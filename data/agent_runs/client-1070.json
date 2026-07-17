@@ -123,8 +123,8 @@
       "t_offset_ms": 23184,
       "agent": "delivery",
       "type": "output",
-      "title": "Route assigned",
-      "detail": "Client 1070 added to route R-EXCE-2 (Excelsior), delivery 2026-07-21, window 10:00–12:00. Cold chain OK.",
+      "title": "Pickup scheduled",
+      "detail": "Meals for client 1070 ready for pickup 2026-07-21, window 10:00–12:00 (Excelsior group). Cold chain OK.",
       "data": {
         "route_id": "R-EXCE-2"
       }

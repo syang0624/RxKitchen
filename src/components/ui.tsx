@@ -50,7 +50,7 @@ export const AGENT_META: Record<
     edge: "border-l-[#77776f]",
   },
   delivery: {
-    label: "Delivery Agent",
+    label: "Pickup Coordinator",
     icon: "truck",
     chip: "bg-[#f3f3ef] text-[#262622]",
     edge: "border-l-[#b1b1aa]",

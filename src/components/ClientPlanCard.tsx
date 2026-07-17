@@ -176,7 +176,7 @@ export default function ClientPlanCard({
   approval?: { approvedAt: string | null; onApprove: () => void } | null;
   /** When the weekly menu is approved, batch clients show as covered by it. */
   weekApprovedAt?: string | null;
-  /** Deliveries paused for this client this week. */
+  /** Meals paused for this client this week. */
   held?: boolean;
   /** Days whose meal the CNO swapped herself. */
   swappedDays?: Set<string>;
@@ -241,7 +241,7 @@ export default function ClientPlanCard({
                 : "bg-[#f6f6f3] text-black hover:bg-[#e5e5e0]"
             }`}
           >
-            {held ? "Resume deliveries" : "Hold this week"}
+            {held ? "Resume her meals" : "Hold this week"}
           </button>
         </div>
 

@@ -100,8 +100,8 @@
       "t_offset_ms": 18131,
       "agent": "delivery",
       "type": "output",
-      "title": "Route assigned",
-      "detail": "Client 1009 added to route R-RICH-1 (Richmond), delivery 2026-07-21, window 12:00–14:00. Cold chain OK.",
+      "title": "Pickup scheduled",
+      "detail": "Meals for client 1009 ready for pickup 2026-07-21, window 12:00–14:00 (Richmond group). Cold chain OK.",
       "data": {
         "route_id": "R-RICH-1"
       }

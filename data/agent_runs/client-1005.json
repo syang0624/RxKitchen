@@ -100,8 +100,8 @@
       "t_offset_ms": 15518,
       "agent": "delivery",
       "type": "output",
-      "title": "Route assigned",
-      "detail": "Client 1005 added to route R-BAYV-1 (Bayview-Hunters Point), delivery 2026-07-21, window 12:00–14:00. Cold chain OK.",
+      "title": "Pickup scheduled",
+      "detail": "Meals for client 1005 ready for pickup 2026-07-21, window 12:00–14:00 (Bayview-Hunters Point group). Cold chain OK.",
       "data": {
         "route_id": "R-BAYV-1"
       }

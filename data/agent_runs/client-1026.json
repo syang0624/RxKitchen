@@ -100,8 +100,8 @@
       "t_offset_ms": 14441,
       "agent": "delivery",
       "type": "output",
-      "title": "Route assigned",
-      "detail": "Client 1026 added to route R-TEND-1 (Tenderloin), delivery 2026-07-21, window 10:00–12:00. Cold chain OK.",
+      "title": "Pickup scheduled",
+      "detail": "Meals for client 1026 ready for pickup 2026-07-21, window 10:00–12:00 (Tenderloin group). Cold chain OK.",
       "data": {
         "route_id": "R-TEND-1"
       }

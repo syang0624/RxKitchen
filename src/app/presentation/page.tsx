@@ -153,13 +153,13 @@ export default function PresentationPage() {
               Chief Nutrition Officer reviews, approves, and edits: one click
               substitutes a recipe for a whole group, safety-checked per person.{" "}
               <b className="text-[#211922]">
-                Agents propose. She decides. Nothing unsafe ships.
+                Agents propose. She decides. Nothing unsafe leaves the kitchen.
               </b>
             </p>
             <div className="mt-auto grid grid-cols-2 gap-3 pt-8 sm:grid-cols-5">
               {[
                 [String(stats.violations), "clinical safety issues — re-verified live in the browser", true],
-                [String(stats.clients), "clients planned, referral to doorstep", false],
+                [String(stats.clients), "clients planned, referral to pickup", false],
                 [stats.servings.toLocaleString(), "meals scheduled this week", false],
                 [`${stats.matchedPct}%`, "matched to fully compliant meals", false],
                 [`${stats.donationPct}%`, "of donations routed into recipes & pantry", false],
@@ -206,8 +206,8 @@ export default function PresentationPage() {
                 <ul className="mt-2 space-y-2.5 text-xs leading-relaxed text-[#62625b] sm:text-sm">
                   <li>
                     • <b className="text-[#211922]">Project Open Hand</b> (San
-                    Francisco) delivers medically tailored meals to clients
-                    discharged with diabetes, cardiovascular and renal
+                    Francisco) prepares medically tailored meals that clients pick
+                    up — prescribed for diabetes, cardiovascular and renal
                     conditions, and allergies.
                   </li>
                   <li>
@@ -242,7 +242,7 @@ export default function PresentationPage() {
                 <ul className="mt-3 space-y-2 text-xs leading-relaxed sm:text-sm">
                   <li>
                     • Clinically accountable — she signs off on every meal that
-                    ships.
+                    leaves the kitchen.
                   </li>
                   <li>
                     • Plans for the whole kitchen: weekly menus, batches, and
@@ -255,8 +255,8 @@ export default function PresentationPage() {
                   <li>
                     • Her definition of success:{" "}
                     <b>
-                      nothing unsafe ships, nobody goes unfed, donations
-                      don&apos;t go to waste.
+                      nothing unsafe leaves the kitchen, nobody goes unfed,
+                      donations don&apos;t go to waste.
                     </b>
                   </li>
                 </ul>
@@ -307,7 +307,7 @@ export default function PresentationPage() {
           <section className="flex flex-1 flex-col">
             <Brand tagline="how it works" />
             <p className="mt-8 text-xs font-bold uppercase tracking-widest text-[#e60023]">
-              Referral to doorstep, in minutes
+              Referral to pickup, in minutes
             </p>
             <h1 className="mt-2 text-3xl font-extrabold tracking-tight sm:text-4xl">
               Specialist agents, one safety hierarchy, a human decision

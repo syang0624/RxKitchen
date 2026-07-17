@@ -100,8 +100,8 @@
       "t_offset_ms": 17864,
       "agent": "delivery",
       "type": "output",
-      "title": "Route assigned",
-      "detail": "Client 1047 added to route R-VISI-1 (Visitacion Valley), delivery 2026-07-21, window 12:00–14:00. Cold chain OK.",
+      "title": "Pickup scheduled",
+      "detail": "Meals for client 1047 ready for pickup 2026-07-21, window 12:00–14:00 (Visitacion Valley group). Cold chain OK.",
       "data": {
         "route_id": "R-VISI-1"
       }

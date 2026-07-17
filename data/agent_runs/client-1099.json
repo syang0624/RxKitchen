@@ -145,8 +145,8 @@
       "t_offset_ms": 22687,
       "agent": "delivery",
       "type": "output",
-      "title": "Route assigned",
-      "detail": "Client 1099 added to route R-WEST-1 (Western Addition), delivery 2026-07-21, window 14:00–16:00. Cold chain OK.",
+      "title": "Pickup scheduled",
+      "detail": "Meals for client 1099 ready for pickup 2026-07-21, window 14:00–16:00 (Western Addition group). Cold chain OK.",
       "data": {
         "route_id": "R-WEST-1"
       }

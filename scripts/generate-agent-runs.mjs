@@ -114,7 +114,7 @@ function stockoutFactsFor(client) {
 /** Donation-intake sim facts (FR12): the donation, its condition/allergens, and
  * the routing decision recomputed with the shared triage rule. Anchored to a
  * client whose plan draws from the target batch so the wrap-up lands on a real
- * doorstep outcome. */
+ * pickup outcome. */
 const SIM_DONATION_ID = argVal("donation") ?? "D011";
 
 function donationBatchFor(donationId) {
@@ -166,11 +166,11 @@ The agents, in pipeline order:
 - kitchen: aggregates unmet demand, schedules production batches within capacity
 - donation: triages incoming donations and routes them into inventory or batches
 - fallback: composes grocery kits with prep instructions when meals can't cover the plan
-- delivery: slots the client into a zone route
+- delivery: schedules the client's meal pickup window by zone
 
 Constraint hierarchy (never violated): a meal failing ANY hard check is EXCLUDED, never "scored down". Soft preferences may be relaxed; clinical limits never are.
 
-You will receive a FACTS JSON computed by the deterministic matching engine. Author 16–24 events telling this client's referral-to-doorstep story.
+You will receive a FACTS JSON computed by the deterministic matching engine. Author 16–24 events telling this client's referral-to-pickup story.
 
 Grounding rules (violations cause your output to be rejected):
 1. Use ONLY meals, IDs, numbers, and constraint results present in FACTS. Never invent a meal, a nutrition number, or a check result.

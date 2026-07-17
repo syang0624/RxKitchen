@@ -67,7 +67,7 @@ const POINTS = [
   },
   {
     icon: CheckCircle2,
-    title: "Nothing ships without you",
+    title: "Nothing goes out without you",
     body: "The agents draft; you approve. The weekly menu can only be sent to the kitchen when every safety check passes.",
   },
   {

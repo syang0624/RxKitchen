@@ -217,16 +217,16 @@
       "t_offset_ms": 38427,
       "agent": "delivery",
       "type": "thought",
-      "title": "Slotting into route",
-      "detail": "Client zone is Tenderloin. Existing route R-TEND-1 departs within the 10:00–12:00 window with cold-chain margin."
+      "title": "Scheduling pickup",
+      "detail": "Client zone is Tenderloin. Pickup batch R-TEND-1 is prepared for the 10:00–12:00 window with cold-chain margin."
     },
     {
       "seq": 21,
       "t_offset_ms": 39988,
       "agent": "delivery",
       "type": "output",
-      "title": "Route assigned",
-      "detail": "Client 1042 added to route R-TEND-1 (Tenderloin), delivery 2026-07-21, window 10:00–12:00. Cold chain OK.",
+      "title": "Pickup scheduled",
+      "detail": "Meals for client 1042 will be ready for pickup 2026-07-21, window 10:00–12:00 (batch R-TEND-1, Tenderloin group). Cold chain OK.",
       "data": {
         "route_id": "R-TEND-1"
       }

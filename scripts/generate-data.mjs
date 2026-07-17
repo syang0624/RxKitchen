@@ -618,8 +618,8 @@ function heroEvents(client, meals, allocation, batchB1, kitchenToday) {
     ev("donation", "check", "Donation D001 triaged", "Incoming jasmine rice donation (12 × 50 lb) classified as kitchen ingredient — condition good, no allergens. Routing to batch B1.", { donation_id: "D001", result: "kitchen_ingredient" }),
     ev("donation", "check", "Donation D007 triaged", "Chicken thighs (9 cases) — cold chain intact. Routing to batch B1 as primary protein.", { donation_id: "D007", result: "kitchen_ingredient" }),
     ev("fallback", "output", "Grocery kit composed", `Gap of ${allocation.grocery_kit ? allocation.grocery_kit.covers_days : 0} day(s) covered with a microwave-only kit: ${allocation.grocery_kit ? allocation.grocery_kit.items.map((i) => i.name).join(", ") : ""}. All items peanut-free; numbered prep steps limited to microwave use.`, { fallback_level: allocation.fallback_level }),
-    ev("delivery", "thought", "Slotting into route", `Client zone is ${client.address_zone}. Existing route R-TEND-1 departs within the 10:00–12:00 window with cold-chain margin.`),
-    ev("delivery", "output", "Route assigned", `Client ${client.id} added to route R-TEND-1 (${client.address_zone}), delivery 2026-07-21, window 10:00–12:00. Cold chain OK.`, { route_id: "R-TEND-1" }),
+    ev("delivery", "thought", "Scheduling pickup", `Client zone is ${client.address_zone}. Pickup batch R-TEND-1 is prepared for the 10:00–12:00 window with cold-chain margin.`),
+    ev("delivery", "output", "Pickup scheduled", `Meals for client ${client.id} will be ready for pickup 2026-07-21, window 10:00–12:00 (batch R-TEND-1, ${client.address_zone} group). Cold chain OK.`, { route_id: "R-TEND-1" }),
     ev("orchestrator", "output", "Plan complete", `Client ${client.id}: ${chosen.length} compliant meals (${chosen.filter((i) => i.from_batch).length} from batch B1)${allocation.grocery_kit ? ` + grocery kit covering ${allocation.grocery_kit.covers_days} day(s)` : ""}. 0 hard-constraint violations. Total pipeline time: ${(t / 1000 / 60).toFixed(1)} min.`),
   ];
 }
@@ -648,7 +648,7 @@ function stockoutEvents(client, meals, allocation) {
  * Donation-intake sim stream (FR12, P2): a new donation arrives, the Donation
  * Triage Agent classifies it with the shared rule, and routes it into a batch
  * or inventory. Anchored to the first client whose plan draws from the target
- * batch so the wrap-up can tie the donation to a real doorstep outcome.
+ * batch so the wrap-up can tie the donation to a real client outcome.
  * Template placeholder — the Claude pipeline upgrades it in place
  * (generate-agent-runs.mjs --scenario donation).
  */
@@ -728,7 +728,7 @@ function templateEvents(client, meals, allocation, route, donations, batches) {
     events.push(ev("fallback", "output", "Grocery kit composed", `${allocation.grocery_kit.covers_days} gap day(s) covered: ${allocation.grocery_kit.items.map((i) => i.name).join(", ")}. All items allergen-safe for this client; prep steps match ${client.cooking_ability === "none" ? "no-cook" : client.cooking_ability} ability.`, { result: "pass" }));
   }
   if (route) {
-    events.push(ev("delivery", "output", "Route assigned", `Client ${client.id} added to route ${route.route_id} (${route.zone}), delivery ${route.delivery_date}, window ${route.window}. Cold chain OK.`, { route_id: route.route_id }));
+    events.push(ev("delivery", "output", "Pickup scheduled", `Meals for client ${client.id} ready for pickup ${route.delivery_date}, window ${route.window} (${route.zone} group). Cold chain OK.`, { route_id: route.route_id }));
   }
   events.push(ev("orchestrator", "output", "Plan complete", `Client ${client.id}: ${allocation.items.length} compliant meal(s)${allocation.grocery_kit ? ` + grocery kit covering ${allocation.grocery_kit.covers_days} day(s)` : ""} at fallback level ${allocation.fallback_level}. 0 hard-constraint violations.`));
   return events;
@@ -812,7 +812,7 @@ function main() {
     events: donationSimEvents({ donation: simDonation, triage: simTriage, batch: simBatch, contrast, contrastTriage: triageDonation(contrast, BATCHES), anchorClient, anchorItem, servingsFromBatch }),
   });
 
-  write("scenarios/happy_path.json", { id: "happy_path", title: "Referral to doorstep: Client 1042", client_id: 1042, run: "agent_runs/client-1042.json", description: "Hospital referral arrives; minutes later a complete, clinically-safe doorstep plan exists (PRD §4)." });
+  write("scenarios/happy_path.json", { id: "happy_path", title: "Referral to pickup: Client 1042", client_id: 1042, run: "agent_runs/client-1042.json", description: "Hospital referral arrives; minutes later a complete, clinically-safe weekly plan exists (PRD §4)." });
   write("scenarios/stockout_replan.json", { id: "stockout_replan", title: "Stress beat: stock depletion re-plan", client_id: 1042, run: "agent_runs/client-1042-stockout.json", depleted_meal_id: heroAlloc.items[0].meal_id, description: "A meal's stock is marked depleted; agents re-plan the allocation live (PRD §4, FR10)." });
   write("scenarios/donation_sim.json", { id: "donation_sim", title: "Donation intake: a new arrival is triaged live", client_id: anchorClient.id, run: `agent_runs/client-${anchorClient.id}-donation.json`, donation_id: SIM_DONATION_ID, description: "A new donation is dropped off; the Donation Triage Agent classifies it against the food-safety gate and routes it into a scheduled kitchen batch (FR12, PRD §4)." });
 

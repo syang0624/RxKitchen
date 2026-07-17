@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "RxKitchen — Agentic Clinical Meal Allocation",
   description:
-    "Deterministic replay dashboard: hospital referral → clinically-safe doorstep plan, re-verified live in the browser.",
+    "Deterministic replay dashboard: hospital referral → clinically-safe weekly meal plan, re-verified live in the browser.",
 };
 
 export default function RootLayout({
