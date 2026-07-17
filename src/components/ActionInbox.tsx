@@ -14,6 +14,7 @@ import {
   setWorkflow,
   useWorkflow,
 } from "@/lib/workflow";
+import { resetOverrides } from "@/lib/overrides";
 
 function Row({
   icon,
@@ -70,7 +71,10 @@ export default function ActionInbox({
           approved {wf.heroApprovedAt} · donation triaged {wf.donationTriagedAt}
         </span>
         <button
-          onClick={resetWorkflow}
+          onClick={() => {
+            resetWorkflow();
+            resetOverrides();
+          }}
           className="ml-auto text-xs font-semibold text-[#3f6b52] underline underline-offset-2 hover:text-[#103c25]"
         >
           Reset demo workflow

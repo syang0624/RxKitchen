@@ -20,6 +20,8 @@ import {
   summarizePreferences,
 } from "@/lib/validators";
 import ExplainDrawer from "./ExplainDrawer";
+import SwapMealDrawer from "./SwapMealDrawer";
+import { clearSwap, setSwap, toggleHold } from "@/lib/overrides";
 import { CheckPill, SectionCard } from "./ui";
 
 const FALLBACK_LABEL: Record<number, string> = {
@@ -41,10 +43,15 @@ function MealItem({
   item,
   client,
   onExplain,
+  onSwap,
+  swapped,
 }: {
   item: Allocation["items"][number];
   client: ClientProfile;
   onExplain: () => void;
+  onSwap: () => void;
+  /** The CNO replaced this day's meal herself. */
+  swapped: boolean;
 }) {
   const meal = mealById.get(item.meal_id);
   if (!meal) {
@@ -112,13 +119,34 @@ function MealItem({
               .map((c) => (
                 <CheckPill key={c.rule} pass={false} label={c.label} />
               ))}
-            <button
-              onClick={onExplain}
-              title="Why this meal? See every safety check and what the agents said."
-              className="brutal-btn ml-auto bg-white px-2 py-0.5 text-[10px] font-bold uppercase"
-            >
-              Why?
-            </button>
+            <span className="ml-auto flex items-center gap-1.5">
+              {swapped && (
+                <span className="flex items-center gap-1 rounded-full bg-[#fdf3e2] px-2 py-0.5 text-[10px] font-bold text-[#6b4c11]">
+                  changed by you
+                  <button
+                    onClick={() => clearSwap(client.id, item.day)}
+                    className="underline underline-offset-2"
+                    title="Back to the agents' pick"
+                  >
+                    undo
+                  </button>
+                </span>
+              )}
+              <button
+                onClick={onSwap}
+                title="Swap this meal — only safe alternatives are offered"
+                className="brutal-btn bg-white px-2 py-0.5 text-[10px] font-bold uppercase"
+              >
+                Swap
+              </button>
+              <button
+                onClick={onExplain}
+                title="Why this meal? See every safety check and what the agents said."
+                className="brutal-btn bg-white px-2 py-0.5 text-[10px] font-bold uppercase"
+              >
+                Why?
+              </button>
+            </span>
           </div>
         </div>
       </div>
@@ -134,6 +162,8 @@ export default function ClientPlanCard({
   kitRevealed,
   approval = null,
   weekApprovedAt = null,
+  held = false,
+  swappedDays = new Set<string>(),
 }: {
   client: ClientProfile;
   allocation: Allocation | undefined;
@@ -146,10 +176,17 @@ export default function ClientPlanCard({
   approval?: { approvedAt: string | null; onApprove: () => void } | null;
   /** When the weekly menu is approved, batch clients show as covered by it. */
   weekApprovedAt?: string | null;
+  /** Deliveries paused for this client this week. */
+  held?: boolean;
+  /** Days whose meal the CNO swapped herself. */
+  swappedDays?: Set<string>;
 }) {
   const [explainItem, setExplainItem] = useState<
     Allocation["items"][number] | null
   >(null);
+  const [swapItem, setSwapItem] = useState<Allocation["items"][number] | null>(
+    null,
+  );
   const items = useMemo(() => {
     const revealed =
       !allocation
@@ -178,6 +215,36 @@ export default function ClientPlanCard({
       subtitle={`#${client.id}`}
     >
       <div className="space-y-4 p-3">
+        {/* hold state (admin) */}
+        <div
+          className={`flex flex-wrap items-center gap-3 rounded-2xl px-3 py-2.5 ${
+            held
+              ? "border border-[#f2b8b8] bg-[#fff0f1]"
+              : "border border-transparent"
+          }`}
+        >
+          {held ? (
+            <p className="min-w-0 flex-1 text-xs font-semibold leading-relaxed text-[#9e0a0a]">
+              On hold — excluded from this week&apos;s cooking, counts, and the
+              kitchen sheet until you resume.
+            </p>
+          ) : (
+            <p className="min-w-0 flex-1 text-[11px] text-[#62625b]">
+              Hospitalized or away? Pause this client&apos;s week.
+            </p>
+          )}
+          <button
+            onClick={() => toggleHold(client.id)}
+            className={`shrink-0 rounded-2xl px-3.5 py-2 text-xs font-bold transition-colors ${
+              held
+                ? "bg-[#0f7a41] text-white hover:bg-[#0c6335]"
+                : "bg-[#f6f6f3] text-black hover:bg-[#e5e5e0]"
+            }`}
+          >
+            {held ? "Resume deliveries" : "Hold this week"}
+          </button>
+        </div>
+
         {/* review & approval state (the CNO's decision, not the agents') */}
         {approval ? (
           approval.approvedAt ? (
@@ -283,6 +350,8 @@ export default function ClientPlanCard({
                     item={item}
                     client={client}
                     onExplain={() => setExplainItem(item)}
+                    onSwap={() => setSwapItem(item)}
+                    swapped={swappedDays.has(item.day)}
                   />
                 ))}
               </ul>
@@ -343,6 +412,19 @@ export default function ClientPlanCard({
           </>
         )}
       </div>
+
+      {/* swap-a-meal picker (admin) */}
+      {swapItem && (
+        <SwapMealDrawer
+          item={swapItem}
+          client={client}
+          onSelect={(mealId) => {
+            setSwap(client.id, swapItem.day, mealId);
+            setSwapItem(null);
+          }}
+          onClose={() => setSwapItem(null)}
+        />
+      )}
 
       {/* "Explain this decision" drawer (FR11) */}
       {explainItem && (

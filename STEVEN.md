@@ -93,6 +93,12 @@ Implementation notes for this codebase:
   menu approval gated on zero live-verified safety issues, and a print-only
   kitchen production sheet (`KitchenPrintSheet`, browser print).
 
+- **Admin layer (2026-07-16):** the CNO can now change things, not just
+  approve them — per-day meal swaps (picker offers only alternatives passing
+  every safety check; `src/lib/overrides.ts`), week holds (client drops out of
+  cooking/counts/print), a first-visit HelpGuide, all persisted and included
+  in the demo reset.
+
 ## Backlog (priority order)
 
 0. **Reskin to the design system above + non-technical usability pass.** Do

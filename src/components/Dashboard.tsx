@@ -10,6 +10,7 @@ import {
   Activity,
   BarChart3,
   ChefHat,
+  HelpCircle,
   HeartPulse,
   PackagePlus,
   Play,
@@ -37,7 +38,9 @@ import { useReplay } from "@/lib/replay";
 import { useAgentRun } from "@/lib/runs";
 import { computeMetrics } from "@/lib/validators";
 import { approvalStamp, setWorkflow, useWorkflow } from "@/lib/workflow";
+import { swapKey, useOverrides } from "@/lib/overrides";
 import ActionInbox from "./ActionInbox";
+import HelpGuide, { markHelpSeen, useHelpSeen } from "./HelpGuide";
 import ActivityFeed from "./ActivityFeed";
 import BatchRunTicker from "./BatchRunTicker";
 import ClientPlanCard from "./ClientPlanCard";
@@ -70,6 +73,14 @@ export default function Dashboard() {
   const [view, setView] = useState<View>("week");
 
   const workflow = useWorkflow();
+  const overrides = useOverrides();
+  const helpSeen = useHelpSeen();
+  const [helpOpen, setHelpOpen] = useState(false);
+  const showHelp = helpOpen || !helpSeen;
+  const closeHelp = () => {
+    markHelpSeen();
+    setHelpOpen(false);
+  };
 
   const totalMeals = useMemo(
     () =>
@@ -115,11 +126,28 @@ export default function Dashboard() {
       (e) => e.agent === "matching" && e.type === "output",
     );
 
+  // The CNO's meal swaps, layered over the generated plans. The validators
+  // re-check swapped meals like any other, so edits can't bypass safety.
+  const adminAllocations = useMemo<Allocation[]>(() => {
+    if (Object.keys(overrides.swaps).length === 0) return allocations;
+    return allocations.map((a) => {
+      let changed = false;
+      const items = a.items.map((item) => {
+        const swappedId = overrides.swaps[swapKey(a.client_id, item.day)];
+        const meal = swappedId ? mealById.get(swappedId) : undefined;
+        if (!meal || meal.id === item.meal_id) return item;
+        changed = true;
+        return { ...item, meal_id: meal.id, meal_name: meal.name, from_batch: null };
+      });
+      return changed ? { ...a, items } : a;
+    });
+  }, [overrides.swaps]);
+
   const effectiveAllocations = useMemo<Allocation[]>(() => {
     if (!swapApplied || !depletedMealId || !replacementMealId) {
-      return allocations;
+      return adminAllocations;
     }
-    return allocations.map((a) => {
+    return adminAllocations.map((a) => {
       if (a.client_id !== HERO_CLIENT_ID) return a;
       return {
         ...a,
@@ -139,15 +167,25 @@ export default function Dashboard() {
         ),
       };
     });
-  }, [swapApplied, depletedMealId, replacementMealId]);
+  }, [adminAllocations, swapApplied, depletedMealId, replacementMealId]);
+
+  // Held clients drop out of everything operational: cooking, metrics,
+  // supply math, and the printed sheet. Their plan card shows the hold.
+  const activeAllocations = useMemo<Allocation[]>(
+    () =>
+      overrides.holds.length === 0
+        ? effectiveAllocations
+        : effectiveAllocations.filter((a) => !overrides.holds.includes(a.client_id)),
+    [effectiveAllocations, overrides.holds],
+  );
 
   // Live safety re-verification gates the weekly approval (agents propose,
   // the CNO approves — never on red).
   const violations = useMemo(
     () =>
-      computeMetrics(effectiveAllocations, clientById, mealById, groceryById, donations)
+      computeMetrics(activeAllocations, clientById, mealById, groceryById, donations)
         .clinicalViolations,
-    [effectiveAllocations],
+    [activeAllocations],
   );
 
   const selectedClient = clientById.get(selectedClientId);
@@ -254,6 +292,14 @@ export default function Dashboard() {
         </div>
         <div className="ml-auto flex flex-wrap items-center justify-end gap-2">
           <button
+            onClick={() => setHelpOpen(true)}
+            title="How RxKitchen works"
+            aria-label="How RxKitchen works"
+            className="brutal-btn inline-flex size-10 items-center justify-center bg-[#f6f6f3] text-black"
+          >
+            <HelpCircle size={17} aria-hidden />
+          </button>
+          <button
             onClick={() => setDonationSimOpen(true)}
             title="Drop off a new donation and watch the triage agent classify it"
             className="brutal-btn inline-flex items-center gap-2 bg-[#f6f6f3] px-4 text-xs font-bold text-black"
@@ -287,7 +333,7 @@ export default function Dashboard() {
         </div>
       </header>
 
-      <MetricsBanner effectiveAllocations={effectiveAllocations} />
+      <MetricsBanner effectiveAllocations={activeAllocations} />
 
       <div className="flex flex-wrap items-center gap-2">
         {(
@@ -318,8 +364,8 @@ export default function Dashboard() {
             onOpenDonation={() => setDonationSimOpen(true)}
           />
           <BatchRunTicker />
-          <WeeklyCookList effectiveAllocations={effectiveAllocations} />
-          <SupplyProjection effectiveAllocations={effectiveAllocations} />
+          <WeeklyCookList effectiveAllocations={activeAllocations} />
+          <SupplyProjection effectiveAllocations={activeAllocations} />
         </div>
       )}
 
@@ -335,6 +381,7 @@ export default function Dashboard() {
           clients={clients}
           selectedId={selectedClientId}
           heroApproved={Boolean(workflow.heroApprovedAt)}
+          heldIds={overrides.holds}
           onSelect={selectClient}
         />
         {feedOpen ? (
@@ -384,6 +431,14 @@ export default function Dashboard() {
                 : null
             }
             weekApprovedAt={workflow.weekApprovedAt}
+            held={overrides.holds.includes(selectedClientId)}
+            swappedDays={
+              new Set(
+                Object.keys(overrides.swaps)
+                  .filter((k) => k.startsWith(`${selectedClientId}:`))
+                  .map((k) => k.split(":")[1]),
+              )
+            }
           />
         ) : (
           <div className="brutal-card bg-white" />
@@ -453,6 +508,8 @@ export default function Dashboard() {
         )}
       </section>
 
+      {showHelp && <HelpGuide onClose={closeHelp} />}
+
       {/* donation intake simulator (FR12) */}
       {donationSimOpen && (
         <DonationSimulator
@@ -463,7 +520,7 @@ export default function Dashboard() {
         />
       )}
     </div>
-    <KitchenPrintSheet effectiveAllocations={effectiveAllocations} />
+    <KitchenPrintSheet effectiveAllocations={activeAllocations} />
     </>
   );
 }

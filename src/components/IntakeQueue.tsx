@@ -15,12 +15,15 @@ export default function IntakeQueue({
   clients,
   selectedId,
   heroApproved,
+  heldIds,
   onSelect,
 }: {
   clients: ClientProfile[];
   selectedId: number | null;
   /** Whether the CNO has approved the new referral's draft plan. */
   heroApproved: boolean;
+  /** Clients whose week the CNO put on hold. */
+  heldIds: number[];
   onSelect: (id: number) => void;
 }) {
   const [query, setQuery] = useState("");
@@ -64,6 +67,7 @@ export default function IntakeQueue({
         {filtered.map((c) => {
           const isHero = c.id === HERO_CLIENT_ID;
           const isNew = isHero && !heroApproved;
+          const isHeld = heldIds.includes(c.id);
           const selected = c.id === selectedId;
           return (
             <li key={c.id}>
@@ -75,7 +79,11 @@ export default function IntakeQueue({
               >
                 <div className="flex items-center justify-between gap-2">
                   <span className="truncate text-sm font-bold">{c.name}</span>
-                  {isNew ? (
+                  {isHeld ? (
+                    <span className="rounded-full bg-[#fff0f1] px-2 py-1 text-[10px] font-bold text-[#9e0a0a]">
+                      On hold
+                    </span>
+                  ) : isNew ? (
                     <span className="inline-flex items-center gap-1 rounded-full bg-primary px-2 py-1 text-[10px] font-bold text-white">
                       <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-white" />
                       Needs review
