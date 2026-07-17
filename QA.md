@@ -18,7 +18,7 @@ Format: each question → **Say:** (~10 sec, speak it as written) → backup bul
 | --- | --- |
 | **0** | clinical violations — recomputed live in the browser, gates every build |
 | **150 / 80** | synthetic clients / meals (8 cuisines × 10) |
-| **5 + 1** | specialist agents + Fallback Composer, under one orchestrator |
+| **5 + 2** | specialist agents + Fallback Composer + Safety Auditor, under one orchestrator |
 | **3** | independent safety layers (allocator filter → build gate → browser re-check) |
 | **tens of seconds** | end-to-end referral run (model calls dominate; matching is µs) |
 | **cents** | cost per referral (model only in explanation path) |
@@ -41,6 +41,7 @@ Format: each question → **Say:** (~10 sec, speak it as written) → backup bul
 - 📦 **Donation Triage Agent** — classifies incoming donations (usable as-is / kitchen ingredient / non-compliant) and routes them into inventory or scheduled batches.
 - 🛒 **Fallback Composer** *(sub-agent of Matching)* — when no compliant meal exists: grocery kit + step-by-step prep matched to cooking ability → **GroceryKit**.
 - 🚚 **Delivery Agent** — batches clients into routes by zone, time window, and cold-chain limits → **DeliveryBatch**.
+- 🛡️ **Safety Auditor** — out-of-band watchdog beside the orchestrator: re-verifies every hand-off against the clinical rules, and when anything fails, authors the **incident report** — which rule broke, on which artifact, what the retry did, which fallback took over.
 
 ### How they talk to each other
 - **Hub-and-spoke, not free-for-all** — specialists never call each other directly; the orchestrator dispatches each one and passes artifacts forward. (One exception: Matching invokes its Fallback sub-agent.)
@@ -51,6 +52,7 @@ Format: each question → **Say:** (~10 sec, speak it as written) → backup bul
   - **Donation Triage → Kitchen:** usable ingredients, routed into the scheduled batches.
   - **Matching → Fallback:** the gap days with no compliant meal.
   - **Orchestrator → Delivery:** the completed allocation, to slot into a route.
+- The **Safety Auditor sits outside the chain** — it observes every hand-off but never produces pipeline artifacts, so it can't be a single point of failure for a run. Its verdicts come from the same deterministic rule module as the UI validators; the model only writes the incident narrative.
 - Every agent also **emits events** (`thought` / `check` / `output`) into one stream — that stream *is* the activity feed on screen, and the persisted audit trail.
 
 ### The exact interaction you saw on screen (hero referral, 23 events)
@@ -67,6 +69,37 @@ Format: each question → **Say:** (~10 sec, speak it as written) → backup bul
 **Say:** *"Narrow contracts. Each agent has one job, one input schema, one
 output schema — so each is auditable, testable, and swappable on its own. One
 mega-prompt gives you one unauditable blob."*
+
+### Q: "What happens when one of the agents fails?"
+**Say:** *"It degrades, it never guesses — and it never fails quietly. Every
+agent's output is schema-validated and fact-audited; bad output is retried
+once with the errors fed back, then rejected. A rejected agent falls back to
+the deterministic rule engine, so the client still gets a compliant plan —
+you lose the narration, never the safety. And the Safety Auditor writes the
+incident report: which rule broke, on which output, what the retry did, and
+which fallback took over — straight into the event stream and the CNO's
+action inbox."*
+
+Backup — what failure means per agent:
+- 📥 **Intake fails** → the only hard stop: no guessed clinical profile, ever. The referral stays in the intake queue for manual entry.
+- 🩺 **Matching fails** → the deterministic allocator has already computed the compliant set — you lose the reasoning trail, not the allocation.
+- 👨‍🍳 **Kitchen fails** → the shortfall stays visible as unmet demand; the existing-stock allocation stands.
+- 📦 **Donation Triage fails** → the donation is parked as pending — it never enters inventory unclassified.
+- 🛒 **Fallback fails** → gap days are flagged to the CNO instead of shipping a guessed grocery kit.
+- 🚚 **Delivery fails** → the client sits in an unassigned pool for manual slotting.
+- The pattern to name out loud: *"failure costs us automation and narration — it never costs a clinical guarantee. And the human approval gate is the final catch."*
+
+### Q: "Who watches the agents? / Isn't your safety agent just another LLM that can fail?"
+**Say:** *"No — the Safety Auditor's verdicts are deterministic. It runs the
+same clinical rule module the browser validators use, on every hand-off. The
+model is only used to write the incident narrative a human reads — if even
+that fails, the raw rule verdict still lands in the log. The watchdog can
+lose its voice, but it can't lose its judgment."*
+
+Backup:
+- It's **out-of-band**: observes hand-offs, never produces pipeline artifacts — so it can't block or corrupt a run.
+- Incident report contents: failing rule → offending artifact → retry outcome → fallback taken → surfaced in the CNO's action inbox.
+- If asked *"why didn't we see it in the demo feed?"*: *"It only speaks when something fails — a quiet feed is the good outcome. Its passing checks are the badges you see on every meal card."*
 
 ---
 
@@ -236,8 +269,17 @@ The doc above answers as a live system. The build differs — know these cold:
 - **The Claude pipeline is real but offline.** `scripts/generate-agent-runs.mjs`
   does everything §3 claims (grounding, schema validation, fact audit,
   retry-then-reject) — as a batch step, not behind an API route.
-- **The fail-safe degrade path** describes the offline pipeline's behavior,
-  not a wired runtime fallback.
+- **The fail-safe degrade paths** (model-call failure in §3, per-agent
+  failure in §1) describe the offline pipeline's behavior and the intended
+  design — none of it is wired runtime fallback logic. Don't offer to
+  demonstrate a failure live.
+- **The Safety Auditor is a personification, not a process.** What's real
+  behind it: the shared rule module, the browser validators
+  (`src/lib/validators.ts`), the build gate (`scripts/validate-data.mjs`),
+  and the generation pipeline's fact audit. There is no separate monitoring
+  agent, no incident-report path, and nothing auditor-related in the event
+  streams or the action inbox. The "quiet feed" line is the only safe answer
+  to "show me the auditor" — never offer to trigger it.
 - **☠️ The exposing question: "Run a brand-new referral right now, live."**
   No answer in this framing survives a failed attempt. Decide **before** Q&A:
   - **(a) Make it true** — API route running the pipeline for one client,
