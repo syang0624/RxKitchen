@@ -9,14 +9,20 @@
  * the client-side validators from raw meal/client data — the generator's own
  * `constraint_checks` are never trusted or rendered (PRD §6, §11).
  */
-import { useMemo } from "react";
-import type { Allocation, ClientProfile, DeliveryRoute } from "@/lib/types";
+import { useMemo, useState } from "react";
+import type {
+  AgentEvent,
+  Allocation,
+  ClientProfile,
+  DeliveryRoute,
+} from "@/lib/types";
 import { groceryById, mealById } from "@/lib/data";
 import {
   checkGroceryForClient,
   checkMealForClient,
   summarizePreferences,
 } from "@/lib/validators";
+import ExplainDrawer from "./ExplainDrawer";
 import { CheckPill, SectionCard } from "./ui";
 
 const FALLBACK_LABEL: Record<number, string> = {
@@ -37,9 +43,11 @@ const COOKING_LABEL: Record<ClientProfile["cooking_ability"], string> = {
 function MealItem({
   item,
   client,
+  onExplain,
 }: {
   item: Allocation["items"][number];
   client: ClientProfile;
+  onExplain: () => void;
 }) {
   const meal = mealById.get(item.meal_id);
   if (!meal) {
@@ -77,10 +85,16 @@ function MealItem({
               </span>
             )}
           </p>
-          <div className="mt-2 flex flex-wrap gap-1">
+          <div className="mt-2 flex flex-wrap items-center gap-1">
             {verdict.checks.map((c) => (
               <CheckPill key={c.rule} pass={c.pass} label={c.label} />
             ))}
+            <button
+              onClick={onExplain}
+              className="brutal-btn ml-auto bg-white px-2 py-0.5 text-[10px] font-bold uppercase"
+            >
+              Why this meal?
+            </button>
           </div>
         </div>
       </div>
@@ -92,6 +106,7 @@ export default function ClientPlanCard({
   client,
   allocation,
   route,
+  runEvents,
   revealedMealIds,
   kitRevealed,
   routeRevealed,
@@ -99,11 +114,16 @@ export default function ClientPlanCard({
   client: ClientProfile;
   allocation: Allocation | undefined;
   route: DeliveryRoute | undefined;
+  /** This client's pipeline events, for the "why this meal?" drawer (FR11). */
+  runEvents: AgentEvent[];
   /** During a hero replay, only meals already matched in the feed; null = show all. */
   revealedMealIds: Set<string> | null;
   kitRevealed: boolean;
   routeRevealed: boolean;
 }) {
+  const [explainItem, setExplainItem] = useState<
+    Allocation["items"][number] | null
+  >(null);
   const items = useMemo(() => {
     const revealed =
       !allocation
@@ -189,7 +209,7 @@ export default function ClientPlanCard({
                 </span>
                 {prefs.totalMeals > 0 && (
                   <span className="brutal-flat bg-primary px-2 py-0.5 text-[11px] font-bold text-white">
-                    {prefs.cuisineMatches} of {prefs.totalMeals} meals match her
+                    {prefs.cuisineMatches} of {prefs.totalMeals} meals match their
                     favorite cuisine
                   </span>
                 )}
@@ -215,6 +235,7 @@ export default function ClientPlanCard({
                     key={`${item.meal_id}-${item.day}`}
                     item={item}
                     client={client}
+                    onExplain={() => setExplainItem(item)}
                   />
                 ))}
               </ul>
@@ -289,6 +310,16 @@ export default function ClientPlanCard({
           </>
         )}
       </div>
+
+      {/* "Explain this decision" drawer (FR11) */}
+      {explainItem && (
+        <ExplainDrawer
+          item={explainItem}
+          client={client}
+          runEvents={runEvents}
+          onClose={() => setExplainItem(null)}
+        />
+      )}
     </SectionCard>
   );
 }

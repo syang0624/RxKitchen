@@ -20,6 +20,7 @@ import {
   stockoutScenario,
 } from "@/lib/data";
 import { useReplay } from "@/lib/replay";
+import { useAgentRun } from "@/lib/runs";
 import ActivityFeed from "./ActivityFeed";
 import ClientPlanCard from "./ClientPlanCard";
 import DeliveryPanel from "./DeliveryPanel";
@@ -44,9 +45,14 @@ export default function Dashboard() {
   const scenario =
     scenarioId === "happy_path" ? happyPathScenario : stockoutScenario;
 
-  // Only the hero referral has a pre-generated event stream; the other 149
-  // were processed in the offline batch run and open straight to their plan.
-  const replay = useReplay(isHero ? activeRun.events : EMPTY_EVENTS);
+  // The hero's streams ship in the main bundle for an instant demo start;
+  // every other client's batch-run stream is code-split and loaded on select
+  // (FR8: any of the 150 plans can be replayed).
+  const nonHeroRun = useAgentRun(isHero ? null : selectedClientId);
+  const activeEvents = isHero
+    ? activeRun.events
+    : (nonHeroRun?.events ?? EMPTY_EVENTS);
+  const replay = useReplay(activeEvents);
 
   // Render-time adjustment (no effect needed): the hero counts as processed
   // the moment its happy-path replay reaches the end.
@@ -196,7 +202,9 @@ export default function Dashboard() {
           scenarioTitle={
             isHero
               ? scenario.title
-              : "Plan ready — built in the overnight batch run. Select Rosa Dela Cruz to watch the agents work live."
+              : nonHeroRun
+                ? `How ${selectedClient?.name ?? "this client"}'s plan was built — press Play`
+                : "Loading this client's pipeline run…"
           }
         />
         {selectedClient ? (
@@ -204,6 +212,7 @@ export default function Dashboard() {
             client={selectedClient}
             allocation={selectedAllocation}
             route={selectedRoute}
+            runEvents={activeEvents}
             revealedMealIds={revealedMealIds}
             kitRevealed={kitRevealed}
             routeRevealed={routeRevealed}
