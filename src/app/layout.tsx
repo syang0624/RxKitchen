@@ -1,15 +1,9 @@
 import type { Metadata } from "next";
-import { Geist_Mono, Lexend_Mega, Public_Sans } from "next/font/google";
+import { Geist_Mono, Manrope } from "next/font/google";
 import "./globals.css";
 
-const lexendMega = Lexend_Mega({
-  variable: "--font-lexend-mega",
-  subsets: ["latin"],
-  weight: ["700", "800"],
-});
-
-const publicSans = Public_Sans({
-  variable: "--font-public-sans",
+const manrope = Manrope({
+  variable: "--font-manrope",
   subsets: ["latin"],
 });
 
@@ -32,7 +26,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${lexendMega.variable} ${publicSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${manrope.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">{children}</body>
     </html>

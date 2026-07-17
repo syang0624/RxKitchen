@@ -1,9 +1,18 @@
 "use client";
 
-/**
- * Shared UI primitives (neobrutalist design system — STEVEN.md).
- * Agent identity chips, check pills, and the standard card container.
- */
+import type { ComponentType, ReactNode } from "react";
+import {
+  ChefHat,
+  ClipboardList,
+  PackageOpen,
+  ShoppingBasket,
+  SlidersHorizontal,
+  Stethoscope,
+  Truck,
+  X,
+  Check,
+  type LucideProps,
+} from "lucide-react";
 import type { AgentName } from "@/lib/types";
 
 export const AGENT_META: Record<
@@ -12,69 +21,86 @@ export const AGENT_META: Record<
 > = {
   orchestrator: {
     label: "Orchestrator",
-    icon: "🎛",
-    chip: "bg-primary text-white",
-    edge: "border-l-primary",
+    icon: "controls",
+    chip: "bg-[#f1f1ed] text-[#211922]",
+    edge: "border-l-[#62625b]",
   },
   intake: {
     label: "Intake Agent",
-    icon: "📋",
-    chip: "bg-sky-300 text-black",
-    edge: "border-l-sky-400",
+    icon: "clipboard",
+    chip: "bg-[#f6f6f3] text-[#33332e]",
+    edge: "border-l-[#91918c]",
   },
   matching: {
     label: "Clinical Matching",
-    icon: "🩺",
-    chip: "bg-secondary text-black",
-    edge: "border-l-lime-500",
+    icon: "stethoscope",
+    chip: "bg-[#e8f5ed] text-[#103c25]",
+    edge: "border-l-[#3f7656]",
   },
   kitchen: {
     label: "Kitchen Planning",
-    icon: "🍳",
-    chip: "bg-amber-300 text-black",
-    edge: "border-l-amber-400",
+    icon: "chef-hat",
+    chip: "bg-[#f4f0e8] text-[#3c3932]",
+    edge: "border-l-[#a59d8e]",
   },
   donation: {
     label: "Donation Triage",
-    icon: "📦",
-    chip: "bg-teal-300 text-black",
-    edge: "border-l-teal-400",
+    icon: "package",
+    chip: "bg-[#eeeeea] text-[#33332e]",
+    edge: "border-l-[#77776f]",
   },
   delivery: {
     label: "Delivery Agent",
-    icon: "🚚",
-    chip: "bg-blue-300 text-black",
-    edge: "border-l-blue-400",
+    icon: "truck",
+    chip: "bg-[#f3f3ef] text-[#262622]",
+    edge: "border-l-[#b1b1aa]",
   },
   fallback: {
     label: "Fallback Composer",
-    icon: "🧺",
-    chip: "bg-rose-300 text-black",
-    edge: "border-l-rose-400",
+    icon: "basket",
+    chip: "bg-[#f7eeee] text-[#651218]",
+    edge: "border-l-[#e60023]",
   },
+};
+
+const AGENT_ICONS: Record<AgentName, ComponentType<LucideProps>> = {
+  orchestrator: SlidersHorizontal,
+  intake: ClipboardList,
+  matching: Stethoscope,
+  kitchen: ChefHat,
+  donation: PackageOpen,
+  delivery: Truck,
+  fallback: ShoppingBasket,
 };
 
 export function AgentBadge({ agent }: { agent: AgentName }) {
   const meta = AGENT_META[agent];
+  const Icon = AGENT_ICONS[agent];
+
   return (
     <span
-      className={`brutal-flat inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide ${meta.chip}`}
+      className={`inline-flex min-h-6 items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-semibold leading-none ${meta.chip}`}
     >
-      <span aria-hidden>{meta.icon}</span>
+      <Icon aria-hidden="true" className="size-3.5" strokeWidth={2} />
       {meta.label}
     </span>
   );
 }
 
 export function CheckPill({ pass, label }: { pass: boolean; label: string }) {
+  const Icon = pass ? Check : X;
+
   return (
     <span
       title={label}
-      className={`brutal-flat inline-flex items-center gap-1 px-1.5 py-0.5 text-[11px] font-bold ${
-        pass ? "bg-secondary text-black" : "bg-red-500 text-white"
+      className={`inline-flex min-h-6 items-center gap-1 rounded-full border px-2.5 py-1 text-[11px] font-semibold leading-none ${
+        pass
+          ? "border-[#b9ddc7] bg-[#e8f5ed] text-[#103c25]"
+          : "border-[#efc6cb] bg-[#fff1f2] text-[#9e0a0a]"
       }`}
     >
-      {pass ? "✓" : "✕"} {label}
+      <Icon aria-hidden="true" className="size-3" strokeWidth={2.5} />
+      {label}
     </span>
   );
 }
@@ -87,19 +113,19 @@ export function SectionCard({
 }: {
   title: string;
   subtitle?: string;
-  children: React.ReactNode;
+  children: ReactNode;
   className?: string;
 }) {
   return (
     <section
-      className={`brutal-card flex min-h-0 flex-col overflow-hidden bg-white ${className}`}
+      className={`flex min-h-0 flex-col overflow-hidden rounded-2xl border border-[#dadad3] bg-white ${className}`}
     >
-      <header className="flex items-baseline justify-between gap-2 border-b-2 border-black bg-background px-4 py-2.5">
-        <h2 className="font-heading text-xs font-extrabold uppercase tracking-wide">
+      <header className="flex min-h-14 flex-wrap items-center justify-between gap-x-4 gap-y-1 border-b border-[#e5e5e0] bg-[#fbfbf9] px-4 py-3 sm:px-5">
+        <h2 className="text-sm font-semibold leading-5 text-[#211922]">
           {title}
         </h2>
         {subtitle && (
-          <span className="font-mono text-[11px] text-black/60">{subtitle}</span>
+          <span className="text-xs leading-5 text-[#62625b]">{subtitle}</span>
         )}
       </header>
       <div className="min-h-0 flex-1 overflow-y-auto">{children}</div>

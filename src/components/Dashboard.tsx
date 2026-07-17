@@ -6,6 +6,18 @@
  * re-plan), and how far the replay has revealed the hero plan (PRD §4, §6).
  */
 import { useEffect, useMemo, useState } from "react";
+import {
+  Activity,
+  BarChart3,
+  ChefHat,
+  HeartPulse,
+  PackagePlus,
+  Play,
+  RotateCcw,
+  Route,
+  TriangleAlert,
+  X,
+} from "lucide-react";
 import type { Allocation } from "@/lib/types";
 import {
   HERO_CLIENT_ID,
@@ -194,28 +206,37 @@ export default function Dashboard() {
   const backToHappyPath = () => setScenarioId("happy_path");
 
   return (
-    <div className="flex h-dvh flex-col gap-3 bg-background p-3 text-black">
-      <header className="flex flex-wrap items-center gap-3 px-1">
-        <h1 className="font-heading text-xl font-extrabold uppercase tracking-tight">
-          🥗 NourishOS{" "}
-          <span className="font-sans text-sm font-normal normal-case text-black/60">
-            · meal plans for the week of July 20, 2026
+    <div className="flex min-h-dvh flex-col gap-3 bg-background p-3 text-foreground sm:p-4 xl:h-dvh xl:overflow-hidden">
+      <header className="sticky top-0 z-30 -mx-3 -mt-3 flex min-h-16 flex-wrap items-center gap-3 border-b border-[#e5e5e0] bg-white/95 px-4 py-2 backdrop-blur sm:-mx-4 sm:-mt-4 sm:px-6">
+        <div className="flex min-w-0 items-center gap-3">
+          <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-primary text-white">
+            <HeartPulse size={21} strokeWidth={2.5} aria-hidden />
           </span>
-        </h1>
-        <div className="ml-auto flex items-center gap-2">
+          <div className="min-w-0">
+            <h1 className="font-heading text-lg font-extrabold leading-tight text-black">
+              NourishOS
+            </h1>
+            <p className="truncate text-xs text-[#62625b]">
+              Meal plans · week of July 20, 2026
+            </p>
+          </div>
+        </div>
+        <div className="ml-auto flex flex-wrap items-center justify-end gap-2">
           <button
             onClick={() => setDonationSimOpen(true)}
             title="Drop off a new donation and watch the triage agent classify it"
-            className="brutal-btn bg-teal-300 px-3 py-1.5 text-xs font-bold uppercase text-black"
+            className="brutal-btn inline-flex items-center gap-2 bg-[#f6f6f3] px-4 text-xs font-bold text-black"
           >
-            📦 A new donation arrives
+            <PackagePlus size={16} aria-hidden />
+            <span className="hidden sm:inline">New donation</span>
           </button>
           {scenarioId === "stockout_replan" ? (
             <button
               onClick={backToHappyPath}
-              className="brutal-btn bg-white px-3 py-1.5 text-xs font-bold uppercase"
+              className="brutal-btn inline-flex items-center gap-2 bg-[#e5e5e0] px-4 text-xs font-bold"
             >
-              ↺ Back to the plan
+              <RotateCcw size={16} aria-hidden />
+              Back to plan
             </button>
           ) : (
             <button
@@ -226,9 +247,10 @@ export default function Dashboard() {
                   ? "Mark a meal out of stock and watch the plan repair itself"
                   : "Play Rosa's referral to the end first"
               }
-              className="brutal-btn bg-red-500 px-3 py-1.5 text-xs font-bold uppercase text-white"
+              className="brutal-btn inline-flex items-center gap-2 bg-primary px-4 text-xs font-bold text-white"
             >
-              ⚡ What if a meal runs out?
+              <TriangleAlert size={16} aria-hidden />
+              <span className="hidden sm:inline">Simulate stockout</span>
             </button>
           )}
         </div>
@@ -237,10 +259,10 @@ export default function Dashboard() {
       <MetricsBanner effectiveAllocations={effectiveAllocations} />
 
       <main
-        className={`grid min-h-0 flex-1 gap-3 ${
+        className={`dashboard-grid grid min-h-0 flex-1 grid-cols-1 gap-3 md:grid-cols-2 ${
           feedOpen
-            ? "grid-cols-[260px_minmax(360px,1fr)_minmax(360px,440px)]"
-            : "grid-cols-[260px_200px_minmax(0,1fr)]"
+            ? "xl:grid-cols-[270px_minmax(380px,1fr)_minmax(380px,440px)]"
+            : "xl:grid-cols-[270px_220px_minmax(0,1fr)]"
         }`}
       >
         <IntakeQueue
@@ -262,19 +284,20 @@ export default function Dashboard() {
             }
           />
         ) : (
-          <section className="brutal-card flex flex-col items-center justify-center gap-3 bg-white p-4 text-center">
-            <span className="text-3xl" aria-hidden>
-              🛰
+          <section className="brutal-card flex flex-col items-center justify-center gap-4 bg-white p-6 text-center">
+            <span className="flex size-12 items-center justify-center rounded-full bg-[#f6f6f3] text-[#62625b]">
+              <Activity size={22} aria-hidden />
             </span>
-            <p className="text-xs text-black/60">
+            <p className="max-w-44 text-xs leading-relaxed text-[#62625b]">
               Every plan is built step by step by the agents — and you can
               watch.
             </p>
             <button
               onClick={watchFeed}
-              className="brutal-btn bg-primary px-3 py-1.5 text-xs font-bold uppercase text-white"
+              className="brutal-btn inline-flex items-center gap-2 bg-primary px-4 text-xs font-bold text-white"
             >
-              ▶ Watch how it was built
+              <Play size={15} fill="currentColor" aria-hidden />
+              Watch the build
             </button>
           </section>
         )}
@@ -295,45 +318,48 @@ export default function Dashboard() {
 
       <section
         className={`brutal-card shrink-0 overflow-hidden bg-white ${
-          opsOpen ? "h-64" : ""
+          opsOpen ? "h-[min(26rem,70vh)] xl:h-64" : ""
         }`}
       >
         <div
-          className={`flex items-center gap-2 bg-background px-3 py-2 ${
-            opsOpen ? "border-b-2 border-black" : ""
+          className={`flex min-h-14 flex-wrap items-center gap-2 bg-white px-3 py-2 ${
+            opsOpen ? "border-b border-[#e5e5e0]" : ""
           }`}
         >
-          <span className="font-heading text-[10px] font-extrabold uppercase tracking-wide text-black/60">
-            Behind the scenes
+          <span className="px-1 text-xs font-semibold text-[#62625b]">
+            Operations
           </span>
           {(
             [
-              ["kitchen", "🍳 Kitchen production"],
-              ["delivery", "🚚 Delivery routes"],
-              ["scale", "📊 All 150 clients"],
-            ] as [Tab, string][]
-          ).map(([id, label]) => (
+              ["kitchen", "Kitchen", ChefHat],
+              ["delivery", "Routes", Route],
+              ["scale", "All clients", BarChart3],
+            ] as [Tab, string, typeof ChefHat][]
+          ).map(([id, label, Icon]) => (
             <button
               key={id}
               onClick={() => {
                 setTab(id);
                 setOpsOpen(id !== tab || !opsOpen);
               }}
-              className={`brutal-btn px-3 py-1 text-xs font-bold uppercase ${
+              className={`brutal-btn inline-flex items-center gap-2 px-3 text-xs font-bold ${
                 opsOpen && tab === id
-                  ? "bg-primary text-white"
-                  : "bg-white text-black"
+                  ? "bg-black text-white"
+                  : "bg-[#f6f6f3] text-black"
               }`}
             >
+              <Icon size={15} aria-hidden />
               {label}
             </button>
           ))}
           {opsOpen && (
             <button
               onClick={() => setOpsOpen(false)}
-              className="brutal-btn ml-auto bg-white px-2 py-1 text-xs font-bold uppercase"
+              title="Close operations panel"
+              aria-label="Close operations panel"
+              className="brutal-btn ml-auto inline-flex size-10 items-center justify-center bg-[#f6f6f3] text-black"
             >
-              Hide ▾
+              <X size={17} aria-hidden />
             </button>
           )}
         </div>

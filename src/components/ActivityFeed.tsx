@@ -6,6 +6,7 @@
  * speed control, pause, and scrub for judge Q&A (PRD §6).
  */
 import { useEffect, useRef } from "react";
+import { Activity, EyeOff, Pause, Play, RotateCcw, SkipForward } from "lucide-react";
 import type { AgentEvent } from "@/lib/types";
 import { REPLAY_SPEEDS, type Replay } from "@/lib/replay";
 import { AGENT_META, AgentBadge, formatClock } from "./ui";
@@ -16,7 +17,7 @@ export function EventRow({ event }: { event: AgentEvent }) {
   const isFail = result === "fail";
   const isPass = result === "pass";
   return (
-    <li className={`border-l-4 px-3 py-2 ${meta.edge}`}>
+    <li className={`border-l-4 px-4 py-3 ${meta.edge}`}>
       <div className="flex flex-wrap items-center gap-2">
         <span className="font-mono text-[10px] tabular-nums text-black/50">
           {formatClock(event.t_offset_ms)}
@@ -26,18 +27,18 @@ export function EventRow({ event }: { event: AgentEvent }) {
           <span className="text-[10px] italic text-black/50">thinking…</span>
         )}
         {isPass && (
-          <span className="brutal-flat bg-secondary px-1.5 py-px text-[10px] font-bold text-black">
-            SAFE ✓
+          <span className="rounded-full bg-[#c7f0da] px-2 py-1 text-[10px] font-bold text-[#103c25]">
+            Safe
           </span>
         )}
         {isFail && (
-          <span className="brutal-flat bg-red-500 px-1.5 py-px text-[10px] font-bold text-white">
-            EXCLUDED ✕
+          <span className="rounded-full bg-[#fff0f1] px-2 py-1 text-[10px] font-bold text-[#9e0a0a]">
+            Excluded
           </span>
         )}
         {event.type === "output" && (
-          <span className="brutal-flat bg-primary px-1.5 py-px text-[10px] font-bold text-white">
-            DONE
+          <span className="rounded-full bg-[#f6f6f3] px-2 py-1 text-[10px] font-bold text-black">
+            Done
           </span>
         )}
       </div>
@@ -55,27 +56,30 @@ export function EventRow({ event }: { event: AgentEvent }) {
 
 function ReplayControls({ replay }: { replay: Replay }) {
   return (
-    <div className="flex flex-wrap items-center gap-2 border-t-2 border-black bg-background px-3 py-2">
+    <div className="flex flex-wrap items-center gap-2 border-t border-[#e5e5e0] bg-white px-3 py-2">
       <button
         onClick={replay.toggle}
         title="Space = play/pause · ←/→ = scrub"
-        className="brutal-btn bg-primary px-3 py-1 text-xs font-bold uppercase text-white"
+        className="brutal-btn inline-flex items-center gap-2 bg-primary px-4 text-xs font-bold text-white"
       >
-        {replay.playing ? "❚❚ Pause" : replay.done ? "↺ Replay" : "▶ Play"}
+        {replay.playing ? <Pause size={14} fill="currentColor" /> : replay.done ? <RotateCcw size={14} /> : <Play size={14} fill="currentColor" />}
+        {replay.playing ? "Pause" : replay.done ? "Replay" : "Play"}
       </button>
       <button
         onClick={replay.restart}
         title="Restart"
-        className="brutal-btn bg-white px-2 py-1 text-xs font-bold"
+        aria-label="Restart replay"
+        className="brutal-btn inline-flex size-10 items-center justify-center bg-[#f6f6f3] text-xs font-bold"
       >
-        ⟲
+        <RotateCcw size={15} aria-hidden />
       </button>
       <button
         onClick={replay.skipToEnd}
         title="Skip to end"
-        className="brutal-btn bg-white px-2 py-1 text-xs font-bold"
+        aria-label="Skip to end"
+        className="brutal-btn inline-flex size-10 items-center justify-center bg-[#f6f6f3] text-xs font-bold"
       >
-        ⇥
+        <SkipForward size={15} fill="currentColor" aria-hidden />
       </button>
       <input
         type="range"
@@ -90,15 +94,15 @@ function ReplayControls({ replay }: { replay: Replay }) {
       <span className="font-mono text-[11px] tabular-nums text-black/60">
         {formatClock(replay.time)} / {formatClock(replay.duration)}
       </span>
-      <div className="brutal-flat flex overflow-hidden bg-white">
+      <div className="flex overflow-hidden rounded-full bg-[#f6f6f3] p-1">
         {REPLAY_SPEEDS.map((s) => (
           <button
             key={s}
             onClick={() => replay.setSpeed(s)}
-            className={`px-2 py-1 text-[11px] font-bold transition ${
+            className={`min-h-8 rounded-full px-2 text-[11px] font-bold transition ${
               replay.speed === s
                 ? "bg-black text-white"
-                : "text-black hover:bg-secondary"
+                : "text-black hover:bg-[#e5e5e0]"
             }`}
           >
             {s}×
@@ -129,8 +133,8 @@ export default function ActivityFeed({
 
   return (
     <section className="brutal-card flex min-h-0 flex-col overflow-hidden bg-white">
-      <header className="flex items-center gap-2 border-b-2 border-black bg-background px-4 py-2.5">
-        <h2 className="font-heading text-xs font-extrabold uppercase tracking-wide">
+      <header className="flex min-h-14 items-center gap-2 border-b border-[#e5e5e0] bg-white px-4 py-2.5">
+        <h2 className="font-heading text-sm font-bold">
           Agent activity
         </h2>
         <span className="min-w-0 flex-1 truncate text-right text-xs text-black/60">
@@ -140,16 +144,17 @@ export default function ActivityFeed({
           <button
             onClick={onHide}
             title="Hide the agent activity feed"
-            className="brutal-btn shrink-0 bg-white px-2 py-0.5 text-xs font-bold uppercase"
+            aria-label="Hide agent activity"
+            className="brutal-btn inline-flex size-10 shrink-0 items-center justify-center bg-[#f6f6f3] text-xs font-bold"
           >
-            Hide ✕
+            <EyeOff size={16} aria-hidden />
           </button>
         )}
       </header>
       <div ref={listRef} className="min-h-0 flex-1 overflow-y-auto">
         {count === 0 ? (
           <div className="flex h-full flex-col items-center justify-center gap-2 p-8 text-center">
-            <span className="text-2xl">🛰</span>
+            <span className="flex size-12 items-center justify-center rounded-full bg-[#f6f6f3] text-[#62625b]"><Activity size={22} aria-hidden /></span>
             <p className="text-sm text-black/60">
               {replay.idle
                 ? "Press Play to watch the agents build this plan."
@@ -157,7 +162,7 @@ export default function ActivityFeed({
             </p>
           </div>
         ) : (
-          <ul className="divide-y-2 divide-black/10 py-1">
+          <ul className="divide-y divide-[#e5e5e0] py-1">
             {replay.visibleEvents.map((e) => (
               <EventRow key={e.seq} event={e} />
             ))}

@@ -1,67 +1,126 @@
 @import "tailwindcss";
 
-/*
- * NEOBRUTALISM design system (STEVEN.md): cream background, clashing neon
- * accents, 2px hard black borders on every container/button, hard offset
- * shadows (never soft), 4px radius. Light mode only.
- */
 :root {
-  --background: #fffdf5;
-  --foreground: #000000;
+  --background: #fbfbf9;
+  --foreground: #211922;
+  --surface: #ffffff;
+  --surface-soft: #f6f6f3;
+  --hairline: #e5e5e0;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --color-primary: #8b5cf6;
-  --color-secondary: #a3e635;
-  --font-heading: var(--font-lexend-mega);
-  --font-sans: var(--font-public-sans);
+  --color-primary: #e60023;
+  --color-secondary: #c7f0da;
+  --font-heading: var(--font-manrope);
+  --font-sans: var(--font-manrope);
   --font-mono: var(--font-geist-mono);
-  --shadow-brutal: 4px 4px 0px 0px #000000;
-  --shadow-brutal-sm: 2px 2px 0px 0px #000000;
+}
+
+* {
+  box-sizing: border-box;
+  letter-spacing: 0;
+}
+
+html {
+  background: var(--background);
 }
 
 body {
+  min-width: 320px;
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-public-sans), sans-serif;
+  font-family: var(--font-manrope), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
-/* Containers: 2px black border, 4px radius, hard 4px offset shadow. */
+button,
+input,
+select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+:focus-visible {
+  outline: 3px solid #435ee5;
+  outline-offset: 2px;
+}
+
+::selection {
+  background: #ffd9df;
+}
+
+/* Compatibility primitives retained while feature panels migrate by name. */
 .brutal-card {
-  border: 2px solid #000;
-  border-radius: 4px;
-  box-shadow: 4px 4px 0 0 #000;
-}
-
-/* Nested containers: same border, smaller hard shadow. */
-.brutal-box {
-  border: 2px solid #000;
-  border-radius: 4px;
-  box-shadow: 2px 2px 0 0 #000;
-}
-
-/* Bordered element with no shadow (inputs, chips, table cells). */
-.brutal-flat {
-  border: 2px solid #000;
-  border-radius: 4px;
-}
-
-/* Buttons: hard shadow that collapses as the button translates into it. */
-.brutal-btn {
-  border: 2px solid #000;
-  border-radius: 4px;
-  box-shadow: 2px 2px 0 0 #000;
-  transition:
-    transform 80ms ease,
-    box-shadow 80ms ease;
-}
-.brutal-btn:active:not(:disabled) {
-  transform: translate(2px, 2px);
+  border: 1px solid var(--hairline);
+  border-radius: 16px;
   box-shadow: none;
 }
+
+.brutal-box {
+  border: 1px solid var(--hairline);
+  border-radius: 16px;
+  box-shadow: none;
+}
+
+.brutal-flat {
+  border: 1px solid var(--hairline);
+  border-radius: 9999px;
+}
+
+.brutal-btn {
+  min-height: 40px;
+  border: 0;
+  border-radius: 16px;
+  box-shadow: none;
+  transition: background-color 150ms ease, color 150ms ease, opacity 150ms ease;
+}
+
+.brutal-btn:hover:not(:disabled) {
+  filter: brightness(0.97);
+}
+
+.brutal-btn:active:not(:disabled) {
+  filter: brightness(0.92);
+}
+
 .brutal-btn:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
+  opacity: 0.42;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #c8c8c1 transparent;
+}
+
+@media (max-width: 1279px) {
+  .dashboard-grid > section {
+    height: 560px;
+    min-height: 420px;
+  }
+}
+
+@media (max-width: 767px) {
+  .dashboard-grid > section {
+    height: min(560px, 72vh);
+    min-height: 440px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
 }
